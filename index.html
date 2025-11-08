@@ -7,6 +7,11 @@
     <meta name="description" content="昶青集團應用程式入口">
     <title>昶青實業 AI-GATE</title>
     
+    <!-- Google Fonts - Noto Sans TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <!-- PWA Manifest -->
     <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIuaYtumdkumbhuWcmCBHQUktR2F0ZSIsCiAgInNob3J0X25hbWUiOiAiR0FJLUdhdGUiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzFhNWY3YSIsCiAgInRoZW1lX2NvbG9yIjogIiMxYTVmN2EiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJSMC5wbmciLAogICAgICAic2l6ZXMiOiAiMTUweDE1MCIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiUjAucG5nIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciCiAgICB9CiAgXQp9">
     
@@ -21,7 +26,7 @@
         }
 
         body {
-            font-family: 'Microsoft JhengHei', 'PingFang TC', 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Noto Sans TC', 'Microsoft JhengHei', 'PingFang TC', sans-serif;
             min-height: 100vh;
             background: linear-gradient(135deg, #2A7B9B 0%, #57C785 25%, #EDDD53 50%, #00D4FF 75%, #090979 100%);
             background-size: 400% 400%;
@@ -56,48 +61,43 @@
             transform: scale(1.05) rotate(5deg);
         }
 
-.title {
-    font-size: 4rem;
-    font-weight: 1000;
-    background: linear-gradient(90deg, 
-        #FFD700 0%, 
-        #FFA500 25%, 
-        #FF8C00 50%, 
-        #00D4FF 75%, 
-        #090979 100%
-    );
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-align: center;
-    margin-bottom: 30px;
-    letter-spacing: 5px;
-    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6))
-            drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
-    animation: fadeInDown 0.8s ease-out 0.2s both, rainbowFlow 4s linear infinite;
-}
+        .title {
+            font-family: 'Noto Sans TC', 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, 
+                #FFD700 0%, 
+                #FFA500 25%, 
+                #FF8C00 50%, 
+                #00D4FF 75%, 
+                #090979 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 30px;
+            letter-spacing: 5px;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6))
+                    drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+            animation: fadeInDown 0.8s ease-out 0.2s both, rainbowFlow 4s linear infinite;
+        }
 
-@keyframes rainbowFlow {
-    0% { background-position: 0% center; }
-    100% { background-position: 200% center; }
-}
+        @keyframes rainbowFlow {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
 
+        @keyframes titleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
 
-@keyframes titleBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-}
-
-
-
-
-
-@keyframes titlePulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.02); }
-}
-
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
 
         @keyframes fadeInDown {
             from {
@@ -276,6 +276,8 @@
         @media (max-width: 768px) {
             .title {
                 font-size: 2.6rem;
+                letter-spacing: 3px;
+                line-height: 1.3;
             }
 
             .main-container {
@@ -296,7 +298,9 @@
         @media (max-width: 480px) {
             .title {
                 font-size: 2rem;
-                letter-spacing: 1px;
+                letter-spacing: 2px;
+                line-height: 1.4;
+                padding: 0 10px;
             }
 
             .main-container {
@@ -315,6 +319,19 @@
             .logo {
                 width: 80px;
                 height: 80px;
+            }
+        }
+
+        /* 超小手機優化 */
+        @media (max-width: 375px) {
+            .title {
+                font-size: 1.6rem;
+                letter-spacing: 1px;
+            }
+            
+            .logo {
+                width: 70px;
+                height: 70px;
             }
         }
 
