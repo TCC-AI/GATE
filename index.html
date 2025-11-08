@@ -245,6 +245,10 @@
             cursor: pointer;
             transition: all 0.3s ease;
             z-index: 1000;
+            max-width: 90%;
+            text-align: center;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .install-prompt.show {
@@ -265,6 +269,7 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-family: 'Noto Sans TC', sans-serif;
         }
 
         .install-prompt button:hover {
@@ -293,6 +298,11 @@
                 width: 100px;
                 height: 100px;
             }
+
+            .install-prompt {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -319,6 +329,17 @@
             .logo {
                 width: 80px;
                 height: 80px;
+            }
+
+            .install-prompt {
+                padding: 10px 15px;
+                font-size: 0.85rem;
+                bottom: 10px;
+            }
+
+            .install-prompt button {
+                padding: 6px 15px;
+                font-size: 0.85rem;
             }
         }
 
@@ -369,7 +390,7 @@
 
     <!-- PWA 安裝提示 -->
     <div class="install-prompt" id="installPrompt">
-        <span>📱 將 GAI-Gate 加入主畫面</span>
+        <span id="installText">📱 將 GAI-Gate 加入主畫面</span>
         <button id="installButton">安裝</button>
     </div>
 
@@ -388,7 +409,6 @@
             { name: '應用程式 10', icon: 'app10.png', url: 'https://example.com/app10' },
             { name: '應用程式 11', icon: 'app11.png', url: 'https://example.com/app11' },
             { name: '應用程式 12', icon: 'app12.png', url: 'https://example.com/app12' }
-            
         ];
 
         // 動態生成應用程式圖標
@@ -417,15 +437,45 @@
             });
         }
 
+        // 檢測是否為 iOS 設備
+        function isIOS() {
+            return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        }
+
+        // 檢測是否已安裝為 PWA
+        function isStandalone() {
+            return window.matchMedia('(display-mode: standalone)').matches || 
+                   window.navigator.standalone === true;
+        }
+
         // PWA 安裝功能
         let deferredPrompt;
         const installPrompt = document.getElementById('installPrompt');
         const installButton = document.getElementById('installButton');
+        const installText = document.getElementById('installText');
 
+        // iOS 安裝指引
+        function showIOSInstallGuide() {
+            installText.innerHTML = '📱 點擊 <strong>分享 📤</strong> → <strong>加入主畫面</strong>';
+            installButton.textContent = '知道了';
+            installPrompt.classList.add('show');
+
+            // 修改按鈕點擊行為
+            installButton.onclick = () => {
+                installPrompt.classList.remove('show');
+                localStorage.setItem('installPromptClosed', 'true');
+            };
+        }
+
+        // Android/Desktop 安裝
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            installPrompt.classList.add('show');
+            
+            // 非 iOS 才顯示自動安裝提示
+            if (!isIOS()) {
+                installPrompt.classList.add('show');
+            }
         });
 
         installButton.addEventListener('click', async () => {
@@ -440,11 +490,13 @@
             
             deferredPrompt = null;
             installPrompt.classList.remove('show');
+            localStorage.setItem('installPromptClosed', 'true');
         });
 
         // 已安裝後隱藏提示
         window.addEventListener('appinstalled', () => {
             installPrompt.classList.remove('show');
+            localStorage.setItem('installPromptClosed', 'true');
             console.log('PWA 已安裝');
         });
 
@@ -480,12 +532,35 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderApps();
             
-            // 3秒後自動隱藏安裝提示
-            setTimeout(() => {
-                if (!deferredPrompt) {
-                    installPrompt.classList.remove('show');
-                }
-            }, 10000);
+            // 檢查是否已關閉過提示
+            const promptClosed = localStorage.getItem('installPromptClosed');
+            
+            // 如果已安裝為 PWA，不顯示提示
+            if (isStandalone()) {
+                console.log('已安裝為 PWA，隱藏安裝提示');
+                return;
+            }
+
+            // 如果已關閉過提示，不再顯示
+            if (promptClosed === 'true') {
+                console.log('使用者已關閉過安裝提示');
+                return;
+            }
+
+            // iOS 設備顯示手動安裝指引
+            if (isIOS()) {
+                setTimeout(() => {
+                    showIOSInstallGuide();
+                }, 2000);
+            } else {
+                // Android/Desktop 等待 beforeinstallprompt 事件
+                setTimeout(() => {
+                    if (!deferredPrompt) {
+                        console.log('瀏覽器不支援自動安裝提示');
+                        installPrompt.classList.remove('show');
+                    }
+                }, 10000);
+            }
         });
 
         // 防止圖片拖曳
