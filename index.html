@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0f0c29">
-    <meta name="description" content="昶青集團應用程式入口 - GAI驅動智慧管理平台">
-    <title>昶青集團應用程式入口 - GAI驅動智慧管理平台</title>
+    <meta name="description" content="昶青集團應用程式入口 - AI驅動的智慧管理平台">
+    <title>昶青集團應用程式入口 - AI驅動的智慧管理平台</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -178,25 +178,25 @@
             }
         }
 
-        /* PC 版 - Bento Box 不規則網格佈局 */
+        /* 🎯 PC 版 - 統一高度 200px 的網格佈局 */
         .apps-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            grid-auto-rows: 180px;
+            grid-auto-rows: 200px; /* 🔥 統一高度 200px */
             gap: 20px;
             padding: 20px;
             position: relative;
             z-index: 1;
         }
 
-        /* PC 版特殊尺寸卡片 */
+        /* 🔥 取消第一個卡片的特殊尺寸 - 所有卡片統一 */
         .app-item:nth-child(1) {
-            grid-column: span 2;
-            grid-row: span 1;
+            grid-column: span 1; /* 改為 1 列 */
+            grid-row: span 1;    /* 改為 1 行 */
         }
 
         .app-item:nth-child(5) {
-            grid-column: span 2;
+            grid-column: span 1; /* 改為 1 列 */
         }
 
         /* 3D 翻轉卡片 */
@@ -293,7 +293,7 @@
             box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
         }
 
-        /* 🎯 新設計：橫向排列 - 圖標在左，文字在右 */
+        /* 🎯 橫向排列 - 圖標在左，文字在右 */
         .app-icon-wrapper {
             width: 150px;
             height: 150px;
@@ -345,16 +345,13 @@
             color: rgba(255, 255, 255, 0.7);
             line-height: 1.5;
             text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
-        /* 第一個卡片特殊樣式 */
-        .app-item:nth-child(1) .app-name {
-            font-size: 1.8rem;
-        }
-
-        .app-item:nth-child(1) .app-desc {
-            font-size: 1rem;
-        }
+        /* 🔥 取消第一個卡片的特殊樣式 - 統一尺寸 */
 
         /* 磁吸效果 */
         .app-item {
@@ -535,7 +532,7 @@
                 border-radius: 25px;
             }
 
-            /* 手機版 - 垂直滾動列表 */
+            /* 🔥 手機版 - 統一高度 160px */
             .apps-grid {
                 display: flex;
                 flex-direction: column;
@@ -545,13 +542,8 @@
 
             .app-item {
                 width: 100%;
-                height: 140px;
+                height: 160px; /* 🔥 統一高度 */
                 perspective: none;
-            }
-
-            /* 第一個卡片 */
-            .app-item:nth-child(1) {
-                height: 160px;
             }
 
             .card-front {
@@ -560,31 +552,19 @@
 
             /* 手機版圖標 */
             .app-icon-wrapper {
-                width: 100px;
-                height: 100px;
-                margin-right: 15px;
-            }
-
-            .app-item:nth-child(1) .app-icon-wrapper {
                 width: 120px;
                 height: 120px;
+                margin-right: 15px;
             }
 
             /* 手機版文字 */
             .app-name {
-                font-size: 1.1rem;
-            }
-
-            .app-item:nth-child(1) .app-name {
-                font-size: 1.3rem;
+                font-size: 1.2rem;
             }
 
             .app-desc {
-                font-size: 0.8rem;
-                display: -webkit-box;
+                font-size: 0.85rem;
                 -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
             }
 
             /* 手機版取消翻轉效果 */
@@ -663,29 +643,20 @@
             }
 
             .app-item {
-                height: 120px;
-            }
-
-            .app-item:nth-child(1) {
-                height: 140px;
+                height: 140px; /* 🔥 小螢幕統一高度 */
             }
 
             .app-icon-wrapper {
-                width: 85px;
-                height: 85px;
-            }
-
-            .app-item:nth-child(1) .app-icon-wrapper {
                 width: 100px;
                 height: 100px;
             }
 
             .app-name {
-                font-size: 1rem;
+                font-size: 1.1rem;
             }
 
             .app-desc {
-                font-size: 0.75rem;
+                font-size: 0.8rem;
             }
         }
 
@@ -709,7 +680,7 @@
         </div>
 
         <!-- 標題 -->
-        <h1 class="title">昶青集團應用程式入口<br>GAI驅動智慧管理平台</h1>
+        <h1 class="title">昶青集團應用程式入口<br>AI驅動的智慧管理平台</h1>
 
         <!-- 主容器 -->
         <div class="main-container">
@@ -742,37 +713,37 @@
         // ==================== 應用程式資料配置 ====================
         const apps = [
             { 
-                name: 'GAI數位資料中心', 
+                name: 'AI數位資料', 
                 icon: 'app1.png', 
                 url: 'https://tcc-ai.github.io/digidata/',
                 desc: '智能數據分析與管理平台，提供即時數據洞察與視覺化報表'
             },
             { 
-                name: 'GAI風控管理中心', 
+                name: 'AI風控管理', 
                 icon: 'app2.png', 
                 url: 'https://tcc-ai.github.io/Risk/',
                 desc: '即時風險監控與預警系統，保障企業營運安全'
             },
             { 
-                name: 'GAI路徑規劃中心', 
+                name: 'AI路徑規劃', 
                 icon: 'app3.png', 
                 url: 'https://tcc-ai.github.io/GAIRoute/',
                 desc: '智能物流路線優化，降低運輸成本提升效率'
             },
             { 
-                name: 'GAI排派車中心', 
+                name: 'AI派車中心', 
                 icon: 'app3.png', 
                 url: 'https://tcc-ai.github.io/GAITransporter/',
                 desc: '自動化車輛調度系統，實現智能派車管理'
             },
             { 
-                name: 'GAI智慧庫存中心', 
+                name: 'AI智慧庫存', 
                 icon: 'app4.png', 
                 url: 'https://tcc-ai.github.io/GAIstock/',
                 desc: '智能庫存預測與管理，優化庫存週轉率'
             },
             { 
-                name: 'GAI智能職訓中心', 
+                name: 'AI智能職訓', 
                 icon: 'app5.png', 
                 url: 'https://tcc-ai.github.io/TRAIN/',
                 desc: '個性化員工培訓平台，提升團隊專業能力'
