@@ -89,16 +89,6 @@
             100% { background-position: 200% center; }
         }
 
-        @keyframes titleBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        @keyframes titlePulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-
         @keyframes fadeInDown {
             from {
                 opacity: 0;
@@ -228,12 +218,11 @@
             transform: translateY(-4px) scale(0.98);
         }
 
-        /* 安裝提示 */
+        /* 安裝提示 - 修正版 */
         .install-prompt {
             position: fixed;
             bottom: 20px;
             left: 50%;
-            transform: translateX(-50%) translateY(100px);
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 15px 30px;
@@ -242,21 +231,24 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            cursor: pointer;
             transition: all 0.3s ease;
             z-index: 1000;
             max-width: 90%;
             text-align: center;
             flex-wrap: wrap;
             justify-content: center;
+            opacity: 0;
+            transform: translateX(-50%) translateY(100px);
+            pointer-events: none;
         }
 
         .install-prompt.show {
-            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            transform: translateX(-50%) translateY(0) !important;
+            pointer-events: auto;
         }
 
         .install-prompt:hover {
-            transform: translateX(-50%) translateY(-5px);
             box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
         }
 
@@ -275,6 +267,10 @@
         .install-prompt button:hover {
             transform: scale(1.05);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .install-prompt button:active {
+            transform: scale(0.95);
         }
 
         /* 響應式設計 */
@@ -343,7 +339,6 @@
             }
         }
 
-        /* 超小手機優化 */
         @media (max-width: 375px) {
             .title {
                 font-size: 1.6rem;
@@ -354,21 +349,6 @@
                 width: 70px;
                 height: 70px;
             }
-        }
-
-        /* 載入動畫 */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -454,53 +434,87 @@
         const installButton = document.getElementById('installButton');
         const installText = document.getElementById('installText');
 
+        // 隱藏安裝提示
+        function hideInstallPrompt() {
+            console.log('隱藏安裝提示');
+            installPrompt.classList.remove('show');
+            localStorage.setItem('installPromptClosed', 'true');
+        }
+
+        // 顯示安裝提示
+        function showInstallPrompt() {
+            console.log('顯示安裝提示');
+            installPrompt.classList.add('show');
+        }
+
         // iOS 安裝指引
         function showIOSInstallGuide() {
+            console.log('顯示 iOS 安裝指引');
             installText.innerHTML = '📱 點擊 <strong>分享 📤</strong> → <strong>加入主畫面</strong>';
             installButton.textContent = '知道了';
-            installPrompt.classList.add('show');
-
-            // 修改按鈕點擊行為
-            installButton.onclick = () => {
-                installPrompt.classList.remove('show');
-                localStorage.setItem('installPromptClosed', 'true');
-            };
+            
+            // 移除舊的事件監聽器，添加新的
+            const newButton = installButton.cloneNode(true);
+            installButton.parentNode.replaceChild(newButton, installButton);
+            
+            // 重新獲取按鈕引用
+            const iosButton = document.getElementById('installButton');
+            iosButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('iOS 按鈕被點擊');
+                hideInstallPrompt();
+            });
+            
+            showInstallPrompt();
         }
 
         // Android/Desktop 安裝
         window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('beforeinstallprompt 事件觸發');
             e.preventDefault();
             deferredPrompt = e;
             
-            // 非 iOS 才顯示自動安裝提示
-            if (!isIOS()) {
-                installPrompt.classList.add('show');
+            // 檢查條件
+            const promptClosed = localStorage.getItem('installPromptClosed');
+            if (!isIOS() && !isStandalone() && promptClosed !== 'true') {
+                showInstallPrompt();
             }
         });
 
-        installButton.addEventListener('click', async () => {
-            if (!deferredPrompt) return;
+        // Android/Desktop 安裝按鈕點擊
+        installButton.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            console.log('安裝按鈕被點擊');
+            
+            if (!deferredPrompt) {
+                console.log('沒有 deferredPrompt');
+                return;
+            }
 
+            console.log('執行安裝提示');
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
+            
+            console.log('使用者選擇:', outcome);
             
             if (outcome === 'accepted') {
                 console.log('使用者接受安裝');
             }
             
             deferredPrompt = null;
-            installPrompt.classList.remove('show');
-            localStorage.setItem('installPromptClosed', 'true');
+            hideInstallPrompt();
         });
 
         // 已安裝後隱藏提示
         window.addEventListener('appinstalled', () => {
-            installPrompt.classList.remove('show');
-            localStorage.setItem('installPromptClosed', 'true');
             console.log('PWA 已安裝');
+            hideInstallPrompt();
         });
 
-        // Service Worker 註冊 (PWA 必要)
+        // Service Worker 註冊
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 const swCode = `
@@ -530,14 +544,16 @@
 
         // 初始化
         document.addEventListener('DOMContentLoaded', () => {
+            console.log('頁面載入完成');
             renderApps();
             
             // 檢查是否已關閉過提示
             const promptClosed = localStorage.getItem('installPromptClosed');
+            console.log('installPromptClosed:', promptClosed);
             
             // 如果已安裝為 PWA，不顯示提示
             if (isStandalone()) {
-                console.log('已安裝為 PWA，隱藏安裝提示');
+                console.log('已安裝為 PWA');
                 return;
             }
 
@@ -549,15 +565,16 @@
 
             // iOS 設備顯示手動安裝指引
             if (isIOS()) {
+                console.log('檢測到 iOS 設備，2秒後顯示安裝指引');
                 setTimeout(() => {
                     showIOSInstallGuide();
                 }, 2000);
             } else {
+                console.log('非 iOS 設備，等待 beforeinstallprompt 事件');
                 // Android/Desktop 等待 beforeinstallprompt 事件
                 setTimeout(() => {
                     if (!deferredPrompt) {
-                        console.log('瀏覽器不支援自動安裝提示');
-                        installPrompt.classList.remove('show');
+                        console.log('10秒後仍未觸發 beforeinstallprompt，可能不支援');
                     }
                 }, 10000);
             }
