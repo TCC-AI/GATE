@@ -57,30 +57,32 @@
         }
 
 .title {
-    font-size: 3.5rem;
-    font-weight: 900;
-    background: linear-gradient(180deg, #FFFFFF 0%, #FFD700 50%, #FFA500 100%);
+    font-size: 3.6rem;
+    font-weight: 1000;
+    background: linear-gradient(90deg, 
+        #FFD700 0%, 
+        #FFA500 25%, 
+        #FF8C00 50%, 
+        #00D4FF 75%, 
+        #090979 100%
+    );
+    background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     text-align: center;
     margin-bottom: 30px;
-    letter-spacing: 6px;
-    filter: 
-        drop-shadow(0 1px 0 #FFD700)
-        drop-shadow(0 2px 0 #FFC700)
-        drop-shadow(0 3px 0 #FFB700)
-        drop-shadow(0 4px 0 #FFA700)
-        drop-shadow(0 5px 0 #FF9700)
-        drop-shadow(0 6px 1px rgba(0,0,0,.1))
-        drop-shadow(0 0 5px rgba(255,215,0,.3))
-        drop-shadow(0 1px 3px rgba(0,0,0,.3))
-        drop-shadow(0 3px 5px rgba(0,0,0,.2))
-        drop-shadow(0 5px 10px rgba(255,165,0,.4))
-        drop-shadow(0 10px 10px rgba(0,0,0,.2))
-        drop-shadow(0 20px 20px rgba(0,0,0,.15));
-    animation: fadeInDown 0.8s ease-out 0.2s both, titleBounce 2s ease-in-out infinite;
+    letter-spacing: 5px;
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6))
+            drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+    animation: fadeInDown 0.8s ease-out 0.2s both, rainbowFlow 4s linear infinite;
 }
+
+@keyframes rainbowFlow {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
 
 @keyframes titleBounce {
     0%, 100% { transform: translateY(0); }
