@@ -373,127 +373,170 @@
         <button id="installButton">安裝</button>
     </div>
 
-    <script>
-        // 應用程式資料配置
-        const apps = [
-            { name: 'AI數位資料', icon: 'app1.png', url: 'https://tcc-ai.github.io/digidata/' },
-            { name: 'AI風控管理', icon: 'app2.png', url: 'https://tcc-ai.github.io/Risk/' },
-            { name: 'AI路徑規劃', icon: 'app3.png', url: 'https://tcc-ai.github.io/GAIRoute/' },
-            { name: 'AI派車中心', icon: 'app3.png', url: 'https://tcc-ai.github.io/GAITransporter/' },
-            { name: 'AI智慧庫存', icon: 'app4.png', url: 'https://tcc-ai.github.io/GAIstock/' },
-            { name: 'AI智能職訓', icon: 'app5.png', url: 'https://tcc-ai.github.io/TRAIN/' },
-            { name: '應用程式 7', icon: 'app7.png', url: 'https://example.com/app7' },
-            { name: '應用程式 8', icon: 'app8.png', url: 'https://example.com/app8' },
-            { name: '應用程式 9', icon: 'app9.png', url: 'https://example.com/app9' },
-            { name: '應用程式 10', icon: 'app10.png', url: 'https://example.com/app10' },
-            { name: '應用程式 11', icon: 'app11.png', url: 'https://example.com/app11' },
-            { name: '應用程式 12', icon: 'app12.png', url: 'https://example.com/app12' }
-            
-        ];
+<script>
+    // 應用程式資料配置
+    const apps = [
+        { name: 'AI數位資料', icon: 'app1.png', url: 'https://tcc-ai.github.io/digidata/' },
+        { name: 'AI風控管理', icon: 'app2.png', url: 'https://tcc-ai.github.io/Risk/' },
+        { name: 'AI路徑規劃', icon: 'app3.png', url: 'https://tcc-ai.github.io/GAIRoute/' },
+        { name: 'AI派車中心', icon: 'app3.png', url: 'https://tcc-ai.github.io/GAITransporter/' },
+        { name: 'AI智慧庫存', icon: 'app4.png', url: 'https://tcc-ai.github.io/GAIstock/' },
+        { name: 'AI智能職訓', icon: 'app5.png', url: 'https://tcc-ai.github.io/TRAIN/' },
+        { name: '應用程式 7', icon: 'app7.png', url: 'https://example.com/app7' },
+        { name: '應用程式 8', icon: 'app8.png', url: 'https://example.com/app8' },
+        { name: '應用程式 9', icon: 'app9.png', url: 'https://example.com/app9' },
+        { name: '應用程式 10', icon: 'app10.png', url: 'https://example.com/app10' },
+        { name: '應用程式 11', icon: 'app11.png', url: 'https://example.com/app11' },
+        { name: '應用程式 12', icon: 'app12.png', url: 'https://example.com/app12' }
+    ];
 
-        // 動態生成應用程式圖標
-        function renderApps() {
-            const grid = document.getElementById('appsGrid');
-            grid.innerHTML = '';
+    // 動態生成應用程式圖標
+    function renderApps() {
+        const grid = document.getElementById('appsGrid');
+        grid.innerHTML = '';
 
-            apps.forEach((app, index) => {
-                const appItem = document.createElement('a');
-                appItem.className = 'app-item';
-                appItem.href = app.url;
-                appItem.target = '_blank';
-                appItem.rel = 'noopener noreferrer';
-                appItem.style.animationDelay = `${index * 0.05}s`;
+        apps.forEach((app, index) => {
+            const appItem = document.createElement('a');
+            appItem.className = 'app-item';
+            appItem.href = app.url;
+            appItem.target = '_blank';
+            appItem.rel = 'noopener noreferrer';
+            appItem.style.animationDelay = `${index * 0.05}s`;
 
-                appItem.innerHTML = `
-                    <div class="app-icon-wrapper">
-                        <div class="app-icon">
-                            <img src="${app.icon}" alt="${app.name}" onerror="this.parentElement.innerHTML='📱'">
-                        </div>
+            appItem.innerHTML = `
+                <div class="app-icon-wrapper">
+                    <div class="app-icon">
+                        <img src="${app.icon}" alt="${app.name}" onerror="this.parentElement.innerHTML='📱'">
                     </div>
-                    <span class="app-name">${app.name}</span>
-                `;
+                </div>
+                <span class="app-name">${app.name}</span>
+            `;
 
-                grid.appendChild(appItem);
-            });
+            grid.appendChild(appItem);
+        });
+    }
+
+    // 檢測是否為 iOS 設備
+    function isIOS() {
+        return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
+    // 檢測是否已安裝為 PWA
+    function isStandalone() {
+        return window.matchMedia('(display-mode: standalone)').matches || 
+               window.navigator.standalone === true;
+    }
+
+    // PWA 安裝功能
+    let deferredPrompt;
+    const installPrompt = document.getElementById('installPrompt');
+    const installButton = document.getElementById('installButton');
+
+    // iOS 安裝指引
+    function showIOSInstallGuide() {
+        installPrompt.innerHTML = `
+            <span>📱 點擊 <strong>分享</strong> 按鈕 → <strong>加入主畫面</strong></span>
+            <button id="iosCloseButton">知道了</button>
+        `;
+        installPrompt.classList.add('show');
+
+        document.getElementById('iosCloseButton').addEventListener('click', () => {
+            installPrompt.classList.remove('show');
+            localStorage.setItem('installPromptClosed', 'true');
+        });
+    }
+
+    // Android/Desktop 安裝
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installPrompt.classList.add('show');
+    });
+
+    installButton.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        
+        if (outcome === 'accepted') {
+            console.log('使用者接受安裝');
+        }
+        
+        deferredPrompt = null;
+        installPrompt.classList.remove('show');
+        localStorage.setItem('installPromptClosed', 'true');
+    });
+
+    // 已安裝後隱藏提示
+    window.addEventListener('appinstalled', () => {
+        installPrompt.classList.remove('show');
+        console.log('PWA 已安裝');
+    });
+
+    // Service Worker 註冊 (PWA 必要)
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            const swCode = `
+                self.addEventListener('install', (event) => {
+                    console.log('Service Worker 安裝中');
+                    self.skipWaiting();
+                });
+
+                self.addEventListener('activate', (event) => {
+                    console.log('Service Worker 已啟動');
+                    return self.clients.claim();
+                });
+
+                self.addEventListener('fetch', (event) => {
+                    event.respondWith(fetch(event.request));
+                });
+            `;
+
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(blob);
+
+            navigator.serviceWorker.register(swUrl)
+                .then(reg => console.log('Service Worker 註冊成功', reg))
+                .catch(err => console.log('Service Worker 註冊失敗', err));
+        });
+    }
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', () => {
+        renderApps();
+        
+        // 檢查是否已關閉過提示
+        const promptClosed = localStorage.getItem('installPromptClosed');
+        
+        // 如果已安裝為 PWA，不顯示提示
+        if (isStandalone()) {
+            installPrompt.classList.remove('show');
+            return;
         }
 
-        // PWA 安裝功能
-        let deferredPrompt;
-        const installPrompt = document.getElementById('installPrompt');
-        const installButton = document.getElementById('installButton');
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installPrompt.classList.add('show');
-        });
-
-        installButton.addEventListener('click', async () => {
-            if (!deferredPrompt) return;
-
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            
-            if (outcome === 'accepted') {
-                console.log('使用者接受安裝');
-            }
-            
-            deferredPrompt = null;
-            installPrompt.classList.remove('show');
-        });
-
-        // 已安裝後隱藏提示
-        window.addEventListener('appinstalled', () => {
-            installPrompt.classList.remove('show');
-            console.log('PWA 已安裝');
-        });
-
-        // Service Worker 註冊 (PWA 必要)
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                const swCode = `
-                    self.addEventListener('install', (event) => {
-                        console.log('Service Worker 安裝中');
-                        self.skipWaiting();
-                    });
-
-                    self.addEventListener('activate', (event) => {
-                        console.log('Service Worker 已啟動');
-                        return self.clients.claim();
-                    });
-
-                    self.addEventListener('fetch', (event) => {
-                        event.respondWith(fetch(event.request));
-                    });
-                `;
-
-                const blob = new Blob([swCode], { type: 'application/javascript' });
-                const swUrl = URL.createObjectURL(blob);
-
-                navigator.serviceWorker.register(swUrl)
-                    .then(reg => console.log('Service Worker 註冊成功', reg))
-                    .catch(err => console.log('Service Worker 註冊失敗', err));
-            });
-        }
-
-        // 初始化
-        document.addEventListener('DOMContentLoaded', () => {
-            renderApps();
-            
-            // 3秒後自動隱藏安裝提示
+        // iOS 設備顯示手動安裝指引
+        if (isIOS() && !promptClosed) {
+            setTimeout(() => {
+                showIOSInstallGuide();
+            }, 2000);
+        } else if (!promptClosed) {
+            // Android/Desktop 顯示自動安裝提示
             setTimeout(() => {
                 if (!deferredPrompt) {
                     installPrompt.classList.remove('show');
                 }
             }, 10000);
-        });
+        }
+    });
 
-        // 防止圖片拖曳
-        document.addEventListener('dragstart', (e) => {
-            if (e.target.tagName === 'IMG') {
-                e.preventDefault();
-            }
-        });
-    </script>
+    // 防止圖片拖曳
+    document.addEventListener('dragstart', (e) => {
+        if (e.target.tagName === 'IMG') {
+            e.preventDefault();
+        }
+    });
+</script>
+
 </body>
 </html>
