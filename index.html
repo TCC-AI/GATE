@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0f0c29">
     <meta name="description" content="昶青集團應用程式入口 - AI驅動的智慧管理平台">
-    <title>昶青集團應用程式入口 - AI驅動的智慧管理平台</title>
+    <title>昶青實業 AI-GATE</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -499,7 +499,7 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
 
-        /* ==================== 手機版樣式 ==================== */
+        /* ==================== 手機版 - Pinterest 瀑布流樣式 ==================== */
         @media (max-width: 768px) {
             body {
                 padding: 15px;
@@ -521,72 +521,107 @@
                 border-radius: 25px;
             }
 
-            /* 手機版 - iOS App Store 風格垂直滾動 */
+            /* Pinterest 瀑布流佈局 */
             .apps-grid {
-                display: flex;
-                flex-direction: column;
-                gap: 25px;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
                 padding: 15px 5px;
+                grid-auto-rows: auto;
             }
 
-            /* 手機版卡片 - 保留不規則佈局 */
+            /* 手機版卡片 - 不規則高度 */
             .app-item {
                 width: 100%;
-                height: 140px;
+                height: auto;
                 perspective: none;
             }
 
-            /* 第1個卡片 - 大卡片 */
-            .app-item:nth-child(1) {
-                height: 200px;
+            /* 瀑布流不規則高度 */
+            .app-item:nth-child(1) .card-front {
+                min-height: 220px;
             }
 
-            /* 第5個卡片 - 橫向卡片 */
-            .app-item:nth-child(5) {
-                height: 120px;
+            .app-item:nth-child(2) .card-front {
+                min-height: 180px;
             }
 
-            /* 第8個卡片 - 高卡片 */
-            .app-item:nth-child(8) {
-                height: 180px;
+            .app-item:nth-child(3) .card-front {
+                min-height: 200px;
+            }
+
+            .app-item:nth-child(4) .card-front {
+                min-height: 190px;
+            }
+
+            .app-item:nth-child(5) .card-front {
+                min-height: 170px;
+            }
+
+            .app-item:nth-child(6) .card-front {
+                min-height: 210px;
+            }
+
+            .app-item:nth-child(7) .card-front {
+                min-height: 185px;
+            }
+
+            .app-item:nth-child(8) .card-front {
+                min-height: 195px;
+            }
+
+            .app-item:nth-child(9) .card-front {
+                min-height: 175px;
+            }
+
+            .app-item:nth-child(10) .card-front {
+                min-height: 205px;
+            }
+
+            .app-item:nth-child(11) .card-front {
+                min-height: 180px;
+            }
+
+            .app-item:nth-child(12) .card-front {
+                min-height: 190px;
             }
 
             /* 手機版卡片內容 */
             .card-front {
-                padding: 15px;
-                justify-content: center;
+                padding: 20px 15px;
+                justify-content: flex-start;
+                padding-top: 25px;
             }
 
             /* 手機版圖標 - 70% 空間 */
             .app-icon-wrapper {
-                width: 90px;
-                height: 90px;
-                margin-bottom: 10px;
+                width: 100px;
+                height: 100px;
+                margin-bottom: 15px;
             }
 
-            .app-item:nth-child(1) .app-icon-wrapper {
+            .app-item:nth-child(1) .app-icon-wrapper,
+            .app-item:nth-child(6) .app-icon-wrapper {
                 width: 120px;
                 height: 120px;
             }
 
-            .app-item:nth-child(5) .app-icon-wrapper {
-                width: 75px;
-                height: 75px;
-            }
-
-            .app-item:nth-child(8) .app-icon-wrapper {
-                width: 100px;
-                height: 100px;
+            .app-item:nth-child(5) .app-icon-wrapper,
+            .app-item:nth-child(9) .app-icon-wrapper {
+                width: 85px;
+                height: 85px;
             }
 
             /* 手機版文字 - 30% 空間 */
             .app-name {
-                font-size: 0.85rem;
+                font-size: 0.9rem;
                 font-weight: 600;
+                margin-top: auto;
             }
 
-            .app-item:nth-child(1) .app-name {
-                font-size: 1.1rem;
+            .app-item:nth-child(1) .app-name,
+            .app-item:nth-child(6) .app-name {
+                font-size: 1rem;
             }
 
             /* 手機版取消翻轉效果 */
@@ -661,29 +696,22 @@
             }
 
             .apps-grid {
-                gap: 20px;
-            }
-
-            .app-item {
-                height: 130px;
-            }
-
-            .app-item:nth-child(1) {
-                height: 180px;
+                gap: 12px;
             }
 
             .app-icon-wrapper {
-                width: 80px;
-                height: 80px;
+                width: 90px;
+                height: 90px;
             }
 
-            .app-item:nth-child(1) .app-icon-wrapper {
+            .app-item:nth-child(1) .app-icon-wrapper,
+            .app-item:nth-child(6) .app-icon-wrapper {
                 width: 110px;
                 height: 110px;
             }
 
             .app-name {
-                font-size: 0.8rem;
+                font-size: 0.85rem;
             }
         }
 
@@ -707,7 +735,7 @@
         </div>
 
         <!-- 標題 -->
-        <h1 class="title">昶青集團應用程式入口<br>AI驅動的智慧管理平台</h1>
+        <h1 class="title">AI-GATE</h1>
 
         <!-- 主容器 -->
         <div class="main-container">
