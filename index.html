@@ -181,8 +181,8 @@
         /* PC 版 - Bento Box 不規則網格佈局 */
         .apps-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-auto-rows: 140px;
+            grid-template-columns: repeat(2, 1fr);
+            grid-auto-rows: 180px;
             gap: 20px;
             padding: 20px;
             position: relative;
@@ -192,15 +192,11 @@
         /* PC 版特殊尺寸卡片 */
         .app-item:nth-child(1) {
             grid-column: span 2;
-            grid-row: span 2;
+            grid-row: span 1;
         }
 
         .app-item:nth-child(5) {
             grid-column: span 2;
-        }
-
-        .app-item:nth-child(8) {
-            grid-row: span 2;
         }
 
         /* 3D 翻轉卡片 */
@@ -243,10 +239,9 @@
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
+            padding: 25px;
             transition: all 0.3s ease;
         }
 
@@ -264,32 +259,32 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 25px;
             color: white;
         }
 
         .card-back-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             text-align: center;
         }
 
         .card-back-desc {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             text-align: center;
             opacity: 0.9;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         .card-back-action {
-            margin-top: 15px;
-            padding: 8px 20px;
+            margin-top: 18px;
+            padding: 10px 25px;
             background: white;
             color: #667eea;
-            border-radius: 20px;
+            border-radius: 25px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             transition: all 0.3s ease;
         }
 
@@ -298,26 +293,22 @@
             box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
         }
 
-        /* 圖標容器 */
+        /* 🎯 新設計：橫向排列 - 圖標在左，文字在右 */
         .app-icon-wrapper {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 15px;
+            width: 150px;
+            height: 150px;
+            flex-shrink: 0;
+            margin-right: 15px;
             position: relative;
-        }
-
-        .app-item:nth-child(1) .app-icon-wrapper {
-            width: 120px;
-            height: 120px;
         }
 
         .app-icon {
             width: 100%;
             height: 100%;
-            border-radius: 20px;
+            border-radius: 25px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 3px;
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            padding: 4px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
             transition: all 0.3s ease;
         }
 
@@ -325,21 +316,44 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 18px;
+            border-radius: 22px;
             background: white;
         }
 
-        .app-name {
-            font-size: 1rem;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.95);
-            text-align: center;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
+        /* 文字區域 */
+        .app-text-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: left;
+            min-width: 0;
         }
 
+        .app-name {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.98);
+            text-shadow: 0 2px 15px rgba(102, 126, 234, 0.8);
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .app-desc {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 第一個卡片特殊樣式 */
         .app-item:nth-child(1) .app-name {
-            font-size: 1.3rem;
+            font-size: 1.8rem;
+        }
+
+        .app-item:nth-child(1) .app-desc {
+            font-size: 1rem;
         }
 
         /* 磁吸效果 */
@@ -349,7 +363,7 @@
         }
 
         .app-item.magnetic-active {
-            transform: translate(var(--magnetic-x), var(--magnetic-y)) scale(1.05);
+            transform: translate(var(--magnetic-x), var(--magnetic-y)) scale(1.02);
         }
 
         /* 長按詳情彈窗 */
@@ -521,47 +535,34 @@
                 border-radius: 25px;
             }
 
-            /* 手機版 - iOS App Store 風格垂直滾動 */
+            /* 手機版 - 垂直滾動列表 */
             .apps-grid {
                 display: flex;
                 flex-direction: column;
-                gap: 25px;
+                gap: 20px;
                 padding: 15px 5px;
             }
 
-            /* 手機版卡片 - 保留不規則佈局 */
             .app-item {
                 width: 100%;
                 height: 140px;
                 perspective: none;
             }
 
-            /* 第1個卡片 - 大卡片 */
+            /* 第一個卡片 */
             .app-item:nth-child(1) {
-                height: 200px;
+                height: 160px;
             }
 
-            /* 第5個卡片 - 橫向卡片 */
-            .app-item:nth-child(5) {
-                height: 120px;
-            }
-
-            /* 第8個卡片 - 高卡片 */
-            .app-item:nth-child(8) {
-                height: 180px;
-            }
-
-            /* 手機版卡片內容 */
             .card-front {
-                padding: 15px;
-                justify-content: center;
+                padding: 20px;
             }
 
-            /* 手機版圖標 - 70% 空間 */
+            /* 手機版圖標 */
             .app-icon-wrapper {
-                width: 90px;
-                height: 90px;
-                margin-bottom: 10px;
+                width: 100px;
+                height: 100px;
+                margin-right: 15px;
             }
 
             .app-item:nth-child(1) .app-icon-wrapper {
@@ -569,24 +570,21 @@
                 height: 120px;
             }
 
-            .app-item:nth-child(5) .app-icon-wrapper {
-                width: 75px;
-                height: 75px;
-            }
-
-            .app-item:nth-child(8) .app-icon-wrapper {
-                width: 100px;
-                height: 100px;
-            }
-
-            /* 手機版文字 - 30% 空間 */
+            /* 手機版文字 */
             .app-name {
-                font-size: 0.85rem;
-                font-weight: 600;
+                font-size: 1.1rem;
             }
 
             .app-item:nth-child(1) .app-name {
-                font-size: 1.1rem;
+                font-size: 1.3rem;
+            }
+
+            .app-desc {
+                font-size: 0.8rem;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
             }
 
             /* 手機版取消翻轉效果 */
@@ -600,7 +598,7 @@
 
             /* 手機版點擊效果 */
             .app-item:active {
-                transform: scale(0.97);
+                transform: scale(0.98);
             }
 
             /* 手機版詳情彈窗 */
@@ -661,36 +659,40 @@
             }
 
             .apps-grid {
-                gap: 20px;
+                gap: 15px;
             }
 
             .app-item {
-                height: 130px;
+                height: 120px;
             }
 
             .app-item:nth-child(1) {
-                height: 180px;
+                height: 140px;
             }
 
             .app-icon-wrapper {
-                width: 80px;
-                height: 80px;
+                width: 85px;
+                height: 85px;
             }
 
             .app-item:nth-child(1) .app-icon-wrapper {
-                width: 110px;
-                height: 110px;
+                width: 100px;
+                height: 100px;
             }
 
             .app-name {
-                font-size: 0.8rem;
+                font-size: 1rem;
+            }
+
+            .app-desc {
+                font-size: 0.75rem;
             }
         }
 
         /* 平板版 */
         @media (min-width: 769px) and (max-width: 1200px) {
             .apps-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -832,10 +834,13 @@
                         <div class="card-front">
                             <div class="app-icon-wrapper">
                                 <div class="app-icon">
-                                    <img src="${app.icon}" alt="${app.name}" onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;font-size:2rem;\\'>📱</div>'">
+                                    <img src="${app.icon}" alt="${app.name}" onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;font-size:3rem;\\'>📱</div>'">
                                 </div>
                             </div>
-                            <span class="app-name">${app.name}</span>
+                            <div class="app-text-wrapper">
+                                <div class="app-name">${app.name}</div>
+                                <div class="app-desc">${app.desc}</div>
+                            </div>
                         </div>
                         <div class="card-back">
                             <div class="card-back-title">${app.name}</div>
@@ -897,7 +902,7 @@
                             if (navigator.vibrate) {
                                 navigator.vibrate(50);
                             }
-                        }, 500); // 長按 500ms
+                        }, 500);
                     });
 
                     item.addEventListener('touchend', function() {
@@ -932,7 +937,6 @@
         // ==================== PC 版磁吸互動效果 ====================
         function initMagneticEffect() {
             const appItems = document.querySelectorAll('.app-item');
-            const magneticRadius = 150;
 
             appItems.forEach(item => {
                 item.addEventListener('mouseenter', function() {
@@ -955,38 +959,11 @@
                     const deltaX = e.clientX - itemCenterX;
                     const deltaY = e.clientY - itemCenterY;
                     
-                    const magneticX = Math.max(-20, Math.min(20, deltaX * 0.15));
-                    const magneticY = Math.max(-20, Math.min(20, deltaY * 0.15));
+                    const magneticX = Math.max(-15, Math.min(15, deltaX * 0.1));
+                    const magneticY = Math.max(-15, Math.min(15, deltaY * 0.1));
                     
                     this.style.setProperty('--magnetic-x', `${magneticX}px`);
                     this.style.setProperty('--magnetic-y', `${magneticY}px`);
-
-                    appItems.forEach(otherItem => {
-                        if (otherItem === this) return;
-
-                        const otherRect = otherItem.getBoundingClientRect();
-                        const otherCenterX = otherRect.left + otherRect.width / 2;
-                        const otherCenterY = otherRect.top + otherRect.height / 2;
-                        
-                        const distance = Math.sqrt(
-                            Math.pow(itemCenterX - otherCenterX, 2) + 
-                            Math.pow(itemCenterY - otherCenterY, 2)
-                        );
-
-                        if (distance < magneticRadius) {
-                            const force = 1 - (distance / magneticRadius);
-                            const pushX = (otherCenterX - itemCenterX) * force * 0.3;
-                            const pushY = (otherCenterY - itemCenterY) * force * 0.3;
-                            
-                            otherItem.style.setProperty('--magnetic-x', `${pushX}px`);
-                            otherItem.style.setProperty('--magnetic-y', `${pushY}px`);
-                            otherItem.classList.add('magnetic-active');
-                        } else {
-                            otherItem.style.setProperty('--magnetic-x', '0px');
-                            otherItem.style.setProperty('--magnetic-y', '0px');
-                            otherItem.classList.remove('magnetic-active');
-                        }
-                    });
                 });
             });
         }
