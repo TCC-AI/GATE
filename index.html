@@ -57,32 +57,36 @@
         }
 
 .title {
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: 900;
-    color: #FFFFFF;
+    background: linear-gradient(180deg, #FFFFFF 0%, #FFD700 50%, #FFA500 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     text-align: center;
     margin-bottom: 30px;
-    letter-spacing: 8px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(15px);
-    padding: 25px 50px;
-    border-radius: 20px;
-    border: 2px solid rgba(255, 215, 0, 0.4);
-    box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.3),
-        inset 0 0 30px rgba(255, 215, 0, 0.2),
-        0 0 60px rgba(255, 215, 0, 0.3);
-    text-shadow: 
-        0 0 20px rgba(255, 255, 255, 0.9),
-        0 0 40px rgba(255, 215, 0, 0.7),
-        0 4px 8px rgba(0, 0, 0, 0.4);
-    animation: fadeInDown 0.8s ease-out 0.2s both, glassFloat 4s ease-in-out infinite;
+    letter-spacing: 6px;
+    filter: 
+        drop-shadow(0 1px 0 #FFD700)
+        drop-shadow(0 2px 0 #FFC700)
+        drop-shadow(0 3px 0 #FFB700)
+        drop-shadow(0 4px 0 #FFA700)
+        drop-shadow(0 5px 0 #FF9700)
+        drop-shadow(0 6px 1px rgba(0,0,0,.1))
+        drop-shadow(0 0 5px rgba(255,215,0,.3))
+        drop-shadow(0 1px 3px rgba(0,0,0,.3))
+        drop-shadow(0 3px 5px rgba(0,0,0,.2))
+        drop-shadow(0 5px 10px rgba(255,165,0,.4))
+        drop-shadow(0 10px 10px rgba(0,0,0,.2))
+        drop-shadow(0 20px 20px rgba(0,0,0,.15));
+    animation: fadeInDown 0.8s ease-out 0.2s both, titleBounce 2s ease-in-out infinite;
 }
 
-@keyframes glassFloat {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+@keyframes titleBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
 }
+
 
 
 
