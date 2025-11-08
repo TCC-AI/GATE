@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#1a5f7a">
-    <meta name="description" content="昶青集團應用程式入口">
+    <meta name="theme-color" content="#0f0c29">
+    <meta name="description" content="昶青集團應用程式入口 - AI驅動的智慧管理平台">
     <title>昶青實業 AI-GATE</title>
     
-    <!-- Google Fonts - Noto Sans TC -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     
     <!-- PWA Manifest -->
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIuaYtumdkumbhuWcmCBHQUktR2F0ZSIsCiAgInNob3J0X25hbWUiOiAiR0FJLUdhdGUiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzFhNWY3YSIsCiAgInRoZW1lX2NvbG9yIjogIiMxYTVmN2EiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJSMC5wbmciLAogICAgICAic2l6ZXMiOiAiMTUweDE1MCIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiUjAucG5nIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciCiAgICB9CiAgXQp9">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIuaYtumdkumbhuWcmCBBSS1HQVRFIiwKICAic2hvcnRfbmFtZSI6ICJBSS1HQVRFIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwZjBjMjkiLAogICJ0aGVtZV9jb2xvciI6ICIjMGYwYzI5IiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiUjAucG5nIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciLAogICAgICAicHVycG9zZSI6ICJhbnkgbWFza2FibGUiCiAgICB9LAogICAgewogICAgICAic3JjIjogIlIwLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0sCiAgImRlc2NyaXB0aW9uIjogIuaYtumdkumbhuWcmEFJ5oeA5oWn566h55CG5bmz5Y+wIiwKICAib3JpZW50YXRpb24iOiAicG9ydHJhaXQiCn0=">
     
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="R0.png">
@@ -26,73 +26,106 @@
         }
 
         body {
-            font-family: 'Noto Sans TC', 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+            font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
             min-height: 100vh;
-            background: linear-gradient(135deg, #2A7B9B 0%, #57C785 25%, #EDDD53 50%, #00D4FF 75%, #090979 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            position: relative;
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
-            overflow-x: hidden;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* 粒子連線背景 Canvas */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
         }
 
+        /* 內容容器 */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Logo 容器 */
         .logo-container {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             animation: fadeInDown 0.8s ease-out;
+            position: relative;
         }
 
         .logo {
             width: 120px;
             height: 120px;
             object-fit: contain;
-            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
-            transition: transform 0.3s ease;
+            filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.8))
+                    drop-shadow(0 8px 20px rgba(0, 0, 0, 0.5));
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: float 6s ease-in-out infinite;
         }
 
         .logo:hover {
-            transform: scale(1.05) rotate(5deg);
+            transform: scale(1.1) rotate(360deg);
+            filter: drop-shadow(0 0 50px rgba(102, 126, 234, 1))
+                    drop-shadow(0 12px 30px rgba(0, 0, 0, 0.7));
         }
 
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* 標題 */
         .title {
-            font-family: 'Noto Sans TC', 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+            font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
             font-size: 4rem;
             font-weight: 900;
             background: linear-gradient(90deg, 
-                #FFD700 0%, 
-                #FFA500 25%, 
-                #FF8C00 50%, 
-                #00D4FF 75%, 
-                #090979 100%
+                #667eea 0%, 
+                #764ba2 25%, 
+                #f093fb 50%, 
+                #4facfe 75%, 
+                #00f2fe 100%
             );
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-align: center;
-            margin-bottom: 30px;
-            letter-spacing: 5px;
-            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6))
-                    drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
-            animation: fadeInDown 0.8s ease-out 0.2s both, rainbowFlow 4s linear infinite;
+            margin-bottom: 40px;
+            letter-spacing: 8px;
+            filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.8));
+            animation: fadeInDown 0.8s ease-out 0.2s both, 
+                       gradientFlow 5s linear infinite,
+                       glow 2s ease-in-out infinite alternate;
         }
 
-        @keyframes rainbowFlow {
+        @keyframes gradientFlow {
             0% { background-position: 0% center; }
             100% { background-position: 200% center; }
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.6)); }
+            to { filter: drop-shadow(0 0 40px rgba(102, 126, 234, 1)); }
         }
 
         @keyframes fadeInDown {
             from {
                 opacity: 0;
-                transform: translateY(-30px);
+                transform: translateY(-50px);
             }
             to {
                 opacity: 1;
@@ -100,21 +133,44 @@
             }
         }
 
+        /* Glassmorphism 主容器 */
         .main-container {
-            background: rgba(255, 255, 255, 0.85);
-            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 30px;
             padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 900px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                inset 0 0 60px rgba(255, 255, 255, 0.05);
+            max-width: 1400px;
             width: 100%;
-            backdrop-filter: blur(10px);
             animation: fadeInUp 0.8s ease-out 0.4s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(50px);
             }
             to {
                 opacity: 1;
@@ -122,62 +178,144 @@
             }
         }
 
+        /* Bento Box 不規則網格佈局 */
         .apps-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: 140px;
+            gap: 20px;
             padding: 20px;
+            position: relative;
+            z-index: 1;
         }
 
+        /* 特殊尺寸卡片 */
+        .app-item:nth-child(1) {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .app-item:nth-child(5) {
+            grid-column: span 2;
+        }
+
+        .app-item:nth-child(8) {
+            grid-row: span 2;
+        }
+
+        /* 3D 翻轉卡片 */
         .app-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            perspective: 1000px;
             cursor: pointer;
             position: relative;
+            text-decoration: none;
+            transition: transform 0.3s ease;
         }
 
-        .app-icon-wrapper {
+        .app-card {
             width: 100%;
-            aspect-ratio: 1;
-            border-radius: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 3px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
             position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .app-item:hover .app-card {
+            transform: rotateY(180deg);
+        }
+
+        /* 卡片正面 */
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
             overflow: hidden;
         }
 
-        .app-icon-wrapper::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
+        .card-front {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: all 0.3s ease;
         }
 
-        .app-item:hover .app-icon-wrapper::before {
-            opacity: 1;
+        .app-item:hover .card-front {
+            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.5);
+        }
+
+        /* 卡片背面 */
+        .card-back {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .card-back-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .card-back-desc {
+            font-size: 0.85rem;
+            text-align: center;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .card-back-action {
+            margin-top: 15px;
+            padding: 8px 20px;
+            background: white;
+            color: #667eea;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .card-back-action:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+        }
+
+        /* 圖標容器 */
+        .app-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .app-item:nth-child(1) .app-icon-wrapper {
+            width: 120px;
+            height: 120px;
         }
 
         .app-icon {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            border-radius: 18px;
-            background: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            color: #667eea;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 3px;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
         }
 
         .app-icon img {
@@ -185,100 +323,89 @@
             height: 100%;
             object-fit: cover;
             border-radius: 18px;
+            background: white;
         }
 
         .app-name {
-            margin-top: 12px;
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 600;
-            color: #2c3e50;
+            color: rgba(255, 255, 255, 0.95);
             text-align: center;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
             transition: all 0.3s ease;
-            max-width: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
 
-        .app-item:hover {
-            transform: translateY(-8px);
+        .app-item:nth-child(1) .app-name {
+            font-size: 1.3rem;
         }
 
-        .app-item:hover .app-icon-wrapper {
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
-            transform: scale(1.05);
+        /* 磁吸效果 - 使用 CSS 變數 */
+        .app-item {
+            --magnetic-x: 0;
+            --magnetic-y: 0;
         }
 
-        .app-item:hover .app-name {
-            color: #667eea;
-            transform: scale(1.05);
+        .app-item.magnetic-active {
+            transform: translate(var(--magnetic-x), var(--magnetic-y)) scale(1.05);
         }
 
-        .app-item:active {
-            transform: translateY(-4px) scale(0.98);
-        }
-
-        /* 安裝提示 - 修正版 */
+        /* PWA 安裝提示 - Glassmorphism 風格 */
         .install-prompt {
             position: fixed;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: translateX(-50%) translateY(150px);
+            background: rgba(102, 126, 234, 0.15);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
-            padding: 15px 30px;
+            padding: 18px 35px;
             border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             display: flex;
             align-items: center;
             gap: 15px;
-            transition: all 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1000;
-            max-width: 90%;
-            text-align: center;
-            flex-wrap: wrap;
-            justify-content: center;
             opacity: 0;
-            transform: translateX(-50%) translateY(100px);
             pointer-events: none;
         }
 
         .install-prompt.show {
             opacity: 1;
-            transform: translateX(-50%) translateY(0) !important;
+            transform: translateX(-50%) translateY(0);
             pointer-events: auto;
         }
 
-        .install-prompt:hover {
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
-        }
-
         .install-prompt button {
-            background: white;
-            color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-weight: bold;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
             font-family: 'Noto Sans TC', sans-serif;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
 
         .install-prompt button:hover {
             transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .install-prompt button:active {
-            transform: scale(0.95);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
 
         /* 響應式設計 */
+        @media (max-width: 1200px) {
+            .apps-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
             .title {
-                font-size: 2.6rem;
-                letter-spacing: 3px;
-                line-height: 1.3;
+                font-size: 2.5rem;
+                letter-spacing: 4px;
             }
 
             .main-container {
@@ -286,231 +413,415 @@
             }
 
             .apps-grid {
-                gap: 20px;
-                padding: 10px;
+                grid-template-columns: repeat(2, 1fr);
+                grid-auto-rows: 120px;
+                gap: 15px;
+            }
+
+            .app-item:nth-child(1) {
+                grid-column: span 2;
+                grid-row: span 1;
+            }
+
+            .app-item:nth-child(5),
+            .app-item:nth-child(8) {
+                grid-column: span 1;
+                grid-row: span 1;
             }
 
             .logo {
                 width: 100px;
                 height: 100px;
             }
-
-            .install-prompt {
-                padding: 12px 20px;
-                font-size: 0.9rem;
-            }
         }
 
         @media (max-width: 480px) {
             .title {
-                font-size: 2rem;
+                font-size: 1.8rem;
                 letter-spacing: 2px;
-                line-height: 1.4;
-                padding: 0 10px;
             }
 
             .main-container {
                 padding: 20px;
-                border-radius: 16px;
             }
 
             .apps-grid {
-                gap: 15px;
+                grid-template-columns: 1fr;
+                grid-auto-rows: 100px;
+            }
+
+            .app-item:nth-child(1) {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+
+            .app-icon-wrapper,
+            .app-item:nth-child(1) .app-icon-wrapper {
+                width: 60px;
+                height: 60px;
             }
 
             .app-name {
-                font-size: 0.85rem;
-            }
-
-            .logo {
-                width: 80px;
-                height: 80px;
-            }
-
-            .install-prompt {
-                padding: 10px 15px;
-                font-size: 0.85rem;
-                bottom: 10px;
-            }
-
-            .install-prompt button {
-                padding: 6px 15px;
-                font-size: 0.85rem;
-            }
-        }
-
-        @media (max-width: 375px) {
-            .title {
-                font-size: 1.6rem;
-                letter-spacing: 1px;
-            }
-            
-            .logo {
-                width: 70px;
-                height: 70px;
+                font-size: 0.9rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Logo -->
-    <div class="logo-container">
-        <img src="R0.png" alt="昶青集團 Logo" class="logo">
-    </div>
+    <!-- 粒子連線背景 -->
+    <canvas id="particleCanvas"></canvas>
 
-    <!-- 標題 -->
-    <h1 class="title">昶青實業 AI-GATE</h1>
+    <!-- 內容容器 -->
+    <div class="content-wrapper">
+        <!-- Logo -->
+        <div class="logo-container">
+            <img src="R0.png" alt="昶青集團 Logo" class="logo">
+        </div>
 
-    <!-- 主容器 -->
-    <div class="main-container">
-        <div class="apps-grid" id="appsGrid">
-            <!-- App 項目將由 JavaScript 動態生成 -->
+        <!-- 標題 -->
+        <h1 class="title">AI-GATE</h1>
+
+        <!-- 主容器 -->
+        <div class="main-container">
+            <div class="apps-grid" id="appsGrid">
+                <!-- App 項目將由 JavaScript 動態生成 -->
+            </div>
         </div>
     </div>
 
     <!-- PWA 安裝提示 -->
     <div class="install-prompt" id="installPrompt">
-        <span id="installText">📱 將 GAI-Gate 加入主畫面</span>
+        <span id="installText">📱 將 AI-GATE 加入主畫面</span>
         <button id="installButton">安裝</button>
     </div>
 
     <script>
-        // 應用程式資料配置
+        // ==================== 應用程式資料配置 ====================
         const apps = [
-            { name: 'AI數位資料', icon: 'app1.png', url: 'https://tcc-ai.github.io/digidata/' },
-            { name: 'AI風控管理', icon: 'app2.png', url: 'https://tcc-ai.github.io/Risk/' },
-            { name: 'AI路徑規劃', icon: 'app3.png', url: 'https://tcc-ai.github.io/GAIRoute/' },
-            { name: 'AI派車中心', icon: 'app3.png', url: 'https://tcc-ai.github.io/GAITransporter/' },
-            { name: 'AI智慧庫存', icon: 'app4.png', url: 'https://tcc-ai.github.io/GAIstock/' },
-            { name: 'AI智能職訓', icon: 'app5.png', url: 'https://tcc-ai.github.io/TRAIN/' },
-            { name: '應用程式 7', icon: 'app7.png', url: 'https://example.com/app7' },
-            { name: '應用程式 8', icon: 'app8.png', url: 'https://example.com/app8' },
-            { name: '應用程式 9', icon: 'app9.png', url: 'https://example.com/app9' },
-            { name: '應用程式 10', icon: 'app10.png', url: 'https://example.com/app10' },
-            { name: '應用程式 11', icon: 'app11.png', url: 'https://example.com/app11' },
-            { name: '應用程式 12', icon: 'app12.png', url: 'https://example.com/app12' }
+            { 
+                name: 'AI數位資料', 
+                icon: 'app1.png', 
+                url: 'https://tcc-ai.github.io/digidata/',
+                desc: '智能數據分析與管理平台'
+            },
+            { 
+                name: 'AI風控管理', 
+                icon: 'app2.png', 
+                url: 'https://tcc-ai.github.io/Risk/',
+                desc: '即時風險監控與預警系統'
+            },
+            { 
+                name: 'AI路徑規劃', 
+                icon: 'app3.png', 
+                url: 'https://tcc-ai.github.io/GAIRoute/',
+                desc: '智能物流路線優化'
+            },
+            { 
+                name: 'AI派車中心', 
+                icon: 'app3.png', 
+                url: 'https://tcc-ai.github.io/GAITransporter/',
+                desc: '自動化車輛調度系統'
+            },
+            { 
+                name: 'AI智慧庫存', 
+                icon: 'app4.png', 
+                url: 'https://tcc-ai.github.io/GAIstock/',
+                desc: '智能庫存預測與管理'
+            },
+            { 
+                name: 'AI智能職訓', 
+                icon: 'app5.png', 
+                url: 'https://tcc-ai.github.io/TRAIN/',
+                desc: '個性化員工培訓平台'
+            },
+            { 
+                name: '應用程式 7', 
+                icon: 'app7.png', 
+                url: 'https://example.com/app7',
+                desc: '即將推出...'
+            },
+            { 
+                name: '應用程式 8', 
+                icon: 'app8.png', 
+                url: 'https://example.com/app8',
+                desc: '即將推出...'
+            },
+            { 
+                name: '應用程式 9', 
+                icon: 'app9.png', 
+                url: 'https://example.com/app9',
+                desc: '即將推出...'
+            },
+            { 
+                name: '應用程式 10', 
+                icon: 'app10.png', 
+                url: 'https://example.com/app10',
+                desc: '即將推出...'
+            },
+            { 
+                name: '應用程式 11', 
+                icon: 'app11.png', 
+                url: 'https://example.com/app11',
+                desc: '即將推出...'
+            },
+            { 
+                name: '應用程式 12', 
+                icon: 'app12.png', 
+                url: 'https://example.com/app12',
+                desc: '即將推出...'
+            }
         ];
 
-        // 動態生成應用程式圖標
+        // ==================== 動態生成應用程式卡片 ====================
         function renderApps() {
             const grid = document.getElementById('appsGrid');
             grid.innerHTML = '';
 
             apps.forEach((app, index) => {
-                const appItem = document.createElement('a');
+                const appItem = document.createElement('div');
                 appItem.className = 'app-item';
-                appItem.href = app.url;
-                appItem.target = '_blank';
-                appItem.rel = 'noopener noreferrer';
+                appItem.dataset.url = app.url;
                 appItem.style.animationDelay = `${index * 0.05}s`;
 
                 appItem.innerHTML = `
-                    <div class="app-icon-wrapper">
-                        <div class="app-icon">
-                            <img src="${app.icon}" alt="${app.name}" onerror="this.parentElement.innerHTML='📱'">
+                    <div class="app-card">
+                        <div class="card-front">
+                            <div class="app-icon-wrapper">
+                                <div class="app-icon">
+                                    <img src="${app.icon}" alt="${app.name}" onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;font-size:2rem;\\'>📱</div>'">
+                                </div>
+                            </div>
+                            <span class="app-name">${app.name}</span>
+                        </div>
+                        <div class="card-back">
+                            <div class="card-back-title">${app.name}</div>
+                            <div class="card-back-desc">${app.desc}</div>
+                            <div class="card-back-action">立即開啟 →</div>
                         </div>
                     </div>
-                    <span class="app-name">${app.name}</span>
                 `;
+
+                // 點擊事件
+                appItem.addEventListener('click', () => {
+                    window.open(app.url, '_blank', 'noopener,noreferrer');
+                });
 
                 grid.appendChild(appItem);
             });
+
+            // 初始化磁吸效果
+            initMagneticEffect();
         }
 
-        // 檢測是否為 iOS 設備
+        // ==================== 磁吸互動效果 ====================
+        function initMagneticEffect() {
+            const appItems = document.querySelectorAll('.app-item');
+            const magneticRadius = 150; // 磁吸半徑
+
+            appItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.classList.add('magnetic-active');
+                });
+
+                item.addEventListener('mouseleave', function() {
+                    this.classList.remove('magnetic-active');
+                    this.style.setProperty('--magnetic-x', '0px');
+                    this.style.setProperty('--magnetic-y', '0px');
+                });
+
+                item.addEventListener('mousemove', function(e) {
+                    if (!this.classList.contains('magnetic-active')) return;
+
+                    const rect = this.getBoundingClientRect();
+                    const itemCenterX = rect.left + rect.width / 2;
+                    const itemCenterY = rect.top + rect.height / 2;
+                    
+                    const deltaX = e.clientX - itemCenterX;
+                    const deltaY = e.clientY - itemCenterY;
+                    
+                    // 限制磁吸距離
+                    const magneticX = Math.max(-20, Math.min(20, deltaX * 0.15));
+                    const magneticY = Math.max(-20, Math.min(20, deltaY * 0.15));
+                    
+                    this.style.setProperty('--magnetic-x', `${magneticX}px`);
+                    this.style.setProperty('--magnetic-y', `${magneticY}px`);
+
+                    // 影響周圍卡片
+                    appItems.forEach(otherItem => {
+                        if (otherItem === this) return;
+
+                        const otherRect = otherItem.getBoundingClientRect();
+                        const otherCenterX = otherRect.left + otherRect.width / 2;
+                        const otherCenterY = otherRect.top + otherRect.height / 2;
+                        
+                        const distance = Math.sqrt(
+                            Math.pow(itemCenterX - otherCenterX, 2) + 
+                            Math.pow(itemCenterY - otherCenterY, 2)
+                        );
+
+                        if (distance < magneticRadius) {
+                            const force = 1 - (distance / magneticRadius);
+                            const pushX = (otherCenterX - itemCenterX) * force * 0.3;
+                            const pushY = (otherCenterY - itemCenterY) * force * 0.3;
+                            
+                            otherItem.style.setProperty('--magnetic-x', `${pushX}px`);
+                            otherItem.style.setProperty('--magnetic-y', `${pushY}px`);
+                            otherItem.classList.add('magnetic-active');
+                        } else {
+                            otherItem.style.setProperty('--magnetic-x', '0px');
+                            otherItem.style.setProperty('--magnetic-y', '0px');
+                            otherItem.classList.remove('magnetic-active');
+                        }
+                    });
+                });
+            });
+        }
+
+        // ==================== 粒子連線背景系統 ====================
+        class ParticleSystem {
+            constructor() {
+                this.canvas = document.getElementById('particleCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.particleCount = window.innerWidth < 768 ? 30 : 60;
+                this.maxDistance = 150;
+                
+                this.resize();
+                this.init();
+                this.animate();
+                
+                window.addEventListener('resize', () => this.resize());
+            }
+
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+
+            init() {
+                this.particles = [];
+                for (let i = 0; i < this.particleCount; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5,
+                        radius: Math.random() * 2 + 1
+                    });
+                }
+            }
+
+            update() {
+                this.particles.forEach(particle => {
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+
+                    // 邊界檢測
+                    if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
+                    if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
+                });
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // 繪製粒子
+                this.particles.forEach(particle => {
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                    this.ctx.fillStyle = 'rgba(102, 126, 234, 0.6)';
+                    this.ctx.fill();
+                });
+
+                // 繪製連線
+                for (let i = 0; i < this.particles.length; i++) {
+                    for (let j = i + 1; j < this.particles.length; j++) {
+                        const dx = this.particles[i].x - this.particles[j].x;
+                        const dy = this.particles[i].y - this.particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < this.maxDistance) {
+                            const opacity = 1 - (distance / this.maxDistance);
+                            this.ctx.beginPath();
+                            this.ctx.strokeStyle = `rgba(102, 126, 234, ${opacity * 0.3})`;
+                            this.ctx.lineWidth = 1;
+                            this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
+                            this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
+                            this.ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            animate() {
+                this.update();
+                this.draw();
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // ==================== PWA 功能 ====================
         function isIOS() {
             return /iPhone|iPad|iPod/i.test(navigator.userAgent);
         }
 
-        // 檢測是否已安裝為 PWA
         function isStandalone() {
             return window.matchMedia('(display-mode: standalone)').matches || 
                    window.navigator.standalone === true;
         }
 
-        // PWA 安裝功能
         let deferredPrompt;
         const installPrompt = document.getElementById('installPrompt');
         const installButton = document.getElementById('installButton');
         const installText = document.getElementById('installText');
 
-        // 隱藏安裝提示
         function hideInstallPrompt() {
-            console.log('隱藏安裝提示');
             installPrompt.classList.remove('show');
             localStorage.setItem('installPromptClosed', 'true');
         }
 
-        // 顯示安裝提示
         function showInstallPrompt() {
-            console.log('顯示安裝提示');
             installPrompt.classList.add('show');
         }
 
-        // iOS 安裝指引
         function showIOSInstallGuide() {
-            console.log('顯示 iOS 安裝指引');
             installText.innerHTML = '📱 點擊 <strong>分享 📤</strong> → <strong>加入主畫面</strong>';
             installButton.textContent = '知道了';
             
-            // 移除舊的事件監聽器，添加新的
             const newButton = installButton.cloneNode(true);
             installButton.parentNode.replaceChild(newButton, installButton);
             
-            // 重新獲取按鈕引用
-            const iosButton = document.getElementById('installButton');
-            iosButton.addEventListener('click', (e) => {
+            document.getElementById('installButton').addEventListener('click', (e) => {
                 e.preventDefault();
-                e.stopPropagation();
-                console.log('iOS 按鈕被點擊');
                 hideInstallPrompt();
             });
             
             showInstallPrompt();
         }
 
-        // Android/Desktop 安裝
         window.addEventListener('beforeinstallprompt', (e) => {
-            console.log('beforeinstallprompt 事件觸發');
             e.preventDefault();
             deferredPrompt = e;
             
-            // 檢查條件
             const promptClosed = localStorage.getItem('installPromptClosed');
             if (!isIOS() && !isStandalone() && promptClosed !== 'true') {
                 showInstallPrompt();
             }
         });
 
-        // Android/Desktop 安裝按鈕點擊
         installButton.addEventListener('click', async (e) => {
             e.preventDefault();
-            e.stopPropagation();
             
-            console.log('安裝按鈕被點擊');
-            
-            if (!deferredPrompt) {
-                console.log('沒有 deferredPrompt');
-                return;
-            }
+            if (!deferredPrompt) return;
 
-            console.log('執行安裝提示');
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
-            
-            console.log('使用者選擇:', outcome);
-            
-            if (outcome === 'accepted') {
-                console.log('使用者接受安裝');
-            }
             
             deferredPrompt = null;
             hideInstallPrompt();
         });
 
-        // 已安裝後隱藏提示
         window.addEventListener('appinstalled', () => {
-            console.log('PWA 已安裝');
             hideInstallPrompt();
         });
 
@@ -518,18 +829,29 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 const swCode = `
+                    const CACHE_NAME = 'ai-gate-v1';
+                    const urlsToCache = [
+                        '/',
+                        '/R0.png'
+                    ];
+
                     self.addEventListener('install', (event) => {
-                        console.log('Service Worker 安裝中');
+                        event.waitUntil(
+                            caches.open(CACHE_NAME)
+                                .then(cache => cache.addAll(urlsToCache))
+                        );
                         self.skipWaiting();
                     });
 
                     self.addEventListener('activate', (event) => {
-                        console.log('Service Worker 已啟動');
-                        return self.clients.claim();
+                        event.waitUntil(self.clients.claim());
                     });
 
                     self.addEventListener('fetch', (event) => {
-                        event.respondWith(fetch(event.request));
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then(response => response || fetch(event.request))
+                        );
                     });
                 `;
 
@@ -537,46 +859,27 @@
                 const swUrl = URL.createObjectURL(blob);
 
                 navigator.serviceWorker.register(swUrl)
-                    .then(reg => console.log('Service Worker 註冊成功', reg))
-                    .catch(err => console.log('Service Worker 註冊失敗', err));
+                    .then(reg => console.log('✅ Service Worker 註冊成功', reg))
+                    .catch(err => console.log('❌ Service Worker 註冊失敗', err));
             });
         }
 
-        // 初始化
+        // ==================== 初始化 ====================
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('頁面載入完成');
+            // 渲染應用程式
             renderApps();
             
-            // 檢查是否已關閉過提示
-            const promptClosed = localStorage.getItem('installPromptClosed');
-            console.log('installPromptClosed:', promptClosed);
+            // 初始化粒子系統
+            new ParticleSystem();
             
-            // 如果已安裝為 PWA，不顯示提示
-            if (isStandalone()) {
-                console.log('已安裝為 PWA');
-                return;
-            }
+            // PWA 安裝提示
+            if (isStandalone()) return;
 
-            // 如果已關閉過提示，不再顯示
-            if (promptClosed === 'true') {
-                console.log('使用者已關閉過安裝提示');
-                return;
-            }
+            const promptClosed = localStorage.getItem('installPromptClosed');
+            if (promptClosed === 'true') return;
 
-            // iOS 設備顯示手動安裝指引
             if (isIOS()) {
-                console.log('檢測到 iOS 設備，2秒後顯示安裝指引');
-                setTimeout(() => {
-                    showIOSInstallGuide();
-                }, 2000);
-            } else {
-                console.log('非 iOS 設備，等待 beforeinstallprompt 事件');
-                // Android/Desktop 等待 beforeinstallprompt 事件
-                setTimeout(() => {
-                    if (!deferredPrompt) {
-                        console.log('10秒後仍未觸發 beforeinstallprompt，可能不支援');
-                    }
-                }, 10000);
+                setTimeout(() => showIOSInstallGuide(), 2000);
             }
         });
 
