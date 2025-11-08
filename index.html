@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a5f7a">
+    <meta name="description" content="昶青集團應用程式入口">
+    <title>昶青集團 GAI-Gate</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIuaYtumdkumbhuWcmCBHQUktR2F0ZSIsCiAgInNob3J0X25hbWUiOiAiR0FJLUdhdGUiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzFhNWY3YSIsCiAgInRoZW1lX2NvbG9yIjogIiMxYTVmN2EiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJSMC5wbmciLAogICAgICAic2l6ZXMiOiAiMTUweDE1MCIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiUjAucG5nIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciCiAgICB9CiAgXQp9">
+    
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="R0.png">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 'PingFang TC', 'Helvetica Neue', Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a5f7a 0%, #159957 25%, #2e8b57 50%, #1e90ff 75%, #4169e1 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .logo-container {
+            margin-bottom: 15px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05) rotate(5deg);
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            letter-spacing: 2px;
+            animation: fadeInDown 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .app-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .app-icon-wrapper {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 3px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-icon-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .app-item:hover .app-icon-wrapper::before {
+            opacity: 1;
+        }
+
+        .app-icon {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 18px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #667eea;
+        }
+
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 18px;
+        }
+
+        .app-name {
+            margin-top: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #2c3e50;
+            text-align: center;
+            transition: all 0.3s ease;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .app-item:hover {
+            transform: translateY(-8px);
+        }
+
+        .app-item:hover .app-icon-wrapper {
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+            transform: scale(1.05);
+        }
+
+        .app-item:hover .app-name {
+            color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .app-item:active {
+            transform: translateY(-4px) scale(0.98);
+        }
+
+        /* 安裝提示 */
+        .install-prompt {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .install-prompt.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .install-prompt:hover {
+            transform: translateX(-50%) translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .install-prompt button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .install-prompt button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8rem;
+            }
+
+            .main-container {
+                padding: 25px;
+            }
+
+            .apps-grid {
+                gap: 20px;
+                padding: 10px;
+            }
+
+            .logo {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 1.5rem;
+                letter-spacing: 1px;
+            }
+
+            .main-container {
+                padding: 20px;
+                border-radius: 16px;
+            }
+
+            .apps-grid {
+                gap: 15px;
+            }
+
+            .app-name {
+                font-size: 0.85rem;
+            }
+
+            .logo {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        /* 載入動畫 */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo -->
+    <div class="logo-container">
+        <img src="R0.png" alt="昶青集團 Logo" class="logo">
+    </div>
+
+    <!-- 標題 -->
+    <h1 class="title">昶青集團 GAI-Gate</h1>
+
+    <!-- 主容器 -->
+    <div class="main-container">
+        <div class="apps-grid" id="appsGrid">
+            <!-- App 項目將由 JavaScript 動態生成 -->
+        </div>
+    </div>
+
+    <!-- PWA 安裝提示 -->
+    <div class="install-prompt" id="installPrompt">
+        <span>📱 將 GAI-Gate 加入主畫面</span>
+        <button id="installButton">安裝</button>
+    </div>
+
+    <script>
+        // 應用程式資料配置
+        const apps = [
+            { name: '應用程式 1', icon: 'app1.png', url: 'https://example.com/app1' },
+            { name: '應用程式 2', icon: 'app2.png', url: 'https://example.com/app2' },
+            { name: '應用程式 3', icon: 'app3.png', url: 'https://example.com/app3' },
+            { name: '應用程式 4', icon: 'app4.png', url: 'https://example.com/app4' },
+            { name: '應用程式 5', icon: 'app5.png', url: 'https://example.com/app5' },
+            { name: '應用程式 6', icon: 'app6.png', url: 'https://example.com/app6' },
+            { name: '應用程式 7', icon: 'app7.png', url: 'https://example.com/app7' },
+            { name: '應用程式 8', icon: 'app8.png', url: 'https://example.com/app8' },
+            { name: '應用程式 9', icon: 'app9.png', url: 'https://example.com/app9' },
+            { name: '應用程式 10', icon: 'app10.png', url: 'https://example.com/app10' },
+            { name: '應用程式 11', icon: 'app11.png', url: 'https://example.com/app11' },
+            { name: '應用程式 12', icon: 'app12.png', url: 'https://example.com/app12' },
+            { name: '應用程式 13', icon: 'app13.png', url: 'https://example.com/app13' },
+            { name: '應用程式 14', icon: 'app14.png', url: 'https://example.com/app14' },
+            { name: '應用程式 15', icon: 'app15.png', url: 'https://example.com/app15' }
+        ];
+
+        // 動態生成應用程式圖標
+        function renderApps() {
+            const grid = document.getElementById('appsGrid');
+            grid.innerHTML = '';
+
+            apps.forEach((app, index) => {
+                const appItem = document.createElement('a');
+                appItem.className = 'app-item';
+                appItem.href = app.url;
+                appItem.target = '_blank';
+                appItem.rel = 'noopener noreferrer';
+                appItem.style.animationDelay = `${index * 0.05}s`;
+
+                appItem.innerHTML = `
+                    <div class="app-icon-wrapper">
+                        <div class="app-icon">
+                            <img src="${app.icon}" alt="${app.name}" onerror="this.parentElement.innerHTML='📱'">
+                        </div>
+                    </div>
+                    <span class="app-name">${app.name}</span>
+                `;
+
+                grid.appendChild(appItem);
+            });
+        }
+
+        // PWA 安裝功能
+        let deferredPrompt;
+        const installPrompt = document.getElementById('installPrompt');
+        const installButton = document.getElementById('installButton');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installPrompt.classList.add('show');
+        });
+
+        installButton.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            if (outcome === 'accepted') {
+                console.log('使用者接受安裝');
+            }
+            
+            deferredPrompt = null;
+            installPrompt.classList.remove('show');
+        });
+
+        // 已安裝後隱藏提示
+        window.addEventListener('appinstalled', () => {
+            installPrompt.classList.remove('show');
+            console.log('PWA 已安裝');
+        });
+
+        // Service Worker 註冊 (PWA 必要)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                const swCode = `
+                    self.addEventListener('install', (event) => {
+                        console.log('Service Worker 安裝中');
+                        self.skipWaiting();
+                    });
+
+                    self.addEventListener('activate', (event) => {
+                        console.log('Service Worker 已啟動');
+                        return self.clients.claim();
+                    });
+
+                    self.addEventListener('fetch', (event) => {
+                        event.respondWith(fetch(event.request));
+                    });
+                `;
+
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+
+                navigator.serviceWorker.register(swUrl)
+                    .then(reg => console.log('Service Worker 註冊成功', reg))
+                    .catch(err => console.log('Service Worker 註冊失敗', err));
+            });
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            renderApps();
+            
+            // 3秒後自動隱藏安裝提示
+            setTimeout(() => {
+                if (!deferredPrompt) {
+                    installPrompt.classList.remove('show');
+                }
+            }, 10000);
+        });
+
+        // 防止圖片拖曳
+        document.addEventListener('dragstart', (e) => {
+            if (e.target.tagName === 'IMG') {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
