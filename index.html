@@ -56,16 +56,41 @@
             transform: scale(1.05) rotate(5deg);
         }
 
-        .title {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #5c5304;
-            text-align: center;
-            margin-bottom: 30px;
-            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            letter-spacing: 2px;
-            animation: fadeInDown 0.8s ease-out 0.2s both;
-        }
+.title {
+    font-size: 3rem;
+    font-weight: 900;
+    background: linear-gradient(180deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-align: center;
+    margin-bottom: 30px;
+    letter-spacing: 4px;
+    position: relative;
+    filter: drop-shadow(0 8px 16px rgba(255, 165, 0, 0.6))
+            drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+    animation: fadeInDown 0.8s ease-out 0.2s both, titlePulse 3s ease-in-out infinite;
+}
+
+.title::before {
+    content: '昶青實業股份有限公司\AGAI-GATE';
+    position: absolute;
+    left: 0;
+    top: 3px;
+    width: 100%;
+    z-index: -1;
+    background: linear-gradient(180deg, #B8860B 0%, #8B6914 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: blur(2px);
+}
+
+@keyframes titlePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
 
         @keyframes fadeInDown {
             from {
