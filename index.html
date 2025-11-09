@@ -13,25 +13,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 
 <!-- PWA Manifest -->
-<link rel="manifest" href="/manifest.json">
+<link rel="manifest" href="/GATE/manifest.json">
 
 <!-- Favicons -->
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/GATE/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/GATE/icons/favicon-16x16.png">
 
 <!-- Apple Touch Icons -->
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="apple-touch-icon" sizes="152x152" href="/icon-152x152.png">
-<link rel="apple-touch-icon" sizes="144x144" href="/icon-144x144.png">
-
-<!-- Apple Meta Tags -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="AI-GATE">
+<link rel="apple-touch-icon" sizes="180x180" href="/GATE/icons/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/GATE/icons/icon-152x152.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/GATE/icons/icon-144x144.png">
 
 <!-- MS Tiles -->
-<meta name="msapplication-TileColor" content="#0a0e27">
-<meta name="msapplication-TileImage" content="/icons/icon-144x144.png">
+<meta name="msapplication-TileImage" content="/GATE/icons/icon-144x144.png">
 
     
     <style>
@@ -890,7 +884,7 @@
     <div class="content-wrapper">
         <!-- Logo -->
         <div class="logo-container">
-            <img src="R0.png" alt="昶青集團 Logo" class="logo">
+            <img src="/GATE/R0.png" alt="昶青集團 Logo" class="logo">
         </div>
 
         <!-- 標題 -->
@@ -923,68 +917,69 @@
 
     <script>
         // JavaScript 保持不變（與之前相同）
-        const apps = [
-            { 
-                name: 'GAI數位資料中心<br>【Willion】', 
-                icon: 'app1.png', 
-                url: 'https://tcc-ai.github.io/digidata/',
-                desc: '智能數位資料與管理平台，提供即時文件查閱與視覺化報表'
-            },
-            { 
-                name: 'GAI風控管理中心<br>【Tina】', 
-                icon: 'app2.png', 
-                url: 'https://tcc-ai.github.io/Risk/',
-                desc: '即時風險監控與預警系統，保障企業營運安全'
-            },
-            { 
-                name: 'GAI路徑規劃中心<br>【Lisa】', 
-                icon: 'app3.png', 
-                url: 'https://tcc-ai.github.io/GAIRoute/',
-                desc: '智能物流路線優化，降低運輸成本提升效率'
-            },
-            { 
-                name: 'GAI排派車中心<br>【Lisa】', 
-                icon: 'app3.png', 
-                url: 'https://tcc-ai.github.io/GAITransporter/',
-                desc: '自動化車輛調度系統，實現智能派車管理'
-            },
-            { 
-                name: 'GAI智慧庫存中心<br>【Elon】', 
-                icon: 'app4.png', 
-                url: 'https://tcc-ai.github.io/GAIstock/',
-                desc: '智能庫存預測與管理，優化庫存週轉率'
-            },
-            { 
-                name: 'GAI智能職訓中心<br>【Sophia】', 
-                icon: 'app5.png', 
-                url: 'https://tcc-ai.github.io/TRAIN/',
-                desc: '個性化員工培訓平台，提升團隊專業能力'
-            },
-            { 
-                name: '應用程式 7', 
-                icon: 'app7.png', 
-                url: 'https://example.com/app7',
-                desc: '更多創新功能即將推出，敬請期待'
-            },
-            { 
-                name: '應用程式 8', 
-                icon: 'app8.png', 
-                url: 'https://example.com/app8',
-                desc: '更多創新功能即將推出，敬請期待'
-            },
-            { 
-                name: '應用程式 9', 
-                icon: 'app9.png', 
-                url: 'https://example.com/app9',
-                desc: '更多創新功能即將推出，敬請期待'
-            },
-            { 
-                name: '應用程式 10', 
-                icon: 'app10.png', 
-                url: 'https://example.com/app10',
-                desc: '更多創新功能即將推出，敬請期待'
-            }
-        ];
+const apps = [
+    { 
+        name: 'GAI數位資料中心<br>【Willion】', 
+        icon: '/GATE/app1.png', 
+        url: 'https://tcc-ai.github.io/digidata/',
+        desc: '智能數位資料與管理平台，提供即時文件查閱與視覺化報表'
+    },
+    { 
+        name: 'GAI風控管理中心<br>【Tina】', 
+        icon: '/GATE/app2.png', 
+        url: 'https://tcc-ai.github.io/Risk/',
+        desc: '即時風險監控與預警系統，保障企業營運安全'
+    },
+    { 
+        name: 'GAI路徑規劃中心<br>【Lisa】', 
+        icon: '/GATE/app3.png', 
+        url: 'https://tcc-ai.github.io/GAIRoute/',
+        desc: '智能物流路線優化，降低運輸成本提升效率'
+    },
+    { 
+        name: 'GAI排派車中心<br>【Lisa】', 
+        icon: '/GATE/app3.png', 
+        url: 'https://tcc-ai.github.io/GAITransporter/',
+        desc: '自動化車輛調度系統，實現智能派車管理'
+    },
+    { 
+        name: 'GAI智慧庫存中心<br>【Elon】', 
+        icon: '/GATE/app4.png', 
+        url: 'https://tcc-ai.github.io/GAIstock/',
+        desc: '智能庫存預測與管理，優化庫存週轉率'
+    },
+    { 
+        name: 'GAI智能職訓中心<br>【Sophia】', 
+        icon: '/GATE/app5.png', 
+        url: 'https://tcc-ai.github.io/TRAIN/',
+        desc: '個性化員工培訓平台，提升團隊專業能力'
+    },
+    { 
+        name: '應用程式 7', 
+        icon: '/GATE/app7.png', 
+        url: 'https://example.com/app7',
+        desc: '更多創新功能即將推出，敬請期待'
+    },
+    { 
+        name: '應用程式 8', 
+        icon: '/GATE/app8.png', 
+        url: 'https://example.com/app8',
+        desc: '更多創新功能即將推出，敬請期待'
+    },
+    { 
+        name: '應用程式 9', 
+        icon: '/GATE/app9.png', 
+        url: 'https://example.com/app9',
+        desc: '更多創新功能即將推出，敬請期待'
+    },
+    { 
+        name: '應用程式 10', 
+        icon: '/GATE/app10.png', 
+        url: 'https://example.com/app10',
+        desc: '更多創新功能即將推出，敬請期待'
+    }
+];
+
 
         function renderApps() {
             const grid = document.getElementById('appsGrid');
@@ -1277,7 +1272,7 @@
 // Service Worker 註冊與更新管理
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
+        navigator.serviceWorker.register('/GATE/sw.js')
             .then(registration => {
                 console.log('✅ Service Worker 註冊成功:', registration.scope);
 
