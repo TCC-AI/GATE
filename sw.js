@@ -1,5 +1,5 @@
 // ==================== 路徑配置 ====================
-const BASE_PATH = '/GATE';
+const BASE_PATH = './';
 const VERSION = '1.0.0';
 const CACHE_NAME = `ai-gate-static-v${VERSION}`;
 const DYNAMIC_CACHE = `ai-gate-dynamic-v${VERSION}`;
@@ -12,17 +12,17 @@ const STATIC_ASSETS = [
 ];
 
 const ICON_ASSETS = [
-    `${BASE_PATH}/icons/icon-72x72.png`,
-    `${BASE_PATH}/icons/icon-96x96.png`,
-    `${BASE_PATH}/icons/icon-128x128.png`,
-    `${BASE_PATH}/icons/icon-144x144.png`,
-    `${BASE_PATH}/icons/icon-152x152.png`,
-    `${BASE_PATH}/icons/icon-192x192.png`,
-    `${BASE_PATH}/icons/icon-384x384.png`,
-    `${BASE_PATH}/icons/icon-512x512.png`,
-    `${BASE_PATH}/icons/apple-touch-icon.png`,
-    `${BASE_PATH}/icons/favicon-32x32.png`,
-    `${BASE_PATH}/icons/favicon-16x16.png`
+    `${BASE_PATH}./icon-72x72.png`,
+    `${BASE_PATH}./icon-96x96.png`,
+    `${BASE_PATH}./icon-128x128.png`,
+    `${BASE_PATH}./icon-144x144.png`,
+    `${BASE_PATH}./icon-152x152.png`,
+    `${BASE_PATH}./icon-192x192.png`,
+    `${BASE_PATH}./icon-384x384.png`,
+    `${BASE_PATH}./icon-512x512.png`,
+    `${BASE_PATH}./apple-touch-icon.png`,
+    `${BASE_PATH}./favicon-32x32.png`,
+    `${BASE_PATH}./favicon-16x16.png`
 ];
 
 const APP_ICONS = [
