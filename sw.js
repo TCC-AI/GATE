@@ -12,17 +12,17 @@ const STATIC_ASSETS = [
 ];
 
 const ICON_ASSETS = [
-    `${BASE_PATH}./icon-72x72.png`,
-    `${BASE_PATH}./icon-96x96.png`,
-    `${BASE_PATH}./icon-128x128.png`,
-    `${BASE_PATH}./icon-144x144.png`,
-    `${BASE_PATH}./icon-152x152.png`,
-    `${BASE_PATH}./icon-192x192.png`,
-    `${BASE_PATH}./icon-384x384.png`,
-    `${BASE_PATH}./icon-512x512.png`,
-    `${BASE_PATH}./apple-touch-icon.png`,
-    `${BASE_PATH}./favicon-32x32.png`,
-    `${BASE_PATH}./favicon-16x16.png`
+    `${BASE_PATH}/icon-72x72.png`,
+    `${BASE_PATH}/icon-96x96.png`,
+    `${BASE_PATH}/icon-128x128.png`,
+    `${BASE_PATH}/icon-144x144.png`,
+    `${BASE_PATH}/icon-152x152.png`,
+    `${BASE_PATH}/icon-192x192.png`,
+    `${BASE_PATH}/icon-384x384.png`,
+    `${BASE_PATH}/icon-512x512.png`,
+    `${BASE_PATH}/apple-touch-icon.png`,
+    `${BASE_PATH}/favicon-32x32.png`,
+    `${BASE_PATH}/favicon-16x16.png`
 ];
 
 const APP_ICONS = [
