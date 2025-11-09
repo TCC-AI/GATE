@@ -12,11 +12,30 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIuaYtumdkumbhuWcmCBBSS1HQVRFIiwKICAic2hvcnRfbmFtZSI6ICJBSS1HQVRFIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwYTBlMjciLAogICJ0aGVtZV9jb2xvciI6ICIjMGEwZTI3IiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiUjAucG5nIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciLAogICAgICAicHVycG9zZSI6ICJhbnkgbWFza2FibGUiCiAgICB9LAogICAgewogICAgICAic3JjIjogIlIwLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0sCiAgImRlc2NyaXB0aW9uIjogIuaYtumdkumbhuWcmEFJ5oeA5oWn566h55CG5bmz5Y+wIiwKICAib3JpZW50YXRpb24iOiAicG9ydHJhaXQiCn0=">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="R0.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="R0.png">
+    <link rel="shortcut icon" href="R0.png">
     
-    <!-- Apple Touch Icon -->
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="R0.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="R0.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="R0.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="R0.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="R0.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="R0.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="R0.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="R0.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="R0.png">
     <link rel="apple-touch-icon" href="R0.png">
+    
+    <!-- Microsoft Tiles -->
+    <meta name="msapplication-TileColor" content="#0a0e27">
+    <meta name="msapplication-TileImage" content="R0.png">
+    <meta name="msapplication-config" content="browserconfig.xml">
     
     <style>
         * {
@@ -672,27 +691,69 @@
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%) translateY(150px);
-            background: rgba(10, 14, 39, 0.95);
+            background: rgba(10, 14, 39, 0.98);
             backdrop-filter: blur(20px);
-            border: 2px solid rgba(0, 255, 255, 0.5);
+            border: 2px solid rgba(0, 255, 255, 0.6);
             color: #00ffff;
-            padding: 18px 35px;
+            padding: 20px 30px;
             border-radius: 0;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.5),
+                0 10px 40px rgba(0, 0, 0, 0.5);
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1000;
+            z-index: 10000;
             opacity: 0;
             pointer-events: none;
             clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            max-width: 90%;
+            min-width: 300px;
         }
 
         .install-prompt.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
             pointer-events: auto;
+            animation: installPromptPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes installPromptPulse {
+            0%, 100% {
+                box-shadow: 
+                    0 0 30px rgba(0, 255, 255, 0.5),
+                    0 10px 40px rgba(0, 0, 0, 0.5);
+            }
+            50% {
+                box-shadow: 
+                    0 0 40px rgba(0, 255, 255, 0.8),
+                    0 10px 50px rgba(0, 0, 0, 0.5);
+            }
+        }
+
+        .install-icon {
+            font-size: 2rem;
+            line-height: 1;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .install-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .install-content span {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
         }
 
         .install-prompt button {
@@ -709,11 +770,68 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
+            font-size: 0.9rem;
         }
 
         .install-prompt button:hover {
             transform: scale(1.05);
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+        }
+
+        .install-close {
+            background: transparent !important;
+            border: 1px solid rgba(0, 255, 255, 0.5) !important;
+            color: #00ffff !important;
+            padding: 5px 12px !important;
+            font-size: 1.5rem !important;
+            line-height: 1 !important;
+            min-width: auto !important;
+            box-shadow: none !important;
+            clip-path: none !important;
+            border-radius: 0 !important;
+        }
+
+        .install-close:hover {
+            background: rgba(0, 255, 255, 0.1) !important;
+            transform: scale(1.1) !important;
+        }
+
+        /* PWA 狀態指示器 */
+        .pwa-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background: rgba(10, 14, 39, 0.9);
+            border: 2px solid rgba(0, 255, 255, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00ffff;
+            cursor: pointer;
+            z-index: 9999;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            opacity: 0.8;
+        }
+
+        .pwa-status:hover {
+            opacity: 1;
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+        }
+
+        .pwa-status svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .pwa-status.installed {
+            background: rgba(0, 255, 0, 0.2);
+            border-color: rgba(0, 255, 0, 0.6);
+            color: #00ff00;
         }
 
         /* ==================== 手機版樣式 ==================== */
@@ -810,14 +928,40 @@
 
             .install-prompt {
                 bottom: 20px;
-                padding: 15px 25px;
+                padding: 15px 20px;
                 font-size: 0.9rem;
                 max-width: 90%;
+                min-width: auto;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .install-content {
+                width: 100%;
+                text-align: center;
             }
 
             .install-prompt button {
                 padding: 8px 20px;
                 font-size: 0.85rem;
+            }
+
+            .install-close {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+            }
+
+            .pwa-status {
+                top: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+            }
+
+            .pwa-status svg {
+                width: 20px;
+                height: 20px;
             }
         }
 
@@ -901,8 +1045,21 @@
 
     <!-- PWA 安裝提示 -->
     <div class="install-prompt" id="installPrompt">
-        <span id="installText">📱 將 AI-GATE 加入主畫面</span>
-        <button id="installButton">安裝</button>
+        <div class="install-icon">📱</div>
+        <div class="install-content">
+            <span id="installText">將 AI-GATE 加入主畫面</span>
+            <button id="installButton">立即安裝</button>
+        </div>
+        <button class="install-close" id="installClose" aria-label="關閉">×</button>
+    </div>
+
+    <!-- PWA 狀態指示器 -->
+    <div class="pwa-status" id="pwaStatus" title="PWA 已啟用">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+            <path d="M2 17l10 5 10-5"></path>
+            <path d="M2 12l10 5 10-5"></path>
+        </svg>
     </div>
 
     <script>
@@ -1207,10 +1364,45 @@
         const installPrompt = document.getElementById('installPrompt');
         const installButton = document.getElementById('installButton');
         const installText = document.getElementById('installText');
+        const installClose = document.getElementById('installClose');
+        const pwaStatus = document.getElementById('pwaStatus');
 
         function hideInstallPrompt() {
             installPrompt.classList.remove('show');
             localStorage.setItem('installPromptClosed', 'true');
+        }
+
+        // 關閉按鈕事件
+        if (installClose) {
+            installClose.addEventListener('click', (e) => {
+                e.preventDefault();
+                hideInstallPrompt();
+            });
+        }
+
+        // 更新 PWA 狀態指示器
+        function updatePWAStatus() {
+            if (!pwaStatus) return;
+            
+            if (isStandalone()) {
+                pwaStatus.classList.add('installed');
+                pwaStatus.title = 'PWA 已安裝並運行';
+                pwaStatus.onclick = () => {
+                    alert('此應用程式已安裝為 PWA，運行於獨立模式');
+                };
+            } else {
+                pwaStatus.title = '點擊查看 PWA 資訊';
+                pwaStatus.onclick = () => {
+                    const info = `
+PWA 狀態資訊：
+• Service Worker: ${'serviceWorker' in navigator ? '✅ 支援' : '❌ 不支援'}
+• 獨立模式: ${isStandalone() ? '✅ 已啟用' : '❌ 未啟用'}
+• 安裝提示: ${deferredPrompt ? '✅ 可用' : '⏳ 等待中'}
+• 平台: ${isIOS() ? 'iOS' : navigator.platform}
+                    `;
+                    alert(info);
+                };
+            }
         }
 
         function showInstallPrompt() {
@@ -1256,6 +1448,8 @@
 
         window.addEventListener('appinstalled', () => {
             hideInstallPrompt();
+            updatePWAStatus();
+            console.log('✅ PWA 安裝成功！');
         });
 
         if ('serviceWorker' in navigator) {
@@ -1300,15 +1494,56 @@
             renderApps();
             new ParticleSystem();
             
-            if (isStandalone()) return;
+            // 更新 PWA 狀態指示器
+            updatePWAStatus();
+            
+            // 檢查並顯示安裝提示
+            checkAndShowInstallPrompt();
+        });
+
+        function checkAndShowInstallPrompt() {
+            // 如果已經是獨立模式（已安裝），不顯示提示
+            if (isStandalone()) {
+                console.log('✅ PWA 已安裝，不顯示安裝提示');
+                return;
+            }
 
             const promptClosed = localStorage.getItem('installPromptClosed');
-            if (promptClosed === 'true') return;
-
-            if (isIOS()) {
-                setTimeout(() => showIOSInstallGuide(), 2000);
+            if (promptClosed === 'true') {
+                console.log('ℹ️ 用戶已關閉安裝提示');
+                return;
             }
-        });
+
+            // iOS 設備顯示特殊指引
+            if (isIOS()) {
+                console.log('📱 檢測到 iOS 設備，顯示安裝指引');
+                setTimeout(() => showIOSInstallGuide(), 2000);
+                return;
+            }
+
+            // Android/Desktop 等待 beforeinstallprompt 事件
+            // 如果 3 秒後還沒有觸發，檢查是否支援 PWA
+            setTimeout(() => {
+                if (!deferredPrompt) {
+                    // 檢查是否支援 PWA 安裝
+                    const isPWAInstallable = 'serviceWorker' in navigator && 
+                                           window.matchMedia('(display-mode: standalone)').matches === false;
+                    
+                    if (isPWAInstallable) {
+                        console.log('💡 PWA 可用，但尚未觸發安裝提示');
+                        // 可以選擇顯示一個通用的安裝提示
+                        installText.innerHTML = '💡 將此網站加入主畫面以獲得更好的體驗';
+                        installButton.textContent = '了解如何安裝';
+                        installButton.onclick = (e) => {
+                            e.preventDefault();
+                            alert('請使用瀏覽器選單中的「安裝應用程式」或「加入主畫面」選項');
+                            hideInstallPrompt();
+                        };
+                        showInstallPrompt();
+                    }
+                }
+            }, 3000);
+        }
 
         document.addEventListener('dragstart', (e) => {
             if (e.target.tagName === 'IMG') {
