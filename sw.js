@@ -1,126 +1,175 @@
-// ==================== 路徑配置 ====================
-const BASE_PATH = './';
-const VERSION = '1.0.0';
-const CACHE_NAME = `ai-gate-static-v${VERSION}`;
-const DYNAMIC_CACHE = `ai-gate-dynamic-v${VERSION}`;
-
-const STATIC_ASSETS = [
-    `${BASE_PATH}/`,
-    `${BASE_PATH}/index.html`,
-    `${BASE_PATH}/manifest.json`,
-    `${BASE_PATH}/R0.png`
+const CACHE_NAME = 'ai-gate-v1.0.3';
+const CACHE_URLS = [
+    './',
+    './index.html',
+    './manifest.json',
+    './R0.png',
+    './app1.png',
+    './app2.png',
+    './app3.png',
+    './app4.png',
+    './app5.png',
+    './app7.png',
+    './app8.png',
+    'https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap'
 ];
 
-const ICON_ASSETS = [
-    `${BASE_PATH}/icon-72x72.png`,
-    `${BASE_PATH}/icon-96x96.png`,
-    `${BASE_PATH}/icon-128x128.png`,
-    `${BASE_PATH}/icon-144x144.png`,
-    `${BASE_PATH}/icon-152x152.png`,
-    `${BASE_PATH}/icon-192x192.png`,
-    `${BASE_PATH}/icon-384x384.png`,
-    `${BASE_PATH}/icon-512x512.png`,
-    `${BASE_PATH}/apple-touch-icon.png`,
-    `${BASE_PATH}/favicon-32x32.png`,
-    `${BASE_PATH}/favicon-16x16.png`
-];
-
-const APP_ICONS = [
-    `${BASE_PATH}/app1.png`,
-    `${BASE_PATH}/app2.png`,
-    `${BASE_PATH}/app3.png`,
-    `${BASE_PATH}/app4.png`,
-    `${BASE_PATH}/app5.png`,
-    `${BASE_PATH}/app7.png`,
-    `${BASE_PATH}/app8.png`,
-    `${BASE_PATH}/app9.png`,
-    `${BASE_PATH}/app10.png`
-];
-
-// ==================== Install 事件 ====================
+// 安裝事件 - 預快取資源
 self.addEventListener('install', (event) => {
-    console.log('🔧 Service Worker 安裝中...');
-
+    console.log('[SW] 🔧 安裝中...');
     event.waitUntil(
-        Promise.all([
-            caches.open(CACHE_NAME).then(cache => {
-                console.log('📦 快取靜態資源...');
-                return cache.addAll([...STATIC_ASSETS, ...ICON_ASSETS]);
-            }),
-            caches.open(DYNAMIC_CACHE).then(cache => {
-                console.log('📦 快取應用圖標...');
-                return cache.addAll(APP_ICONS.filter(icon => icon));
+        caches.open(CACHE_NAME)
+            .then(cache => {
+                console.log('[SW] 📦 開始快取檔案');
+                return cache.addAll(CACHE_URLS.map(url => new Request(url, { cache: 'reload' })));
             })
-        ]).then(() => {
-            console.log('✅ Service Worker 安裝完成');
-            return self.skipWaiting();
-        }).catch(error => {
-            console.error('❌ 快取失敗:', error);
-        })
+            .then(() => {
+                console.log('[SW] ✅ 快取完成');
+                return self.skipWaiting();
+            })
+            .catch(err => {
+                console.error('[SW] ❌ 快取失敗:', err);
+            })
     );
 });
 
-// ==================== Activate 事件 ====================
+// 啟用事件 - 清理舊快取
 self.addEventListener('activate', (event) => {
-    console.log('🔄 Service Worker 啟動中...');
-
+    console.log('[SW] 🚀 啟用中...');
     event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cacheName => {
-                    if (cacheName.includes(`v${VERSION}`)) {
-                        return null;
-                    }
-                    console.log('🗑️ 刪除舊快取:', cacheName);
-                    return caches.delete(cacheName);
-                })
-            );
-        }).then(() => {
-            console.log('✅ Service Worker 已啟動');
-            return self.clients.claim();
-        })
+        caches.keys()
+            .then(cacheNames => {
+                return Promise.all(
+                    cacheNames.map(cacheName => {
+                        if (cacheName !== CACHE_NAME) {
+                            console.log('[SW] 🗑️ 刪除舊快取:', cacheName);
+                            return caches.delete(cacheName);
+                        }
+                    })
+                );
+            })
+            .then(() => {
+                console.log('[SW] ✅ 啟用完成');
+                return self.clients.claim();
+            })
     );
 });
 
-// ==================== Fetch 事件 ====================
+// Fetch 事件 - 攔截請求
 self.addEventListener('fetch', (event) => {
-    if (event.request.method !== 'GET') return;
-    if (event.request.url.startsWith('chrome-extension://')) return;
+    const { request } = event;
+    const url = new URL(request.url);
+
+    // 跳過 Chrome Extension 請求
+    if (url.protocol === 'chrome-extension:') {
+        return;
+    }
+
+    // 跳過非 GET 請求
+    if (request.method !== 'GET') {
+        return;
+    }
 
     event.respondWith(
-        caches.match(event.request)
-            .then(response => {
-                if (response) {
-                    return response;
+        caches.match(request)
+            .then(cachedResponse => {
+                if (cachedResponse) {
+                    console.log('[SW] 📦 從快取載入:', url.pathname);
+                    return cachedResponse;
                 }
 
-                return fetch(event.request)
-                    .then(fetchResponse => {
-                        if (!fetchResponse || fetchResponse.status !== 200 || fetchResponse.type === 'error') {
-                            return fetchResponse;
+                console.log('[SW] 🌐 從網路載入:', url.pathname);
+                return fetch(request)
+                    .then(response => {
+                        // 只快取成功的回應
+                        if (!response || response.status !== 200 || response.type !== 'basic') {
+                            return response;
                         }
 
-                        const responseToCache = fetchResponse.clone();
-                        caches.open(DYNAMIC_CACHE)
+                        // 複製回應並存入快取
+                        const responseToCache = response.clone();
+                        caches.open(CACHE_NAME)
                             .then(cache => {
-                                cache.put(event.request, responseToCache);
+                                cache.put(request, responseToCache);
                             });
 
-                        return fetchResponse;
+                        return response;
                     })
-                    .catch(() => {
-                        // 離線時返回快取的資源
-                        return caches.match(`${BASE_PATH}/index.html`);
+                    .catch(err => {
+                        console.error('[SW] ❌ Fetch 失敗:', err);
+                        
+                        // 返回離線頁面
+                        return new Response(
+                            `<!DOCTYPE html>
+                            <html lang="zh-TW">
+                            <head>
+                                <meta charset="UTF-8">
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                <title>離線模式</title>
+                                <style>
+                                    body {
+                                        font-family: 'Noto Sans TC', sans-serif;
+                                        background: #0a0e27;
+                                        color: #00ffff;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        height: 100vh;
+                                        margin: 0;
+                                        text-align: center;
+                                    }
+                                    .offline-container {
+                                        padding: 40px;
+                                    }
+                                    .offline-icon {
+                                        font-size: 5rem;
+                                        margin-bottom: 20px;
+                                    }
+                                    .offline-title {
+                                        font-size: 2rem;
+                                        margin-bottom: 10px;
+                                    }
+                                    .offline-desc {
+                                        opacity: 0.8;
+                                        margin-bottom: 30px;
+                                    }
+                                    .retry-button {
+                                        background: linear-gradient(135deg, #0064ff 0%, #00ffff 100%);
+                                        color: white;
+                                        border: none;
+                                        padding: 15px 40px;
+                                        font-size: 1.1rem;
+                                        font-weight: bold;
+                                        cursor: pointer;
+                                        border-radius: 5px;
+                                    }
+                                </style>
+                            </head>
+                            <body>
+                                <div class="offline-container">
+                                    <div class="offline-icon">📡</div>
+                                    <div class="offline-title">離線模式</div>
+                                    <div class="offline-desc">目前無法連線，請檢查網路連線</div>
+                                    <button class="retry-button" onclick="location.reload()">重新載入</button>
+                                </div>
+                            </body>
+                            </html>`,
+                            {
+                                status: 503,
+                                statusText: 'Service Unavailable',
+                                headers: new Headers({
+                                    'Content-Type': 'text/html; charset=utf-8'
+                                })
+                            }
+                        );
                     });
             })
     );
 });
 
-// ==================== 消息通信 ====================
+// 訊息事件 - 接收來自頁面的訊息
 self.addEventListener('message', (event) => {
-    if (event.data.type === 'SKIP_WAITING') {
+    if (event.data && event.data.type === 'SKIP_WAITING') {
         self.skipWaiting();
     }
 });
-
-console.log(`🚀 Service Worker v${VERSION} 已載入`);
