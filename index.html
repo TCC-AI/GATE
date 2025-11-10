@@ -28,7 +28,6 @@
         body {
             font-family: 'Rajdhani', 'Noto Sans TC', sans-serif;
             min-height: 100vh;
-            /* 🔥 科技風深色背景 */
             background: #0a0e27;
             position: relative;
             overflow-x: hidden;
@@ -38,7 +37,7 @@
             padding: 20px;
         }
 
-        /* 🔥 電路板網格背景 */
+        /* 電路板網格背景 */
         body::before {
             content: '';
             position: fixed;
@@ -54,7 +53,7 @@
             pointer-events: none;
         }
 
-        /* 🔥 動態掃描線效果 */
+        /* 動態掃描線效果 */
         body::after {
             content: '';
             position: fixed;
@@ -77,7 +76,7 @@
             100% { top: 100%; }
         }
 
-        /* 🔥 數位粒子背景 Canvas */
+        /* 數位粒子背景 Canvas */
         #particleCanvas {
             position: fixed;
             top: 0;
@@ -99,7 +98,7 @@
             align-items: center;
         }
 
-        /* 🔥 Logo 容器 - 科技感六角形 */
+        /* 🔥 Logo 容器 - 正 10 邊形 */
         .logo-container {
             margin-bottom: 20px;
             animation: fadeInDown 0.8s ease-out;
@@ -111,7 +110,19 @@
             width: 120px;
             height: 120px;
             object-fit: contain;
-            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+            /* 🔥 改為正 10 邊形 */
+            clip-path: polygon(
+                50% 0%, 
+                80.9% 9.5%, 
+                97.6% 34.5%, 
+                97.6% 65.5%, 
+                80.9% 90.5%, 
+                50% 100%, 
+                19.1% 90.5%, 
+                2.4% 65.5%, 
+                2.4% 34.5%, 
+                19.1% 9.5%
+            );
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             animation: float 6s ease-in-out infinite, rotate3D 20s linear infinite;
         }
@@ -131,7 +142,7 @@
             100% { transform: rotateY(360deg); }
         }
 
-        /* 🔥 標題 - 霓虹科技字體 */
+        /* 標題 - 霓虹科技字體 */
         .title {
             font-family: 'Orbitron', 'Rajdhani', sans-serif;
             font-size: 4rem;
@@ -151,7 +162,7 @@
             position: relative;
         }
 
-        /* 🔥 標題下方科技線條 */
+        /* 標題下方科技線條 */
         .title::after {
             content: '';
             position: absolute;
@@ -194,7 +205,7 @@
             }
         }
 
-        /* 🔥 主容器 - 科技感邊框 */
+        /* 主容器 - 科技感邊框 */
         .main-container {
             background: rgba(10, 14, 39, 0.85);
             backdrop-filter: blur(10px);
@@ -219,7 +230,7 @@
             );
         }
 
-        /* 🔥 容器四角科技裝飾 */
+        /* 容器四角科技裝飾 */
         .main-container::before,
         .main-container::after {
             content: '';
@@ -255,7 +266,7 @@
             }
         }
 
-        /* 🔥 PC 版 - 統一高度 200px 的網格佈局 */
+        /* PC 版 - 統一高度 200px 的網格佈局 */
         .apps-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -275,20 +286,26 @@
             grid-column: span 1;
         }
 
-        /* 3D 翻轉卡片 */
+        /* 3D 翻轉卡片 - 原地翻轉不遮蔽 */
         .app-item {
             perspective: 1000px;
             cursor: pointer;
             position: relative;
             text-decoration: none;
             transition: transform 0.3s ease;
+            z-index: 1;
+            isolation: isolate;
+        }
+
+        .app-item:hover {
+            z-index: 10;
         }
 
         .app-card {
             width: 100%;
             height: 100%;
             position: relative;
-            transform-style: preserve-3d;
+            transform-style: flat;
             transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -299,7 +316,7 @@
             }
         }
 
-        /* 🔥 卡片正面 - 科技感設計 */
+        /* 卡片正面 - 科技感設計 */
         .card-front, .card-back {
             position: absolute;
             width: 100%;
@@ -307,6 +324,7 @@
             backface-visibility: hidden;
             border-radius: 0;
             overflow: hidden;
+            transform-style: flat;
         }
 
         .card-front {
@@ -329,9 +347,10 @@
                 0 calc(100% - 15px)
             );
             position: relative;
+            z-index: 2;
         }
 
-        /* 🔥 卡片掃描線效果 */
+        /* 卡片掃描線效果 */
         .card-front::before {
             content: '';
             position: absolute;
@@ -357,7 +376,7 @@
                 inset 0 0 40px rgba(0, 255, 255, 0.1);
         }
 
-        /* 🔥 卡片背面 - 霓虹漸變 */
+        /* 卡片背面 - 霓虹漸變 */
         .card-back {
             background: linear-gradient(135deg, 
                 rgba(0, 100, 255, 0.9) 0%, 
@@ -378,6 +397,7 @@
                 15px 100%, 
                 0 calc(100% - 15px)
             );
+            z-index: 1;
         }
 
         .card-back-title {
@@ -416,7 +436,7 @@
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
         }
 
-        /* 🔥 圖標容器 - 六角形邊框 */
+        /* 🔥 圖標容器 - 正 10 邊形邊框 */
         .app-icon-wrapper {
             width: 150px;
             height: 150px;
@@ -435,7 +455,19 @@
                 0 0 20px rgba(0, 255, 255, 0.4),
                 inset 0 0 20px rgba(0, 255, 255, 0.2);
             transition: all 0.3s ease;
-            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+            /* 🔥 改為正 10 邊形 */
+            clip-path: polygon(
+                50% 0%, 
+                80.9% 9.5%, 
+                97.6% 34.5%, 
+                97.6% 65.5%, 
+                80.9% 90.5%, 
+                50% 100%, 
+                19.1% 90.5%, 
+                2.4% 65.5%, 
+                2.4% 34.5%, 
+                19.1% 9.5%
+            );
         }
 
         .app-icon img {
@@ -443,7 +475,19 @@
             height: 100%;
             object-fit: cover;
             background: #0a0e27;
-            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+            /* 🔥 改為正 10 邊形 */
+            clip-path: polygon(
+                50% 0%, 
+                80.9% 9.5%, 
+                97.6% 34.5%, 
+                97.6% 65.5%, 
+                80.9% 90.5%, 
+                50% 100%, 
+                19.1% 90.5%, 
+                2.4% 65.5%, 
+                2.4% 34.5%, 
+                19.1% 9.5%
+            );
         }
 
         /* 文字區域 */
@@ -491,7 +535,7 @@
             transform: translate(var(--magnetic-x), var(--magnetic-y)) scale(1.02);
         }
 
-        /* 🔥 長按詳情彈窗 - 科技風 */
+        /* 長按詳情彈窗 - 科技風 */
         .detail-modal {
             position: fixed;
             top: 0;
@@ -543,6 +587,7 @@
             transform: scale(1);
         }
 
+        /* 🔥 彈窗圖標 - 正 10 邊形 */
         .detail-icon {
             width: 100px;
             height: 100px;
@@ -550,7 +595,19 @@
             border-radius: 0;
             overflow: hidden;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+            /* 🔥 改為正 10 邊形 */
+            clip-path: polygon(
+                50% 0%, 
+                80.9% 9.5%, 
+                97.6% 34.5%, 
+                97.6% 65.5%, 
+                80.9% 90.5%, 
+                50% 100%, 
+                19.1% 90.5%, 
+                2.4% 65.5%, 
+                2.4% 34.5%, 
+                19.1% 9.5%
+            );
         }
 
         .detail-icon img {
@@ -609,7 +666,7 @@
             transform: scale(0.95);
         }
 
-        /* 🔥 PWA 安裝提示 - 科技風 */
+        /* PWA 安裝提示 - 科技風 */
         .install-prompt {
             position: fixed;
             bottom: 30px;
@@ -825,9 +882,7 @@
 
         <!-- 主容器 -->
         <div class="main-container">
-            <div class="apps-grid" id="appsGrid">
-                <!-- App 項目將由 JavaScript 動態生成 -->
-            </div>
+            <div class="apps-grid" id="appsGrid"></div>
         </div>
     </div>
 
@@ -851,40 +906,40 @@
     </div>
 
     <script>
-        // ==================== 應用程式資料配置 ====================
+        // JavaScript 保持不變（與之前相同）
         const apps = [
             { 
-                name: 'GAI數位資料中心', 
+                name: 'GAI數位資料中心<br>【Willion】', 
                 icon: 'app1.png', 
                 url: 'https://tcc-ai.github.io/digidata/',
                 desc: '智能數位資料與管理平台，提供即時文件查閱與視覺化報表'
             },
             { 
-                name: 'GAI風控管理中心', 
+                name: 'GAI風控管理中心<br>【Tina】', 
                 icon: 'app2.png', 
                 url: 'https://tcc-ai.github.io/Risk/',
                 desc: '即時風險監控與預警系統，保障企業營運安全'
             },
             { 
-                name: 'GAI路徑規劃中心', 
+                name: 'GAI路徑規劃中心<br>【Lisa】', 
                 icon: 'app3.png', 
                 url: 'https://tcc-ai.github.io/GAIRoute/',
                 desc: '智能物流路線優化，降低運輸成本提升效率'
             },
             { 
-                name: 'GAI排派車中心', 
+                name: 'GAI排派車中心<br>【Lisa】', 
                 icon: 'app3.png', 
                 url: 'https://tcc-ai.github.io/GAITransporter/',
                 desc: '自動化車輛調度系統，實現智能派車管理'
             },
             { 
-                name: 'GAI智慧庫存中心', 
+                name: 'GAI智慧庫存中心<br>【Elon】', 
                 icon: 'app4.png', 
                 url: 'https://tcc-ai.github.io/GAIstock/',
                 desc: '智能庫存預測與管理，優化庫存週轉率'
             },
             { 
-                name: 'GAI智能職訓中心', 
+                name: 'GAI智能職訓中心<br>【Sophia】', 
                 icon: 'app5.png', 
                 url: 'https://tcc-ai.github.io/TRAIN/',
                 desc: '個性化員工培訓平台，提升團隊專業能力'
@@ -912,22 +967,9 @@
                 icon: 'app10.png', 
                 url: 'https://example.com/app10',
                 desc: '更多創新功能即將推出，敬請期待'
-            },
-            { 
-                name: '應用程式 11', 
-                icon: 'app11.png', 
-                url: 'https://example.com/app11',
-                desc: '更多創新功能即將推出，敬請期待'
-            },
-            { 
-                name: '應用程式 12', 
-                icon: 'app12.png', 
-                url: 'https://example.com/app12',
-                desc: '更多創新功能即將推出，敬請期待'
             }
         ];
 
-        // ==================== 動態生成應用程式卡片 ====================
         function renderApps() {
             const grid = document.getElementById('appsGrid');
             grid.innerHTML = '';
@@ -971,7 +1013,6 @@
             initTouchEvents();
         }
 
-        // ==================== 手機版長按顯示詳情 ====================
         function initTouchEvents() {
             const appItems = document.querySelectorAll('.app-item');
             const detailModal = document.getElementById('detailModal');
@@ -1038,7 +1079,6 @@
             });
         }
 
-        // ==================== PC 版磁吸互動效果 ====================
         function initMagneticEffect() {
             const appItems = document.querySelectorAll('.app-item');
 
@@ -1072,7 +1112,6 @@
             });
         }
 
-        // ==================== 🔥 科技風數位粒子系統 ====================
         class ParticleSystem {
             constructor() {
                 this.canvas = document.getElementById('particleCanvas');
@@ -1119,7 +1158,6 @@
             draw() {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-                // 🔥 繪製霓虹粒子
                 this.particles.forEach(particle => {
                     this.ctx.beginPath();
                     this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
@@ -1130,7 +1168,6 @@
                     this.ctx.shadowBlur = 0;
                 });
 
-                // 🔥 繪製霓虹連線
                 for (let i = 0; i < this.particles.length; i++) {
                     for (let j = i + 1; j < this.particles.length; j++) {
                         const dx = this.particles[i].x - this.particles[j].x;
@@ -1157,7 +1194,6 @@
             }
         }
 
-        // ==================== PWA 功能 ====================
         function isIOS() {
             return /iPhone|iPad|iPod/i.test(navigator.userAgent);
         }
@@ -1222,7 +1258,6 @@
             hideInstallPrompt();
         });
 
-        // Service Worker 註冊
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 const swCode = `
@@ -1261,7 +1296,6 @@
             });
         }
 
-        // ==================== 初始化 ====================
         document.addEventListener('DOMContentLoaded', () => {
             renderApps();
             new ParticleSystem();
