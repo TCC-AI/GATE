@@ -2,46 +2,23 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0a0e27">
-    <meta name="description" content="昶青集團應用程式入口 - GAI驅動智慧管理平台，整合數位資料、風控、路徑規劃等多項智能服務">
-    <meta name="keywords" content="昶青集團,AI,智慧管理,數位轉型,GAI">
-    <meta name="author" content="昶青集團">
-    
-    <!-- ✅ 移除嚴格的 CSP，改用較寬鬆的策略 -->
-    <meta http-equiv="Content-Security-Policy" content="
-        default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; 
-        img-src 'self' data: https: blob:; 
-        script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; 
-        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
-        font-src 'self' https://fonts.gstatic.com data:; 
-        connect-src 'self' https:;
-        manifest-src 'self';
-        worker-src 'self';">
-    
+    <meta name="description" content="昶青集團應用程式入口 - GAI驅動智慧管理平台">
     <title>昶青集團應用程式入口 - GAI驅動智慧管理平台</title>
     
-    <!-- Preconnect -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <!-- ✅ 使用外部 Manifest -->
-    <link rel="manifest" href="./manifest.json">
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIuaYtumdkumbhuWcmCBBSS1HQVRFIiwKICAic2hvcnRfbmFtZSI6ICJBSS1HQVRFIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwYTBlMjciLAogICJ0aGVtZV9jb2xvciI6ICIjMGEwZTI3IiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiUjAucG5nIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciLAogICAgICAicHVycG9zZSI6ICJhbnkgbWFza2FibGUiCiAgICB9LAogICAgewogICAgICAic3JjIjogIlIwLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0sCiAgImRlc2NyaXB0aW9uIjogIuaYtumdkumbhuWcmEFJ5oeA5oWn566h55CG5bmz5Y+wIiwKICAib3JpZW50YXRpb24iOiAicG9ydHJhaXQiCn0=">
     
     <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" href="./R0.png">
-    <link rel="icon" type="image/png" href="./R0.png">
-    
-    <!-- Apple Web App -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="AI-GATE">
+    <link rel="apple-touch-icon" href="R0.png">
     
     <style>
-        /* 保持原有的 CSS 樣式不變 */
         * {
             margin: 0;
             padding: 0;
@@ -51,6 +28,7 @@
         body {
             font-family: 'Rajdhani', 'Noto Sans TC', sans-serif;
             min-height: 100vh;
+            /* 🔥 科技風深色背景 */
             background: #0a0e27;
             position: relative;
             overflow-x: hidden;
@@ -58,10 +36,9 @@
             flex-direction: column;
             align-items: center;
             padding: 20px;
-            padding-top: max(20px, env(safe-area-inset-top));
-            padding-bottom: max(20px, env(safe-area-inset-bottom));
         }
 
+        /* 🔥 電路板網格背景 */
         body::before {
             content: '';
             position: fixed;
@@ -77,6 +54,7 @@
             pointer-events: none;
         }
 
+        /* 🔥 動態掃描線效果 */
         body::after {
             content: '';
             position: fixed;
@@ -92,28 +70,14 @@
             animation: scanLine 4s linear infinite;
             z-index: 0;
             pointer-events: none;
-            will-change: transform;
         }
 
         @keyframes scanLine {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(100vh); }
+            0% { top: 0%; }
+            100% { top: 100%; }
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-            
-            body::after {
-                animation: none;
-            }
-        }
-
+        /* 🔥 數位粒子背景 Canvas */
         #particleCanvas {
             position: fixed;
             top: 0;
@@ -122,9 +86,9 @@
             height: 100%;
             z-index: 0;
             pointer-events: none;
-            transform: translateZ(0);
         }
 
+        /* 內容容器 */
         .content-wrapper {
             position: relative;
             z-index: 1;
@@ -135,34 +99,21 @@
             align-items: center;
         }
 
+        /* 🔥 Logo 容器 - 科技感六角形 */
         .logo-container {
             margin-bottom: 20px;
             animation: fadeInDown 0.8s ease-out;
             position: relative;
             filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.6));
-            width: 120px;
-            height: 120px;
         }
 
         .logo {
-            width: 100%;
-            height: 100%;
+            width: 120px;
+            height: 120px;
             object-fit: contain;
-            clip-path: polygon(
-                50% 0%, 
-                80.9% 9.5%, 
-                97.6% 34.5%, 
-                97.6% 65.5%, 
-                80.9% 90.5%, 
-                50% 100%, 
-                19.1% 90.5%, 
-                2.4% 65.5%, 
-                2.4% 34.5%, 
-                19.1% 9.5%
-            );
+            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: float 6s ease-in-out infinite;
-            will-change: transform;
+            animation: float 6s ease-in-out infinite, rotate3D 20s linear infinite;
         }
 
         .logo:hover {
@@ -171,10 +122,16 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0) translateZ(0); }
-            50% { transform: translateY(-15px) translateZ(0); }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
         }
 
+        @keyframes rotate3D {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        /* 🔥 標題 - 霓虹科技字體 */
         .title {
             font-family: 'Orbitron', 'Rajdhani', sans-serif;
             font-size: 4rem;
@@ -192,9 +149,9 @@
             animation: fadeInDown 0.8s ease-out 0.2s both, 
                        neonPulse 2s ease-in-out infinite alternate;
             position: relative;
-            line-height: 1.2;
         }
 
+        /* 🔥 標題下方科技線條 */
         .title::after {
             content: '';
             position: absolute;
@@ -237,6 +194,7 @@
             }
         }
 
+        /* 🔥 主容器 - 科技感邊框 */
         .main-container {
             background: rgba(10, 14, 39, 0.85);
             backdrop-filter: blur(10px);
@@ -259,9 +217,9 @@
                 20px 100%, 
                 0 calc(100% - 20px)
             );
-            contain: layout style paint;
         }
 
+        /* 🔥 容器四角科技裝飾 */
         .main-container::before,
         .main-container::after {
             content: '';
@@ -297,6 +255,7 @@
             }
         }
 
+        /* 🔥 PC 版 - 統一高度 200px 的網格佈局 */
         .apps-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -305,29 +264,24 @@
             padding: 20px;
             position: relative;
             z-index: 1;
-            contain: layout style;
         }
 
+        .app-item:nth-child(1) {
+            grid-column: span 1;
+            grid-row: span 1;
+        }
+
+        .app-item:nth-child(5) {
+            grid-column: span 1;
+        }
+
+        /* 3D 翻轉卡片 */
         .app-item {
             perspective: 1000px;
             cursor: pointer;
             position: relative;
             text-decoration: none;
             transition: transform 0.3s ease;
-            z-index: 1;
-            isolation: isolate;
-            width: 100%;
-            height: 100%;
-            contain: layout style paint;
-        }
-
-        .app-item:focus {
-            outline: 2px solid #00ffff;
-            outline-offset: 4px;
-        }
-
-        .app-item:hover {
-            z-index: 10;
         }
 
         .app-card {
@@ -336,15 +290,16 @@
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            will-change: transform;
         }
 
+        /* PC 版翻轉效果 */
         @media (min-width: 769px) {
             .app-item:hover .app-card {
                 transform: rotateY(180deg);
             }
         }
 
+        /* 🔥 卡片正面 - 科技感設計 */
         .card-front, .card-back {
             position: absolute;
             width: 100%;
@@ -352,8 +307,6 @@
             backface-visibility: hidden;
             border-radius: 0;
             overflow: hidden;
-            transform-style: preserve-3d;
-            contain: layout style paint;
         }
 
         .card-front {
@@ -376,9 +329,9 @@
                 0 calc(100% - 15px)
             );
             position: relative;
-            z-index: 2;
         }
 
+        /* 🔥 卡片掃描線效果 */
         .card-front::before {
             content: '';
             position: absolute;
@@ -404,6 +357,7 @@
                 inset 0 0 40px rgba(0, 255, 255, 0.1);
         }
 
+        /* 🔥 卡片背面 - 霓虹漸變 */
         .card-back {
             background: linear-gradient(135deg, 
                 rgba(0, 100, 255, 0.9) 0%, 
@@ -424,7 +378,6 @@
                 15px 100%, 
                 0 calc(100% - 15px)
             );
-            z-index: 1;
         }
 
         .card-back-title {
@@ -435,7 +388,6 @@
             text-align: center;
             text-transform: uppercase;
             letter-spacing: 2px;
-            white-space: pre-line;
         }
 
         .card-back-desc {
@@ -464,13 +416,13 @@
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
         }
 
+        /* 🔥 圖標容器 - 六角形邊框 */
         .app-icon-wrapper {
             width: 150px;
             height: 150px;
             flex-shrink: 0;
             margin-right: 15px;
             position: relative;
-            contain: layout size style;
         }
 
         .app-icon {
@@ -483,18 +435,7 @@
                 0 0 20px rgba(0, 255, 255, 0.4),
                 inset 0 0 20px rgba(0, 255, 255, 0.2);
             transition: all 0.3s ease;
-            clip-path: polygon(
-                50% 0%, 
-                80.9% 9.5%, 
-                97.6% 34.5%, 
-                97.6% 65.5%, 
-                80.9% 90.5%, 
-                50% 100%, 
-                19.1% 90.5%, 
-                2.4% 65.5%, 
-                2.4% 34.5%, 
-                19.1% 9.5%
-            );
+            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
         }
 
         .app-icon img {
@@ -502,29 +443,10 @@
             height: 100%;
             object-fit: cover;
             background: #0a0e27;
-            clip-path: polygon(
-                50% 0%, 
-                80.9% 9.5%, 
-                97.6% 34.5%, 
-                97.6% 65.5%, 
-                80.9% 90.5%, 
-                50% 100%, 
-                19.1% 90.5%, 
-                2.4% 65.5%, 
-                2.4% 34.5%, 
-                19.1% 9.5%
-            );
+            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
         }
 
-        .icon-fallback {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            font-size: 3rem;
-            color: #00ffff;
-        }
-
+        /* 文字區域 */
         .app-text-wrapper {
             flex: 1;
             display: flex;
@@ -532,7 +454,6 @@
             justify-content: center;
             text-align: left;
             min-width: 0;
-            line-height: 1.5;
         }
 
         .app-name {
@@ -547,13 +468,12 @@
             line-height: 1.3;
             text-transform: uppercase;
             letter-spacing: 2px;
-            white-space: pre-line;
         }
 
         .app-desc {
             font-size: 0.9rem;
             font-weight: 400;
-            color: rgba(0, 255, 255, 0.8);
+            color: rgba(0, 255, 255, 0.7);
             line-height: 1.5;
             display: -webkit-box;
             -webkit-line-clamp: 3;
@@ -561,6 +481,7 @@
             overflow: hidden;
         }
 
+        /* 磁吸效果 */
         .app-item {
             --magnetic-x: 0;
             --magnetic-y: 0;
@@ -570,6 +491,7 @@
             transform: translate(var(--magnetic-x), var(--magnetic-y)) scale(1.02);
         }
 
+        /* 🔥 長按詳情彈窗 - 科技風 */
         .detail-modal {
             position: fixed;
             top: 0;
@@ -628,18 +550,7 @@
             border-radius: 0;
             overflow: hidden;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-            clip-path: polygon(
-                50% 0%, 
-                80.9% 9.5%, 
-                97.6% 34.5%, 
-                97.6% 65.5%, 
-                80.9% 90.5%, 
-                50% 100%, 
-                19.1% 90.5%, 
-                2.4% 65.5%, 
-                2.4% 34.5%, 
-                19.1% 9.5%
-            );
+            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
         }
 
         .detail-icon img {
@@ -655,7 +566,6 @@
             margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            white-space: pre-line;
         }
 
         .detail-desc {
@@ -699,6 +609,7 @@
             transform: scale(0.95);
         }
 
+        /* 🔥 PWA 安裝提示 - 科技風 */
         .install-prompt {
             position: fixed;
             bottom: 30px;
@@ -748,6 +659,7 @@
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
         }
 
+        /* ==================== 手機版樣式 ==================== */
         @media (max-width: 768px) {
             body {
                 padding: 15px;
@@ -759,7 +671,7 @@
                 margin-bottom: 25px;
             }
 
-            .logo-container {
+            .logo {
                 width: 90px;
                 height: 90px;
             }
@@ -858,7 +770,7 @@
                 letter-spacing: 2px;
             }
 
-            .logo-container {
+            .logo {
                 width: 75px;
                 height: 75px;
             }
@@ -889,6 +801,7 @@
             }
         }
 
+        /* 平板版 */
         @media (min-width: 769px) and (max-width: 1200px) {
             .apps-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -897,21 +810,29 @@
     </style>
 </head>
 <body>
+    <!-- 數位粒子背景 -->
     <canvas id="particleCanvas"></canvas>
 
+    <!-- 內容容器 -->
     <div class="content-wrapper">
+        <!-- Logo -->
         <div class="logo-container">
-            <img src="./R0.png" alt="昶青集團 Logo" class="logo" loading="eager" width="120" height="120">
+            <img src="R0.png" alt="昶青集團 Logo" class="logo">
         </div>
 
+        <!-- 標題 -->
         <h1 class="title">昶青集團應用程式入口<br>GAI驅動智慧管理平台</h1>
 
+        <!-- 主容器 -->
         <div class="main-container">
-            <div class="apps-grid" id="appsGrid"></div>
+            <div class="apps-grid" id="appsGrid">
+                <!-- App 項目將由 JavaScript 動態生成 -->
+            </div>
         </div>
     </div>
 
-    <div class="detail-modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+    <!-- 長按詳情彈窗 -->
+    <div class="detail-modal" id="detailModal">
         <div class="detail-content">
             <div class="detail-icon" id="detailIcon"></div>
             <div class="detail-title" id="detailTitle"></div>
@@ -923,811 +844,452 @@
         </div>
     </div>
 
-    <div class="install-prompt" id="installPrompt" role="alert">
+    <!-- PWA 安裝提示 -->
+    <div class="install-prompt" id="installPrompt">
         <span id="installText">📱 將 AI-GATE 加入主畫面</span>
         <button id="installButton">安裝</button>
     </div>
 
     <script>
-        (function() {
-            'use strict';
-
-            const CONFIG = {
-                particles: {
-                    mobile: { count: 30, maxDistance: 120 },
-                    desktop: { count: 50, maxDistance: 150 }
-                },
-                interactions: {
-                    longPressDelay: 500,
-                    magneticStrength: 0.1,
-                    magneticMaxOffset: 15
-                },
-                breakpoints: {
-                    mobile: 768,
-                    tablet: 1200
-                }
-            };
-
-            // ✅ 修正：移除缺失的圖片應用
-            const apps = [
-                { 
-                    name: 'GAI數位資料中心\n【Willion】', 
-                    icon: './app1.png', 
-                    url: 'https://tcc-ai.github.io/digidata/',
-                    desc: '智能數位資料與管理平台，提供即時文件查閱與視覺化報表'
-                },
-                { 
-                    name: 'GAI風控管理中心\n【Tina】', 
-                    icon: './app2.png', 
-                    url: 'https://tcc-ai.github.io/Risk/',
-                    desc: '即時風險監控與預警系統，保障企業營運安全'
-                },
-                { 
-                    name: 'GAI路徑規劃中心\n【Lisa】', 
-                    icon: './app3.png', 
-                    url: 'https://tcc-ai.github.io/GAIRoute/',
-                    desc: '智能物流路線優化，降低運輸成本提升效率'
-                },
-                { 
-                    name: 'GAI排派車中心\n【Lisa】', 
-                    icon: './app3.png', 
-                    url: 'https://tcc-ai.github.io/GAITransporter/',
-                    desc: '自動化車輛調度系統，實現智能派車管理'
-                },
-                { 
-                    name: 'GAI智慧庫存中心\n【Elon】', 
-                    icon: './app4.png', 
-                    url: 'https://tcc-ai.github.io/GAIstock/',
-                    desc: '智能庫存預測與管理，優化庫存週轉率'
-                },
-                { 
-                    name: 'GAI智能職訓中心\n【Sophia】', 
-                    icon: './app5.png', 
-                    url: 'https://tcc-ai.github.io/TRAIN/',
-                    desc: '個性化員工培訓平台，提升團隊專業能力'
-                }
-                // ✅ 移除 app6, app7, app8, app9, app10（避免 404 錯誤）
-            ];
-
-            function escapeHtml(text) {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
+        // ==================== 應用程式資料配置 ====================
+        const apps = [
+            { 
+                name: 'GAI數位資料中心', 
+                icon: 'app1.png', 
+                url: 'https://tcc-ai.github.io/digidata/',
+                desc: '智能數位資料與管理平台，提供即時文件查閱與視覺化報表'
+            },
+            { 
+                name: 'GAI風控管理中心', 
+                icon: 'app2.png', 
+                url: 'https://tcc-ai.github.io/Risk/',
+                desc: '即時風險監控與預警系統，保障企業營運安全'
+            },
+            { 
+                name: 'GAI路徑規劃中心', 
+                icon: 'app3.png', 
+                url: 'https://tcc-ai.github.io/GAIRoute/',
+                desc: '智能物流路線優化，降低運輸成本提升效率'
+            },
+            { 
+                name: 'GAI排派車中心', 
+                icon: 'app3.png', 
+                url: 'https://tcc-ai.github.io/GAITransporter/',
+                desc: '自動化車輛調度系統，實現智能派車管理'
+            },
+            { 
+                name: 'GAI智慧庫存中心', 
+                icon: 'app4.png', 
+                url: 'https://tcc-ai.github.io/GAIstock/',
+                desc: '智能庫存預測與管理，優化庫存週轉率'
+            },
+            { 
+                name: 'GAI智能職訓中心', 
+                icon: 'app5.png', 
+                url: 'https://tcc-ai.github.io/TRAIN/',
+                desc: '個性化員工培訓平台，提升團隊專業能力'
+            },
+            { 
+                name: '應用程式 7', 
+                icon: 'app7.png', 
+                url: 'https://example.com/app7',
+                desc: '更多創新功能即將推出，敬請期待'
+            },
+            { 
+                name: '應用程式 8', 
+                icon: 'app8.png', 
+                url: 'https://example.com/app8',
+                desc: '更多創新功能即將推出，敬請期待'
+            },
+            { 
+                name: '應用程式 9', 
+                icon: 'app9.png', 
+                url: 'https://example.com/app9',
+                desc: '更多創新功能即將推出，敬請期待'
+            },
+            { 
+                name: '應用程式 10', 
+                icon: 'app10.png', 
+                url: 'https://example.com/app10',
+                desc: '更多創新功能即將推出，敬請期待'
+            },
+            { 
+                name: '應用程式 11', 
+                icon: 'app11.png', 
+                url: 'https://example.com/app11',
+                desc: '更多創新功能即將推出，敬請期待'
+            },
+            { 
+                name: '應用程式 12', 
+                icon: 'app12.png', 
+                url: 'https://example.com/app12',
+                desc: '更多創新功能即將推出，敬請期待'
             }
+        ];
 
-            function throttle(func, limit) {
-                let inThrottle;
-                return function(...args) {
-                    if (!inThrottle) {
-                        func.apply(this, args);
-                        inThrottle = true;
-                        setTimeout(() => inThrottle = false, limit);
-                    }
-                };
-            }
+        // ==================== 動態生成應用程式卡片 ====================
+        function renderApps() {
+            const grid = document.getElementById('appsGrid');
+            grid.innerHTML = '';
 
-            function debounce(func, wait) {
-                let timeout;
-                return function(...args) {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => func.apply(this, args), wait);
-                };
-            }
-
-            function safeLocalStorage(key, value) {
-                try {
-                    if (value === undefined) {
-                        return localStorage.getItem(key);
-                    }
-                    localStorage.setItem(key, value);
-                    return true;
-                } catch (e) {
-                    console.warn('localStorage 不可用:', e);
-                    return value === undefined ? null : false;
-                }
-            }
-
-            // ✅ 改進的圖片錯誤處理
-            function createAppIcon(app) {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'app-icon-wrapper';
-                
-                const iconDiv = document.createElement('div');
-                iconDiv.className = 'app-icon';
-                
-                const img = document.createElement('img');
-                img.src = app.icon;
-                img.alt = escapeHtml(app.name);
-                img.loading = 'lazy';
-                img.decoding = 'async';
-                img.width = 150;
-                img.height = 150;
-                
-                img.addEventListener('error', function() {
-                    console.warn(`圖片載入失敗: ${app.icon}`);
-                    const parent = this.parentElement;
-                    if (parent) {
-                        parent.innerHTML = '';
-                        
-                        // 創建 SVG fallback
-                        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                        svg.setAttribute('width', '150');
-                        svg.setAttribute('height', '150');
-                        svg.setAttribute('viewBox', '0 0 150 150');
-                        svg.innerHTML = `
-                            <defs>
-                                <linearGradient id="grad${Date.now()}" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#0064ff;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#00ffff;stop-opacity:1" />
-                                </linearGradient>
-                            </defs>
-                            <rect width="150" height="150" fill="url(#grad${Date.now()})" />
-                            <text x="75" y="75" text-anchor="middle" dominant-baseline="middle" 
-                                  fill="white" font-size="48" font-weight="bold">⚡</text>
-                        `;
-                        parent.appendChild(svg);
-                    }
-                }, { once: true });
-                
-                iconDiv.appendChild(img);
-                wrapper.appendChild(iconDiv);
-                return wrapper;
-            }
-
-            function createCardFront(app) {
-                const front = document.createElement('div');
-                front.className = 'card-front';
-                
-                const iconWrapper = createAppIcon(app);
-                
-                const textWrapper = document.createElement('div');
-                textWrapper.className = 'app-text-wrapper';
-                
-                const name = document.createElement('div');
-                name.className = 'app-name';
-                name.textContent = app.name;
-                
-                const desc = document.createElement('div');
-                desc.className = 'app-desc';
-                desc.textContent = app.desc;
-                
-                textWrapper.appendChild(name);
-                textWrapper.appendChild(desc);
-                
-                front.appendChild(iconWrapper);
-                front.appendChild(textWrapper);
-                
-                return front;
-            }
-
-            function createCardBack(app) {
-                const back = document.createElement('div');
-                back.className = 'card-back';
-                
-                const title = document.createElement('div');
-                title.className = 'card-back-title';
-                title.textContent = app.name;
-                
-                const desc = document.createElement('div');
-                desc.className = 'card-back-desc';
-                desc.textContent = app.desc;
-                
-                const action = document.createElement('div');
-                action.className = 'card-back-action';
-                action.textContent = '立即開啟 →';
-                
-                back.appendChild(title);
-                back.appendChild(desc);
-                back.appendChild(action);
-                
-                return back;
-            }
-
-            function createAppItem(app, index) {
-                const appItem = document.createElement('a');
-                appItem.href = app.url;
+            apps.forEach((app, index) => {
+                const appItem = document.createElement('div');
                 appItem.className = 'app-item';
-                appItem.setAttribute('role', 'button');
-                appItem.setAttribute('aria-label', `開啟 ${app.name.replace(/\n/g, ' ')}`);
-                appItem.setAttribute('tabindex', '0');
                 appItem.dataset.url = app.url;
                 appItem.dataset.name = app.name;
                 appItem.dataset.desc = app.desc;
                 appItem.dataset.icon = app.icon;
                 appItem.style.animationDelay = `${index * 0.05}s`;
-                
-                const card = document.createElement('div');
-                card.className = 'app-card';
-                
-                const front = createCardFront(app);
-                card.appendChild(front);
-                
-                if (window.innerWidth > CONFIG.breakpoints.mobile) {
-                    const back = createCardBack(app);
-                    card.appendChild(back);
-                }
-                
-                appItem.appendChild(card);
-                
-                appItem.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
+
+                appItem.innerHTML = `
+                    <div class="app-card">
+                        <div class="card-front">
+                            <div class="app-icon-wrapper">
+                                <div class="app-icon">
+                                    <img src="${app.icon}" alt="${app.name}" onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;font-size:3rem;color:#00ffff;\\'>⚡</div>'">
+                                </div>
+                            </div>
+                            <div class="app-text-wrapper">
+                                <div class="app-name">${app.name}</div>
+                                <div class="app-desc">${app.desc}</div>
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <div class="card-back-title">${app.name}</div>
+                            <div class="card-back-desc">${app.desc}</div>
+                            <div class="card-back-action">立即開啟 →</div>
+                        </div>
+                    </div>
+                `;
+
+                grid.appendChild(appItem);
+            });
+
+            if (window.innerWidth > 768) {
+                initMagneticEffect();
+            }
+            initTouchEvents();
+        }
+
+        // ==================== 手機版長按顯示詳情 ====================
+        function initTouchEvents() {
+            const appItems = document.querySelectorAll('.app-item');
+            const detailModal = document.getElementById('detailModal');
+            const detailIcon = document.getElementById('detailIcon');
+            const detailTitle = document.getElementById('detailTitle');
+            const detailDesc = document.getElementById('detailDesc');
+            const detailOpen = document.getElementById('detailOpen');
+            const detailClose = document.getElementById('detailClose');
+
+            let longPressTimer;
+            let currentUrl = '';
+
+            appItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (window.innerWidth <= 768) {
                         e.preventDefault();
-                        window.open(app.url, '_blank', 'noopener,noreferrer');
+                        window.open(this.dataset.url, '_blank', 'noopener,noreferrer');
+                    } else {
+                        window.open(this.dataset.url, '_blank', 'noopener,noreferrer');
                     }
                 });
-                
-                appItem.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    window.open(app.url, '_blank', 'noopener,noreferrer');
-                });
-                
-                return appItem;
-            }
 
-            function renderApps() {
-                const grid = document.getElementById('appsGrid');
-                if (!grid) {
-                    console.error('找不到 appsGrid 元素');
-                    return;
-                }
-                
-                grid.innerHTML = '';
-                const fragment = document.createDocumentFragment();
-
-                apps.forEach((app, index) => {
-                    try {
-                        const appItem = createAppItem(app, index);
-                        fragment.appendChild(appItem);
-                    } catch (error) {
-                        console.error(`渲染應用 ${app.name} 失敗:`, error);
-                    }
-                });
-                
-                grid.appendChild(fragment);
-                
-                if (window.innerWidth > CONFIG.breakpoints.mobile) {
-                    initMagneticEffect();
-                }
-                initTouchEvents();
-            }
-
-            const touchTimers = new WeakMap();
-            
-            function initTouchEvents() {
-                const appItems = document.querySelectorAll('.app-item');
-                const detailModal = document.getElementById('detailModal');
-                const detailIcon = document.getElementById('detailIcon');
-                const detailTitle = document.getElementById('detailTitle');
-                const detailDesc = document.getElementById('detailDesc');
-                const detailOpen = document.getElementById('detailOpen');
-                const detailClose = document.getElementById('detailClose');
-
-                let currentUrl = '';
-
-                appItems.forEach(item => {
-                    if (window.innerWidth <= CONFIG.breakpoints.mobile) {
-                        item.addEventListener('touchstart', function(e) {
-                            const timer = setTimeout(() => {
-                                e.preventDefault();
-                                currentUrl = this.dataset.url;
-                                
-                                const iconImg = document.createElement('img');
-                                iconImg.src = this.dataset.icon;
-                                iconImg.alt = this.dataset.name;
-                                if (detailIcon) {
-                                    detailIcon.innerHTML = '';
-                                    detailIcon.appendChild(iconImg);
-                                }
-                                
-                                if (detailTitle) detailTitle.textContent = this.dataset.name;
-                                if (detailDesc) detailDesc.textContent = this.dataset.desc;
-                                
-                                if (detailModal) detailModal.classList.add('show');
-                                
-                                if (navigator.vibrate) {
-                                    navigator.vibrate(50);
-                                }
-                            }, CONFIG.interactions.longPressDelay);
+                if (window.innerWidth <= 768) {
+                    item.addEventListener('touchstart', function(e) {
+                        longPressTimer = setTimeout(() => {
+                            e.preventDefault();
+                            currentUrl = this.dataset.url;
                             
-                            touchTimers.set(this, timer);
-                        }, { passive: false });
-
-                        item.addEventListener('touchend', function() {
-                            const timer = touchTimers.get(this);
-                            if (timer) {
-                                clearTimeout(timer);
-                                touchTimers.delete(this);
+                            detailIcon.innerHTML = `<img src="${this.dataset.icon}" alt="${this.dataset.name}">`;
+                            detailTitle.textContent = this.dataset.name;
+                            detailDesc.textContent = this.dataset.desc;
+                            
+                            detailModal.classList.add('show');
+                            
+                            if (navigator.vibrate) {
+                                navigator.vibrate(50);
                             }
-                        });
-
-                        item.addEventListener('touchmove', function() {
-                            const timer = touchTimers.get(this);
-                            if (timer) {
-                                clearTimeout(timer);
-                                touchTimers.delete(this);
-                            }
-                        });
-                    }
-                });
-
-                if (detailOpen) {
-                    detailOpen.addEventListener('click', () => {
-                        window.open(currentUrl, '_blank', 'noopener,noreferrer');
-                        if (detailModal) detailModal.classList.remove('show');
-                    });
-                }
-
-                if (detailClose) {
-                    detailClose.addEventListener('click', () => {
-                        if (detailModal) detailModal.classList.remove('show');
-                    });
-                }
-
-                if (detailModal) {
-                    detailModal.addEventListener('click', (e) => {
-                        if (e.target === detailModal) {
-                            detailModal.classList.remove('show');
-                        }
-                    });
-                }
-            }
-
-            function initMagneticEffect() {
-                const appItems = document.querySelectorAll('.app-item');
-
-                appItems.forEach(item => {
-                    item.addEventListener('mouseenter', function() {
-                        this.classList.add('magnetic-active');
+                        }, 500);
                     });
 
-                    item.addEventListener('mouseleave', function() {
-                        this.classList.remove('magnetic-active');
-                        this.style.setProperty('--magnetic-x', '0px');
-                        this.style.setProperty('--magnetic-y', '0px');
+                    item.addEventListener('touchend', function() {
+                        clearTimeout(longPressTimer);
                     });
 
-                    const throttledMove = throttle(function(e) {
-                        if (!this.classList.contains('magnetic-active')) return;
-
-                        const rect = this.getBoundingClientRect();
-                        const itemCenterX = rect.left + rect.width / 2;
-                        const itemCenterY = rect.top + rect.height / 2;
-                        
-                        const deltaX = e.clientX - itemCenterX;
-                        const deltaY = e.clientY - itemCenterY;
-                        
-                        const maxOffset = CONFIG.interactions.magneticMaxOffset;
-                        const strength = CONFIG.interactions.magneticStrength;
-                        
-                        const magneticX = Math.max(-maxOffset, Math.min(maxOffset, deltaX * strength));
-                        const magneticY = Math.max(-maxOffset, Math.min(maxOffset, deltaY * strength));
-                        
-                        this.style.setProperty('--magnetic-x', `${magneticX}px`);
-                        this.style.setProperty('--magnetic-y', `${magneticY}px`);
-                    }, 16);
-
-                    item.addEventListener('mousemove', throttledMove);
-                });
-            }
-
-            class ParticleSystem {
-                constructor() {
-                    this.canvas = document.getElementById('particleCanvas');
-                    if (!this.canvas) {
-                        console.warn('找不到 particleCanvas');
-                        return;
-                    }
-                    
-                    this.ctx = this.canvas.getContext('2d', { 
-                        alpha: true,
-                        desynchronized: true 
+                    item.addEventListener('touchmove', function() {
+                        clearTimeout(longPressTimer);
                     });
-                    this.particles = [];
-                    this.animationId = null;
-                    this.lastTime = 0;
-                    this.fps = 30;
-                    this.fpsInterval = 1000 / this.fps;
-                    
-                    const config = window.innerWidth < CONFIG.breakpoints.mobile 
-                        ? CONFIG.particles.mobile 
-                        : CONFIG.particles.desktop;
-                    
-                    this.particleCount = config.count;
-                    this.maxDistance = config.maxDistance;
-                    
-                    this.resize();
-                    this.init();
-                    this.animate(0);
-                    
-                    window.addEventListener('resize', debounce(() => this.resize(), 250));
-                    
-                    document.addEventListener('visibilitychange', () => {
-                        if (document.hidden) {
-                            if (this.animationId) {
-                                cancelAnimationFrame(this.animationId);
-                                this.animationId = null;
-                            }
-                        } else {
-                            if (!this.animationId) {
-                                this.lastTime = performance.now();
-                                this.animate(this.lastTime);
-                            }
-                        }
-                    });
-                }
-
-                resize() {
-                    if (this.canvas) {
-                        this.canvas.width = window.innerWidth;
-                        this.canvas.height = window.innerHeight;
-                    }
-                }
-
-                init() {
-                    this.particles = [];
-                    for (let i = 0; i < this.particleCount; i++) {
-                        this.particles.push({
-                            x: Math.random() * this.canvas.width,
-                            y: Math.random() * this.canvas.height,
-                            vx: (Math.random() - 0.5) * 0.5,
-                            vy: (Math.random() - 0.5) * 0.5,
-                            radius: Math.random() * 1.5 + 0.5
-                        });
-                    }
-                }
-
-                update() {
-                    this.particles.forEach(particle => {
-                        particle.x += particle.vx;
-                        particle.y += particle.vy;
-
-                        if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
-                        if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
-                    });
-                }
-
-                draw() {
-                    if (!this.ctx) return;
-                    
-                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-                    this.particles.forEach(particle => {
-                        this.ctx.beginPath();
-                        this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-                        this.ctx.fillStyle = 'rgba(0, 255, 255, 0.6)';
-                        this.ctx.fill();
-                    });
-
-                    for (let i = 0; i < this.particles.length; i++) {
-                        for (let j = i + 1; j < this.particles.length; j++) {
-                            const dx = this.particles[i].x - this.particles[j].x;
-                            const dy = this.particles[i].y - this.particles[j].y;
-                            const distance = Math.sqrt(dx * dx + dy * dy);
-
-                            if (distance < this.maxDistance) {
-                                const opacity = 1 - (distance / this.maxDistance);
-                                this.ctx.beginPath();
-                                this.ctx.strokeStyle = `rgba(0, 255, 255, ${opacity * 0.3})`;
-                                this.ctx.lineWidth = 0.5;
-                                this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
-                                this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
-                                this.ctx.stroke();
-                            }
-                        }
-                    }
-                }
-
-                animate(currentTime) {
-                    if (document.hidden) {
-                        this.animationId = null;
-                        return;
-                    }
-                    
-                    this.animationId = requestAnimationFrame((time) => this.animate(time));
-                    
-                    const elapsed = currentTime - this.lastTime;
-                    
-                    if (elapsed > this.fpsInterval) {
-                        this.lastTime = currentTime - (elapsed % this.fpsInterval);
-                                                this.update();
-                        this.draw();
-                    }
-                }
-            }
-
-            function isIOS() {
-                return /iPhone|iPad|iPod/i.test(navigator.userAgent);
-            }
-
-            function isStandalone() {
-                return window.matchMedia('(display-mode: standalone)').matches || 
-                       window.navigator.standalone === true;
-            }
-
-            let deferredPrompt = null;
-            const installPrompt = document.getElementById('installPrompt');
-            const installButton = document.getElementById('installButton');
-            const installText = document.getElementById('installText');
-
-            function hideInstallPrompt() {
-                if (installPrompt) {
-                    installPrompt.classList.remove('show');
-                    safeLocalStorage('installPromptClosed', 'true');
-                }
-            }
-
-            function showInstallPrompt() {
-                if (installPrompt) {
-                    installPrompt.classList.add('show');
-                }
-            }
-
-            function showIOSInstallGuide() {
-                if (installText && installButton) {
-                    installText.innerHTML = '📱 點擊 <strong>分享 📤</strong> → <strong>加入主畫面</strong>';
-                    installButton.textContent = '知道了';
-                    
-                    const newButton = installButton.cloneNode(true);
-                    installButton.parentNode.replaceChild(newButton, installButton);
-                    
-                    document.getElementById('installButton').addEventListener('click', (e) => {
-                        e.preventDefault();
-                        hideInstallPrompt();
-                    });
-                    
-                    showInstallPrompt();
-                }
-            }
-
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                
-                const promptClosed = safeLocalStorage('installPromptClosed');
-                if (!isIOS() && !isStandalone() && promptClosed !== 'true') {
-                    showInstallPrompt();
                 }
             });
 
-            if (installButton) {
-                installButton.addEventListener('click', async (e) => {
-                    e.preventDefault();
-                    
-                    if (!deferredPrompt) return;
+            detailOpen.addEventListener('click', () => {
+                window.open(currentUrl, '_blank', 'noopener,noreferrer');
+                detailModal.classList.remove('show');
+            });
 
-                    try {
-                        deferredPrompt.prompt();
-                        const { outcome } = await deferredPrompt.userChoice;
-                        console.log(`用戶選擇: ${outcome}`);
-                    } catch (error) {
-                        console.error('安裝提示失敗:', error);
-                    } finally {
-                        deferredPrompt = null;
-                        hideInstallPrompt();
-                    }
+            detailClose.addEventListener('click', () => {
+                detailModal.classList.remove('show');
+            });
+
+            detailModal.addEventListener('click', (e) => {
+                if (e.target === detailModal) {
+                    detailModal.classList.remove('show');
+                }
+            });
+        }
+
+        // ==================== PC 版磁吸互動效果 ====================
+        function initMagneticEffect() {
+            const appItems = document.querySelectorAll('.app-item');
+
+            appItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.classList.add('magnetic-active');
+                });
+
+                item.addEventListener('mouseleave', function() {
+                    this.classList.remove('magnetic-active');
+                    this.style.setProperty('--magnetic-x', '0px');
+                    this.style.setProperty('--magnetic-y', '0px');
+                });
+
+                item.addEventListener('mousemove', function(e) {
+                    if (!this.classList.contains('magnetic-active')) return;
+
+                    const rect = this.getBoundingClientRect();
+                    const itemCenterX = rect.left + rect.width / 2;
+                    const itemCenterY = rect.top + rect.height / 2;
+                    
+                    const deltaX = e.clientX - itemCenterX;
+                    const deltaY = e.clientY - itemCenterY;
+                    
+                    const magneticX = Math.max(-15, Math.min(15, deltaX * 0.1));
+                    const magneticY = Math.max(-15, Math.min(15, deltaY * 0.1));
+                    
+                    this.style.setProperty('--magnetic-x', `${magneticX}px`);
+                    this.style.setProperty('--magnetic-y', `${magneticY}px`);
+                });
+            });
+        }
+
+        // ==================== 🔥 科技風數位粒子系統 ====================
+        class ParticleSystem {
+            constructor() {
+                this.canvas = document.getElementById('particleCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.particleCount = window.innerWidth < 768 ? 40 : 80;
+                this.maxDistance = 150;
+                
+                this.resize();
+                this.init();
+                this.animate();
+                
+                window.addEventListener('resize', () => this.resize());
+            }
+
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+
+            init() {
+                this.particles = [];
+                for (let i = 0; i < this.particleCount; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.8,
+                        vy: (Math.random() - 0.5) * 0.8,
+                        radius: Math.random() * 2 + 1
+                    });
+                }
+            }
+
+            update() {
+                this.particles.forEach(particle => {
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+
+                    if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
+                    if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
                 });
             }
 
-            window.addEventListener('appinstalled', () => {
-                console.log('✅ PWA 已安裝');
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // 🔥 繪製霓虹粒子
+                this.particles.forEach(particle => {
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                    this.ctx.fillStyle = 'rgba(0, 255, 255, 0.8)';
+                    this.ctx.shadowBlur = 10;
+                    this.ctx.shadowColor = 'rgba(0, 255, 255, 0.8)';
+                    this.ctx.fill();
+                    this.ctx.shadowBlur = 0;
+                });
+
+                // 🔥 繪製霓虹連線
+                for (let i = 0; i < this.particles.length; i++) {
+                    for (let j = i + 1; j < this.particles.length; j++) {
+                        const dx = this.particles[i].x - this.particles[j].x;
+                        const dy = this.particles[i].y - this.particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < this.maxDistance) {
+                            const opacity = 1 - (distance / this.maxDistance);
+                            this.ctx.beginPath();
+                            this.ctx.strokeStyle = `rgba(0, 255, 255, ${opacity * 0.5})`;
+                            this.ctx.lineWidth = 1;
+                            this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
+                            this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
+                            this.ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            animate() {
+                this.update();
+                this.draw();
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // ==================== PWA 功能 ====================
+        function isIOS() {
+            return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        }
+
+        function isStandalone() {
+            return window.matchMedia('(display-mode: standalone)').matches || 
+                   window.navigator.standalone === true;
+        }
+
+        let deferredPrompt;
+        const installPrompt = document.getElementById('installPrompt');
+        const installButton = document.getElementById('installButton');
+        const installText = document.getElementById('installText');
+
+        function hideInstallPrompt() {
+            installPrompt.classList.remove('show');
+            localStorage.setItem('installPromptClosed', 'true');
+        }
+
+        function showInstallPrompt() {
+            installPrompt.classList.add('show');
+        }
+
+        function showIOSInstallGuide() {
+            installText.innerHTML = '📱 點擊 <strong>分享 📤</strong> → <strong>加入主畫面</strong>';
+            installButton.textContent = '知道了';
+            
+            const newButton = installButton.cloneNode(true);
+            installButton.parentNode.replaceChild(newButton, installButton);
+            
+            document.getElementById('installButton').addEventListener('click', (e) => {
+                e.preventDefault();
                 hideInstallPrompt();
             });
+            
+            showInstallPrompt();
+        }
 
-            // ✅ 修正：使用外部 Service Worker
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./sw.js')
-                        .then(registration => {
-                            console.log('✅ Service Worker 註冊成功:', registration.scope);
-                            
-                            // 檢查更新
-                            registration.addEventListener('updatefound', () => {
-                                const newWorker = registration.installing;
-                                console.log('🔄 發現新版本 Service Worker');
-                                
-                                newWorker.addEventListener('statechange', () => {
-                                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                        console.log('✨ 新版本已安裝');
-                                        // 可選：提示用戶重新載入
-                                        if (confirm('發現新版本，是否立即更新？')) {
-                                            newWorker.postMessage({ type: 'SKIP_WAITING' });
-                                            window.location.reload();
-                                        }
-                                    }
-                                });
-                            });
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            const promptClosed = localStorage.getItem('installPromptClosed');
+            if (!isIOS() && !isStandalone() && promptClosed !== 'true') {
+                showInstallPrompt();
+            }
+        });
 
-                            // 定期檢查更新
-                            setInterval(() => {
-                                registration.update();
-                            }, 60000); // 每分鐘檢查一次
-                        })
-                        .catch(error => {
-                            console.error('❌ Service Worker 註冊失敗:', error);
-                        });
+        installButton.addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            if (!deferredPrompt) return;
 
-                    // 監聽 Service Worker 控制權變更
-                    let refreshing = false;
-                    navigator.serviceWorker.addEventListener('controllerchange', () => {
-                        if (refreshing) return;
-                        refreshing = true;
-                        console.log('🔄 Service Worker 已更新，重新載入頁面');
-                        window.location.reload();
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            deferredPrompt = null;
+            hideInstallPrompt();
+        });
+
+        window.addEventListener('appinstalled', () => {
+            hideInstallPrompt();
+        });
+
+        // Service Worker 註冊
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                const swCode = `
+                    const CACHE_NAME = 'ai-gate-v1';
+                    const urlsToCache = [
+                        '/',
+                        '/R0.png'
+                    ];
+
+                    self.addEventListener('install', (event) => {
+                        event.waitUntil(
+                            caches.open(CACHE_NAME)
+                                .then(cache => cache.addAll(urlsToCache))
+                        );
+                        self.skipWaiting();
                     });
-                });
-            }
 
-            // ✅ 確保 DOM 載入完成後初始化
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', init);
-            } else {
-                init();
-            }
+                    self.addEventListener('activate', (event) => {
+                        event.waitUntil(self.clients.claim());
+                    });
 
-            function init() {
-                try {
-                    console.log('🚀 初始化應用程式...');
-                    
-                    // 渲染應用卡片
-                    renderApps();
-                    
-                    // 延遲啟動粒子系統以提升初始載入速度
-                    setTimeout(() => {
-                        new ParticleSystem();
-                    }, 500);
-                    
-                    // 如果已經是獨立模式，不顯示安裝提示
-                    if (isStandalone()) {
-                        console.log('✅ 應用已在獨立模式運行');
-                        return;
-                    }
+                    self.addEventListener('fetch', (event) => {
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then(response => response || fetch(event.request))
+                        );
+                    });
+                `;
 
-                    // 檢查是否已關閉安裝提示
-                    const promptClosed = safeLocalStorage('installPromptClosed');
-                    if (promptClosed === 'true') {
-                        console.log('ℹ️ 用戶已關閉安裝提示');
-                        return;
-                    }
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
 
-                    // iOS 設備顯示安裝指南
-                    if (isIOS()) {
-                        setTimeout(() => showIOSInstallGuide(), 2000);
-                    }
-
-                    console.log('✅ 初始化完成');
-                } catch (error) {
-                    console.error('❌ 初始化失敗:', error);
-                    
-                    // 顯示錯誤訊息
-                    const grid = document.getElementById('appsGrid');
-                    if (grid) {
-                        grid.innerHTML = `
-                            <div style="grid-column: 1 / -1; text-align: center; color: #00ffff; padding: 40px;">
-                                <div style="font-size: 3rem; margin-bottom: 20px;">⚠️</div>
-                                <div style="font-size: 1.5rem; margin-bottom: 10px;">載入失敗</div>
-                                <div style="opacity: 0.7; margin-bottom: 20px;">
-                                    發生錯誤: ${escapeHtml(error.message)}
-                                </div>
-                                <button onclick="location.reload()" style="
-                                    margin-top: 20px; 
-                                    padding: 10px 30px; 
-                                    background: linear-gradient(135deg, #0064ff 0%, #00ffff 100%); 
-                                    color: white; 
-                                    border: none; 
-                                    cursor: pointer; 
-                                    font-weight: bold;
-                                    font-size: 1rem;
-                                    border-radius: 5px;
-                                    box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
-                                ">
-                                    🔄 重新載入
-                                </button>
-                            </div>
-                        `;
-                    }
-                }
-            }
-
-            // 防止圖片被拖曳
-            document.addEventListener('dragstart', (e) => {
-                if (e.target.tagName === 'IMG') {
-                    e.preventDefault();
-                }
+                navigator.serviceWorker.register(swUrl)
+                    .then(reg => console.log('✅ Service Worker 註冊成功', reg))
+                    .catch(err => console.log('❌ Service Worker 註冊失敗', err));
             });
+        }
 
-            // 響應式處理
-            window.addEventListener('resize', debounce(() => {
-                console.log('📐 視窗大小改變，重新調整布局');
-                
-                // 清除所有磁吸效果
-                const appItems = document.querySelectorAll('.app-item');
-                appItems.forEach(item => {
-                    item.classList.remove('magnetic-active');
-                    item.style.setProperty('--magnetic-x', '0px');
-                    item.style.setProperty('--magnetic-y', '0px');
-                    
-                    // 清除長按計時器
-                    const timer = touchTimers.get(item);
-                    if (timer) {
-                        clearTimeout(timer);
-                        touchTimers.delete(item);
-                    }
-                });
-                
-                // 根據螢幕寬度調整卡片背面
-                if (window.innerWidth > CONFIG.breakpoints.mobile) {
-                    const cards = document.querySelectorAll('.app-card');
-                    cards.forEach((card, index) => {
-                        const hasBack = card.querySelector('.card-back');
-                        if (!hasBack && apps[index]) {
-                            const back = createCardBack(apps[index]);
-                            card.appendChild(back);
-                        }
-                    });
-                } else {
-                    const backs = document.querySelectorAll('.card-back');
-                    backs.forEach(back => back.remove());
-                }
-            }, 250));
+        // ==================== 初始化 ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            renderApps();
+            new ParticleSystem();
+            
+            if (isStandalone()) return;
 
-            // iOS 防止過度滾動
+            const promptClosed = localStorage.getItem('installPromptClosed');
+            if (promptClosed === 'true') return;
+
             if (isIOS()) {
-                let startY = 0;
-                
-                document.body.addEventListener('touchstart', function(e) {
-                    startY = e.touches[0].pageY;
-                }, { passive: false });
-                
-                document.body.addEventListener('touchmove', function(e) {
-                    const currentY = e.touches[0].pageY;
-                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                    const scrollHeight = document.documentElement.scrollHeight;
-                    const clientHeight = document.documentElement.clientHeight;
-                    
-                    // 防止頂部和底部過度滾動
-                    if ((scrollTop <= 0 && currentY > startY) || 
-                        (scrollTop + clientHeight >= scrollHeight && currentY < startY)) {
-                        e.preventDefault();
-                    }
-                }, { passive: false });
+                setTimeout(() => showIOSInstallGuide(), 2000);
             }
+        });
 
-            // ESC 鍵關閉 Modal
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    const detailModal = document.getElementById('detailModal');
-                    if (detailModal && detailModal.classList.contains('show')) {
-                        detailModal.classList.remove('show');
-                    }
-                    
-                    const installPrompt = document.getElementById('installPrompt');
-                    if (installPrompt && installPrompt.classList.contains('show')) {
-                        hideInstallPrompt();
-                    }
-                }
+        document.addEventListener('dragstart', (e) => {
+            if (e.target.tagName === 'IMG') {
+                e.preventDefault();
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            const appItems = document.querySelectorAll('.app-item');
+            appItems.forEach(item => {
+                item.classList.remove('magnetic-active');
+                item.style.setProperty('--magnetic-x', '0px');
+                item.style.setProperty('--magnetic-y', '0px');
             });
-
-            // 全局錯誤處理
-            window.addEventListener('error', (e) => {
-                console.error('❌ 全局錯誤:', e.error);
-            });
-
-            window.addEventListener('unhandledrejection', (e) => {
-                console.error('❌ 未處理的 Promise 拒絕:', e.reason);
-            });
-
-            // 暴露 API 供外部使用
-            window.AppPortal = {
-                version: '2.1.0',
-                renderApps: renderApps,
-                config: CONFIG,
-                apps: apps
-            };
-
-            console.log('🎉 昶青集團 AI-GATE 已載入完成');
-
-        })();
+        });
     </script>
 </body>
 </html>
-
