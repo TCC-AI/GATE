@@ -21,13 +21,13 @@
       "purpose": "any maskable"
     },
     {
-      "src": "R10.png",
+      "src": "icon-512x512.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "R11.png",
+      "src": "icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
