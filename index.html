@@ -1,36 +1,290 @@
+🚀 完整可運行版本 - 昶青集團 AI-GATE
+📦 完整檔案結構
+GATE/
+├── index.html          (主頁面 - 下方提供)
+├── manifest.json       (PWA Manifest)
+├── sw.js              (Service Worker)
+└── 圖片檔案/
+    ├── R0.png         (Logo - 必須)
+    ├── app1.png       (應用圖示 1)
+    ├── app2.png       (應用圖示 2)
+    ├── app3.png       (應用圖示 3)
+    ├── app4.png       (應用圖示 4)
+    ├── app5.png       (應用圖示 5)
+    ├── app7.png       (應用圖示 7)
+    └── app8.png       (應用圖示 8)
+
+
+📄 1. manifest.json
+{
+  "name": "昶青集團 AI-GATE 智慧管理平台",
+  "short_name": "AI-GATE",
+  "description": "昶青集團AI驅動智慧管理平台 - 整合數位資料、風控、路徑規劃等多項智能服務",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a0e27",
+  "theme_color": "#0a0e27",
+  "lang": "zh-TW",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "./R0.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./R0.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "utilities"],
+  "shortcuts": [
+    {
+      "name": "數位資料中心",
+      "short_name": "資料中心",
+      "description": "快速開啟數位資料管理平台",
+      "url": "./index.html?app=digidata",
+      "icons": [{ "src": "./app1.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "風控管理中心",
+      "short_name": "風控中心",
+      "description": "快速開啟風險控制系統",
+      "url": "./index.html?app=risk",
+      "icons": [{ "src": "./app2.png", "sizes": "192x192" }]
+    }
+  ]
+}
+
+
+📄 2. sw.js (Service Worker)
+const CACHE_NAME = 'ai-gate-v1.0.3';
+const CACHE_URLS = [
+    './',
+    './index.html',
+    './manifest.json',
+    './R0.png',
+    './app1.png',
+    './app2.png',
+    './app3.png',
+    './app4.png',
+    './app5.png',
+    './app7.png',
+    './app8.png',
+    'https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap'
+];
+
+// 安裝事件 - 預快取資源
+self.addEventListener('install', (event) => {
+    console.log('[SW] 🔧 安裝中...');
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then(cache => {
+                console.log('[SW] 📦 開始快取檔案');
+                return cache.addAll(CACHE_URLS.map(url => new Request(url, { cache: 'reload' })));
+            })
+            .then(() => {
+                console.log('[SW] ✅ 快取完成');
+                return self.skipWaiting();
+            })
+            .catch(err => {
+                console.error('[SW] ❌ 快取失敗:', err);
+            })
+    );
+});
+
+// 啟用事件 - 清理舊快取
+self.addEventListener('activate', (event) => {
+    console.log('[SW] 🚀 啟用中...');
+    event.waitUntil(
+        caches.keys()
+            .then(cacheNames => {
+                return Promise.all(
+                    cacheNames.map(cacheName => {
+                        if (cacheName !== CACHE_NAME) {
+                            console.log('[SW] 🗑️ 刪除舊快取:', cacheName);
+                            return caches.delete(cacheName);
+                        }
+                    })
+                );
+            })
+            .then(() => {
+                console.log('[SW] ✅ 啟用完成');
+                return self.clients.claim();
+            })
+    );
+});
+
+// Fetch 事件 - 攔截請求
+self.addEventListener('fetch', (event) => {
+    const { request } = event;
+    const url = new URL(request.url);
+
+    // 跳過 Chrome Extension 請求
+    if (url.protocol === 'chrome-extension:') {
+        return;
+    }
+
+    // 跳過非 GET 請求
+    if (request.method !== 'GET') {
+        return;
+    }
+
+    event.respondWith(
+        caches.match(request)
+            .then(cachedResponse => {
+                if (cachedResponse) {
+                    console.log('[SW] 📦 從快取載入:', url.pathname);
+                    return cachedResponse;
+                }
+
+                console.log('[SW] 🌐 從網路載入:', url.pathname);
+                return fetch(request)
+                    .then(response => {
+                        // 只快取成功的回應
+                        if (!response || response.status !== 200 || response.type !== 'basic') {
+                            return response;
+                        }
+
+                        // 複製回應並存入快取
+                        const responseToCache = response.clone();
+                        caches.open(CACHE_NAME)
+                            .then(cache => {
+                                cache.put(request, responseToCache);
+                            });
+
+                        return response;
+                    })
+                    .catch(err => {
+                        console.error('[SW] ❌ Fetch 失敗:', err);
+                        
+                        // 返回離線頁面
+                        return new Response(
+                            `<!DOCTYPE html>
+                            <html lang="zh-TW">
+                            <head>
+                                <meta charset="UTF-8">
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                <title>離線模式</title>
+                                <style>
+                                    body {
+                                        font-family: 'Noto Sans TC', sans-serif;
+                                        background: #0a0e27;
+                                        color: #00ffff;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        height: 100vh;
+                                        margin: 0;
+                                        text-align: center;
+                                    }
+                                    .offline-container {
+                                        padding: 40px;
+                                    }
+                                    .offline-icon {
+                                        font-size: 5rem;
+                                        margin-bottom: 20px;
+                                    }
+                                    .offline-title {
+                                        font-size: 2rem;
+                                        margin-bottom: 10px;
+                                    }
+                                    .offline-desc {
+                                        opacity: 0.8;
+                                        margin-bottom: 30px;
+                                    }
+                                    .retry-button {
+                                        background: linear-gradient(135deg, #0064ff 0%, #00ffff 100%);
+                                        color: white;
+                                        border: none;
+                                        padding: 15px 40px;
+                                        font-size: 1.1rem;
+                                        font-weight: bold;
+                                        cursor: pointer;
+                                        border-radius: 5px;
+                                    }
+                                </style>
+                            </head>
+                            <body>
+                                <div class="offline-container">
+                                    <div class="offline-icon">📡</div>
+                                    <div class="offline-title">離線模式</div>
+                                    <div class="offline-desc">目前無法連線，請檢查網路連線</div>
+                                    <button class="retry-button" onclick="location.reload()">重新載入</button>
+                                </div>
+                            </body>
+                            </html>`,
+                            {
+                                status: 503,
+                                statusText: 'Service Unavailable',
+                                headers: new Headers({
+                                    'Content-Type': 'text/html; charset=utf-8'
+                                })
+                            }
+                        );
+                    });
+            })
+    );
+});
+
+// 訊息事件 - 接收來自頁面的訊息
+self.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'SKIP_WAITING') {
+        self.skipWaiting();
+    }
+});
+
+
+📄 3. index.html (完整修正版)
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0a0e27">
-    <meta name="description" content="昶青集團應用程式入口 - GAI驅動智慧管理平台">
+    <meta name="description" content="昶青集團應用程式入口 - GAI驅動智慧管理平台，整合數位資料、風控、路徑規劃等多項智能服務">
+    <meta name="keywords" content="昶青集團,AI,智慧管理,數位轉型,GAI">
+    <meta name="author" content="昶青集團">
     
-    <!-- ✅ 修正：放寬 CSP 策略 -->
+    <!-- ✅ 移除嚴格的 CSP，改用較寬鬆的策略 -->
     <meta http-equiv="Content-Security-Policy" content="
-        default-src 'self'; 
-        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
-        font-src 'self' https://fonts.gstatic.com; 
+        default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; 
         img-src 'self' data: https: blob:; 
-        script-src 'self' 'unsafe-inline' blob:; 
-        connect-src 'self';
-        manifest-src 'self' data:;
-        worker-src 'self' blob:;">
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; 
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+        font-src 'self' https://fonts.gstatic.com data:; 
+        connect-src 'self' https:;
+        manifest-src 'self';
+        worker-src 'self';">
     
     <title>昶青集團應用程式入口 - GAI驅動智慧管理平台</title>
     
-    <!-- Google Fonts -->
+    <!-- Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIuaYtumdkumbhuWcmCBBSS1HQVRFIiwKICAic2hvcnRfbmFtZSI6ICJBSS1HQVRFIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwYTBlMjciLAogICJ0aGVtZV9jb2xvciI6ICIjMGEwZTI3IiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiUjAucG5nIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciLAogICAgICAicHVycG9zZSI6ICJhbnkgbWFza2FibGUiCiAgICB9LAogICAgewogICAgICAic3JjIjogIlIwLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0sCiAgImRlc2NyaXB0aW9uIjogIuaYtumdkumbhuWcmEFJ5oeA5oWn566h55CG5bmz5Y+wIiwKICAib3JpZW50YXRpb24iOiAicG9ydHJhaXQiCn0=">
+    <!-- ✅ 使用外部 Manifest -->
+    <link rel="manifest" href="./manifest.json">
     
     <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" href="R0.png">
+    <link rel="apple-touch-icon" href="./R0.png">
+    <link rel="icon" type="image/png" href="./R0.png">
+    
+    <!-- Apple Web App -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AI-GATE">
     
     <style>
+        /* 保持原有的 CSS 樣式不變 */
         * {
             margin: 0;
             padding: 0;
@@ -890,7 +1144,7 @@
 
     <div class="content-wrapper">
         <div class="logo-container">
-            <img src="R0.png" alt="昶青集團 Logo" class="logo" loading="eager" width="120" height="120">
+            <img src="./R0.png" alt="昶青集團 Logo" class="logo" loading="eager" width="120" height="120">
         </div>
 
         <h1 class="title">昶青集團應用程式入口<br>GAI驅動智慧管理平台</h1>
@@ -937,67 +1191,45 @@
                 }
             };
 
+            // ✅ 修正：移除缺失的圖片應用
             const apps = [
                 { 
                     name: 'GAI數位資料中心\n【Willion】', 
-                    icon: 'app1.png', 
+                    icon: './app1.png', 
                     url: 'https://tcc-ai.github.io/digidata/',
                     desc: '智能數位資料與管理平台，提供即時文件查閱與視覺化報表'
                 },
                 { 
                     name: 'GAI風控管理中心\n【Tina】', 
-                    icon: 'app2.png', 
+                    icon: './app2.png', 
                     url: 'https://tcc-ai.github.io/Risk/',
                     desc: '即時風險監控與預警系統，保障企業營運安全'
                 },
                 { 
                     name: 'GAI路徑規劃中心\n【Lisa】', 
-                    icon: 'app3.png', 
+                    icon: './app3.png', 
                     url: 'https://tcc-ai.github.io/GAIRoute/',
                     desc: '智能物流路線優化，降低運輸成本提升效率'
                 },
                 { 
                     name: 'GAI排派車中心\n【Lisa】', 
-                    icon: 'app3.png', 
+                    icon: './app3.png', 
                     url: 'https://tcc-ai.github.io/GAITransporter/',
                     desc: '自動化車輛調度系統，實現智能派車管理'
                 },
                 { 
                     name: 'GAI智慧庫存中心\n【Elon】', 
-                    icon: 'app4.png', 
+                    icon: './app4.png', 
                     url: 'https://tcc-ai.github.io/GAIstock/',
                     desc: '智能庫存預測與管理，優化庫存週轉率'
                 },
                 { 
                     name: 'GAI智能職訓中心\n【Sophia】', 
-                    icon: 'app5.png', 
+                    icon: './app5.png', 
                     url: 'https://tcc-ai.github.io/TRAIN/',
                     desc: '個性化員工培訓平台，提升團隊專業能力'
-                },
-                { 
-                    name: '應用程式 7', 
-                    icon: 'app7.png', 
-                    url: 'https://example.com/app7',
-                    desc: '更多創新功能即將推出，敬請期待'
-                },
-                { 
-                    name: '應用程式 8', 
-                    icon: 'app8.png', 
-                    url: 'https://example.com/app8',
-                    desc: '更多創新功能即將推出，敬請期待'
-                },
-                { 
-                    name: '應用程式 9', 
-                    icon: 'app9.png', 
-                    url: 'https://example.com/app9',
-                    desc: '更多創新功能即將推出，敬請期待'
-                },
-                { 
-                    name: '應用程式 10', 
-                    icon: 'app10.png', 
-                    url: 'https://example.com/app10',
-                    desc: '更多創新功能即將推出，敬請期待'
                 }
+                // ✅ 移除 app6, app7, app8, app9, app10（避免 404 錯誤）
             ];
 
             function escapeHtml(text) {
@@ -1038,7 +1270,7 @@
                 }
             }
 
-            // ✅ 關鍵修正：安全的 DOM 操作
+            // ✅ 改進的圖片錯誤處理
             function createAppIcon(app) {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'app-icon-wrapper';
@@ -1054,18 +1286,31 @@
                 img.width = 150;
                 img.height = 150;
                 
-                // ✅ 修正：確保父元素存在
-                img.addEventListener('error', function(e) {
+                img.addEventListener('error', function() {
                     console.warn(`圖片載入失敗: ${app.icon}`);
                     const parent = this.parentElement;
                     if (parent) {
-                        const fallback = document.createElement('div');
-                        fallback.className = 'icon-fallback';
-                        fallback.textContent = '⚡';
                         parent.innerHTML = '';
-                        parent.appendChild(fallback);
+                        
+                        // 創建 SVG fallback
+                        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                        svg.setAttribute('width', '150');
+                        svg.setAttribute('height', '150');
+                        svg.setAttribute('viewBox', '0 0 150 150');
+                        svg.innerHTML = `
+                            <defs>
+                                <linearGradient id="grad${Date.now()}" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#0064ff;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#00ffff;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <rect width="150" height="150" fill="url(#grad${Date.now()})" />
+                            <text x="75" y="75" text-anchor="middle" dominant-baseline="middle" 
+                                  fill="white" font-size="48" font-weight="bold">⚡</text>
+                        `;
+                        parent.appendChild(svg);
                     }
-                });
+                }, { once: true });
                 
                 iconDiv.appendChild(img);
                 wrapper.appendChild(iconDiv);
@@ -1162,19 +1407,6 @@
                 return appItem;
             }
 
-            function createErrorPlaceholder(name) {
-                const placeholder = document.createElement('div');
-                placeholder.className = 'app-item error-placeholder';
-                placeholder.style.opacity = '0.5';
-                placeholder.innerHTML = `
-                    <div style="display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;color:#00ffff;">
-                        <div style="font-size:3rem;margin-bottom:10px;">⚠️</div>
-                        <div>載入失敗: ${escapeHtml(name)}</div>
-                    </div>
-                `;
-                return placeholder;
-            }
-
             function renderApps() {
                 const grid = document.getElementById('appsGrid');
                 if (!grid) {
@@ -1183,7 +1415,6 @@
                 }
                 
                 grid.innerHTML = '';
-                
                 const fragment = document.createDocumentFragment();
 
                 apps.forEach((app, index) => {
@@ -1192,7 +1423,6 @@
                         fragment.appendChild(appItem);
                     } catch (error) {
                         console.error(`渲染應用 ${app.name} 失敗:`, error);
-                        fragment.appendChild(createErrorPlaceholder(app.name));
                     }
                 });
                 
@@ -1442,7 +1672,7 @@
                     
                     if (elapsed > this.fpsInterval) {
                         this.lastTime = currentTime - (elapsed % this.fpsInterval);
-                        this.update();
+                                                this.update();
                         this.draw();
                     }
                 }
@@ -1526,58 +1756,51 @@
                 hideInstallPrompt();
             });
 
-            // ✅ 修正：Service Worker 註冊
+            // ✅ 修正：使用外部 Service Worker
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                    try {
-                        const swCode = `
-                            const CACHE_NAME = 'ai-gate-v1';
-                            const urlsToCache = [
-                                '/',
-                                '/R0.png'
-                            ];
-
-                            self.addEventListener('install', (event) => {
-                                event.waitUntil(
-                                    caches.open(CACHE_NAME)
-                                        .then(cache => cache.addAll(urlsToCache))
-                                        .catch(err => console.error('Cache failed:', err))
-                                );
-                                self.skipWaiting();
+                    navigator.serviceWorker.register('./sw.js')
+                        .then(registration => {
+                            console.log('✅ Service Worker 註冊成功:', registration.scope);
+                            
+                            // 檢查更新
+                            registration.addEventListener('updatefound', () => {
+                                const newWorker = registration.installing;
+                                console.log('🔄 發現新版本 Service Worker');
+                                
+                                newWorker.addEventListener('statechange', () => {
+                                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                        console.log('✨ 新版本已安裝');
+                                        // 可選：提示用戶重新載入
+                                        if (confirm('發現新版本，是否立即更新？')) {
+                                            newWorker.postMessage({ type: 'SKIP_WAITING' });
+                                            window.location.reload();
+                                        }
+                                    }
+                                });
                             });
 
-                            self.addEventListener('activate', (event) => {
-                                event.waitUntil(self.clients.claim());
-                            });
+                            // 定期檢查更新
+                            setInterval(() => {
+                                registration.update();
+                            }, 60000); // 每分鐘檢查一次
+                        })
+                        .catch(error => {
+                            console.error('❌ Service Worker 註冊失敗:', error);
+                        });
 
-                            self.addEventListener('fetch', (event) => {
-                                event.respondWith(
-                                    caches.match(event.request)
-                                        .then(response => response || fetch(event.request))
-                                        .catch(err => {
-                                            console.error('Fetch failed:', err);
-                                            return new Response('Network error', { status: 408 });
-                                        })
-                                );
-                            });
-                        `;
-
-                        const blob = new Blob([swCode], { type: 'application/javascript' });
-                        const swUrl = URL.createObjectURL(blob);
-
-                        navigator.serviceWorker.register(swUrl)
-                            .then(reg => {
-                                console.log('✅ Service Worker 註冊成功', reg.scope);
-                                reg.update();
-                            })
-                            .catch(err => console.error('❌ Service Worker 註冊失敗:', err));
-                    } catch (error) {
-                        console.error('Service Worker 初始化失敗:', error);
-                    }
+                    // 監聽 Service Worker 控制權變更
+                    let refreshing = false;
+                    navigator.serviceWorker.addEventListener('controllerchange', () => {
+                        if (refreshing) return;
+                        refreshing = true;
+                        console.log('🔄 Service Worker 已更新，重新載入頁面');
+                        window.location.reload();
+                    });
                 });
             }
 
-            // ✅ 修正：確保 DOM 載入完成
+            // ✅ 確保 DOM 載入完成後初始化
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', init);
             } else {
@@ -1586,31 +1809,61 @@
 
             function init() {
                 try {
+                    console.log('🚀 初始化應用程式...');
+                    
+                    // 渲染應用卡片
                     renderApps();
                     
+                    // 延遲啟動粒子系統以提升初始載入速度
                     setTimeout(() => {
                         new ParticleSystem();
                     }, 500);
                     
-                    if (isStandalone()) return;
+                    // 如果已經是獨立模式，不顯示安裝提示
+                    if (isStandalone()) {
+                        console.log('✅ 應用已在獨立模式運行');
+                        return;
+                    }
 
+                    // 檢查是否已關閉安裝提示
                     const promptClosed = safeLocalStorage('installPromptClosed');
-                    if (promptClosed === 'true') return;
+                    if (promptClosed === 'true') {
+                        console.log('ℹ️ 用戶已關閉安裝提示');
+                        return;
+                    }
 
+                    // iOS 設備顯示安裝指南
                     if (isIOS()) {
                         setTimeout(() => showIOSInstallGuide(), 2000);
                     }
+
+                    console.log('✅ 初始化完成');
                 } catch (error) {
-                    console.error('初始化失敗:', error);
+                    console.error('❌ 初始化失敗:', error);
+                    
+                    // 顯示錯誤訊息
                     const grid = document.getElementById('appsGrid');
                     if (grid) {
                         grid.innerHTML = `
                             <div style="grid-column: 1 / -1; text-align: center; color: #00ffff; padding: 40px;">
                                 <div style="font-size: 3rem; margin-bottom: 20px;">⚠️</div>
                                 <div style="font-size: 1.5rem; margin-bottom: 10px;">載入失敗</div>
-                                <div style="opacity: 0.7;">請重新整理頁面或聯繫技術支援</div>
-                                <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 30px; background: #00ffff; color: #0a0e27; border: none; cursor: pointer; font-weight: bold;">
-                                    重新整理
+                                <div style="opacity: 0.7; margin-bottom: 20px;">
+                                    發生錯誤: ${escapeHtml(error.message)}
+                                </div>
+                                <button onclick="location.reload()" style="
+                                    margin-top: 20px; 
+                                    padding: 10px 30px; 
+                                    background: linear-gradient(135deg, #0064ff 0%, #00ffff 100%); 
+                                    color: white; 
+                                    border: none; 
+                                    cursor: pointer; 
+                                    font-weight: bold;
+                                    font-size: 1rem;
+                                    border-radius: 5px;
+                                    box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+                                ">
+                                    🔄 重新載入
                                 </button>
                             </div>
                         `;
@@ -1618,19 +1871,25 @@
                 }
             }
 
+            // 防止圖片被拖曳
             document.addEventListener('dragstart', (e) => {
                 if (e.target.tagName === 'IMG') {
                     e.preventDefault();
                 }
             });
 
+            // 響應式處理
             window.addEventListener('resize', debounce(() => {
+                console.log('📐 視窗大小改變，重新調整布局');
+                
+                // 清除所有磁吸效果
                 const appItems = document.querySelectorAll('.app-item');
-                                appItems.forEach(item => {
+                appItems.forEach(item => {
                     item.classList.remove('magnetic-active');
                     item.style.setProperty('--magnetic-x', '0px');
                     item.style.setProperty('--magnetic-y', '0px');
                     
+                    // 清除長按計時器
                     const timer = touchTimers.get(item);
                     if (timer) {
                         clearTimeout(timer);
@@ -1638,6 +1897,7 @@
                     }
                 });
                 
+                // 根據螢幕寬度調整卡片背面
                 if (window.innerWidth > CONFIG.breakpoints.mobile) {
                     const cards = document.querySelectorAll('.app-card');
                     cards.forEach((card, index) => {
@@ -1653,6 +1913,7 @@
                 }
             }, 250));
 
+            // iOS 防止過度滾動
             if (isIOS()) {
                 let startY = 0;
                 
@@ -1666,6 +1927,7 @@
                     const scrollHeight = document.documentElement.scrollHeight;
                     const clientHeight = document.documentElement.clientHeight;
                     
+                    // 防止頂部和底部過度滾動
                     if ((scrollTop <= 0 && currentY > startY) || 
                         (scrollTop + clientHeight >= scrollHeight && currentY < startY)) {
                         e.preventDefault();
@@ -1673,6 +1935,7 @@
                 }, { passive: false });
             }
 
+            // ESC 鍵關閉 Modal
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     const detailModal = document.getElementById('detailModal');
@@ -1687,23 +1950,27 @@
                 }
             });
 
+            // 全局錯誤處理
             window.addEventListener('error', (e) => {
-                console.error('全局錯誤:', e.error);
+                console.error('❌ 全局錯誤:', e.error);
             });
 
             window.addEventListener('unhandledrejection', (e) => {
-                console.error('未處理的 Promise 拒絕:', e.reason);
+                console.error('❌ 未處理的 Promise 拒絕:', e.reason);
             });
 
+            // 暴露 API 供外部使用
             window.AppPortal = {
-                version: '2.0.2',
+                version: '2.1.0',
                 renderApps: renderApps,
-                config: CONFIG
+                config: CONFIG,
+                apps: apps
             };
+
+            console.log('🎉 昶青集團 AI-GATE 已載入完成');
 
         })();
     </script>
 </body>
 </html>
 
-                
