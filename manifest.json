@@ -1,55 +1,36 @@
 {
-  "name": "昶青集團 AI-GATE",
+  "name": "昶青集團應用程式入口 - GAI驅動智慧管理平台",
   "short_name": "AI-GATE",
-  "description": "GAI驅動智慧管理平台",
-  "start_url": "./",
-  "scope": "./",
+  "description": "昶青集團AI智慧管理平台",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0e27",
   "theme_color": "#0a0e27",
-  "orientation": "portrait-primary",
+  "orientation": "portrait",
   "icons": [
     {
-      "src": "./icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png"
-    },
-    {
-      "src": "./icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png"
-    },
-    {
-      "src": "./icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png"
-    },
-    {
-      "src": "./icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png"
-    },
-    {
-      "src": "./icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png"
-    },
-    {
-      "src": "./icon-192x192.png",
+      "src": "R0.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "./icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png"
-    },
-    {
-      "src": "./icon-512x512.png",
+      "src": "R0.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "R10.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "R11.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
