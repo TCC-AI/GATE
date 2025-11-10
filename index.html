@@ -37,12 +37,13 @@
             flex-direction: column;
             align-items: center;
             padding: 20px;
-            /* ✅ iOS 安全區域支持 */
             padding-top: max(20px, env(safe-area-inset-top));
             padding-bottom: max(20px, env(safe-area-inset-bottom));
+            /* ✅ 關鍵修正：強制字體顯示 */
+            font-display: swap;
         }
 
-        /* 電路板網格背景 */
+        /* ✅ 關鍵修正：固定定位背景，避免觸發 layout */
         body::before {
             content: '';
             position: fixed;
@@ -56,9 +57,11 @@
             background-size: 50px 50px;
             z-index: 0;
             pointer-events: none;
+            /* ✅ 使用 will-change 提示瀏覽器優化 */
+            will-change: auto;
         }
 
-        /* 動態掃描線效果 */
+        /* ✅ 關鍵修正：使用 transform 代替 top，避免觸發 layout */
         body::after {
             content: '';
             position: fixed;
@@ -74,14 +77,16 @@
             animation: scanLine 4s linear infinite;
             z-index: 0;
             pointer-events: none;
+            /* ✅ 關鍵：使用 transform */
+            will-change: transform;
         }
 
+        /* ✅ 關鍵修正：使用 transform 代替 top */
         @keyframes scanLine {
-            0% { top: 0%; }
-            100% { top: 100%; }
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100vh); }
         }
 
-        /* ✅ 減少動畫支持 */
         @media (prefers-reduced-motion: reduce) {
             *,
             *::before,
@@ -100,7 +105,7 @@
             }
         }
 
-        /* 數位粒子背景 Canvas */
+        /* ✅ 關鍵修正：Canvas 固定定位 + GPU 加速 */
         #particleCanvas {
             position: fixed;
             top: 0;
@@ -109,9 +114,11 @@
             height: 100%;
             z-index: 0;
             pointer-events: none;
+            /* ✅ 使用 GPU 加速 */
+            transform: translateZ(0);
+            will-change: auto;
         }
 
-        /* 內容容器 */
         .content-wrapper {
             position: relative;
             z-index: 1;
@@ -122,17 +129,20 @@
             align-items: center;
         }
 
-        /* Logo 容器 - 正 10 邊形 */
+        /* ✅ 關鍵修正：Logo 固定尺寸，防止載入偏移 */
         .logo-container {
             margin-bottom: 20px;
             animation: fadeInDown 0.8s ease-out;
             position: relative;
             filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.6));
+            /* ✅ 預設寬高 */
+            width: 120px;
+            height: 120px;
         }
 
         .logo {
-            width: 120px;
-            height: 120px;
+            width: 100%;
+            height: 100%;
             object-fit: contain;
             clip-path: polygon(
                 50% 0%, 
@@ -147,7 +157,9 @@
                 19.1% 9.5%
             );
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: float 6s ease-in-out infinite, rotate3D 20s linear infinite;
+            /* ✅ 關鍵修正：使用 transform 動畫 */
+            animation: float 6s ease-in-out infinite;
+            will-change: transform;
         }
 
         .logo:hover {
@@ -155,17 +167,13 @@
             filter: drop-shadow(0 0 50px rgba(0, 255, 255, 1));
         }
 
+        /* ✅ 關鍵修正：只使用 transform */
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
+            0%, 100% { transform: translateY(0) translateZ(0); }
+            50% { transform: translateY(-15px) translateZ(0); }
         }
 
-        @keyframes rotate3D {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
-        }
-
-        /* 標題 - 霓虹科技字體 */
+        /* ✅ 關鍵修正：固定行高，防止字體載入偏移 */
         .title {
             font-family: 'Orbitron', 'Rajdhani', sans-serif;
             font-size: 4rem;
@@ -183,6 +191,8 @@
             animation: fadeInDown 0.8s ease-out 0.2s both, 
                        neonPulse 2s ease-in-out infinite alternate;
             position: relative;
+            /* ✅ 固定行高 */
+            line-height: 1.2;
         }
 
         .title::after {
@@ -227,7 +237,6 @@
             }
         }
 
-        /* 主容器 - 科技感邊框 */
         .main-container {
             background: rgba(10, 14, 39, 0.85);
             backdrop-filter: blur(10px);
@@ -250,6 +259,8 @@
                 20px 100%, 
                 0 calc(100% - 20px)
             );
+            /* ✅ 使用 contain 優化渲染 */
+            contain: layout style paint;
         }
 
         .main-container::before,
@@ -287,7 +298,7 @@
             }
         }
 
-        /* PC 版 - 統一高度 200px 的網格佈局 */
+        /* ✅ 關鍵修正：網格固定高度 */
         .apps-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -296,6 +307,8 @@
             padding: 20px;
             position: relative;
             z-index: 1;
+            /* ✅ 使用 contain 優化 */
+            contain: layout style;
         }
 
         .app-item:nth-child(1) {
@@ -307,7 +320,7 @@
             grid-column: span 1;
         }
 
-        /* ✅ 3D 翻轉卡片 - 修正 transform-style */
+        /* ✅ 關鍵修正：卡片容器固定尺寸 */
         .app-item {
             perspective: 1000px;
             cursor: pointer;
@@ -316,9 +329,13 @@
             transition: transform 0.3s ease;
             z-index: 1;
             isolation: isolate;
+            /* ✅ 固定寬高 */
+            width: 100%;
+            height: 100%;
+            /* ✅ 使用 contain 優化 */
+            contain: layout style paint;
         }
 
-        /* ✅ 添加焦點樣式 */
         .app-item:focus {
             outline: 2px solid #00ffff;
             outline-offset: 4px;
@@ -332,18 +349,18 @@
             width: 100%;
             height: 100%;
             position: relative;
-            transform-style: preserve-3d; /* ✅ 修正：flat → preserve-3d */
+            transform-style: preserve-3d;
             transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            /* ✅ 使用 will-change 優化翻轉 */
+            will-change: transform;
         }
 
-        /* PC 版翻轉效果 */
         @media (min-width: 769px) {
             .app-item:hover .app-card {
                 transform: rotateY(180deg);
             }
         }
 
-        /* 卡片正面 - 科技感設計 */
         .card-front, .card-back {
             position: absolute;
             width: 100%;
@@ -351,7 +368,9 @@
             backface-visibility: hidden;
             border-radius: 0;
             overflow: hidden;
-            transform-style: preserve-3d; /* ✅ 修正：flat → preserve-3d */
+            transform-style: preserve-3d;
+            /* ✅ 使用 contain 優化 */
+            contain: layout style paint;
         }
 
         .card-front {
@@ -402,7 +421,6 @@
                 inset 0 0 40px rgba(0, 255, 255, 0.1);
         }
 
-        /* 卡片背面 - 霓虹漸變 */
         .card-back {
             background: linear-gradient(135deg, 
                 rgba(0, 100, 255, 0.9) 0%, 
@@ -434,7 +452,7 @@
             text-align: center;
             text-transform: uppercase;
             letter-spacing: 2px;
-            white-space: pre-line; /* ✅ 支持 \n 換行 */
+            white-space: pre-line;
         }
 
         .card-back-desc {
@@ -463,13 +481,15 @@
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
         }
 
-        /* 圖標容器 - 正 10 邊形邊框 */
+        /* ✅ 關鍵修正：圖標固定尺寸 */
         .app-icon-wrapper {
             width: 150px;
             height: 150px;
             flex-shrink: 0;
             margin-right: 15px;
             position: relative;
+            /* ✅ 使用 contain 優化 */
+            contain: layout size style;
         }
 
         .app-icon {
@@ -515,7 +535,6 @@
             );
         }
 
-        /* ✅ 圖標錯誤佔位符 */
         .icon-fallback {
             display: flex;
             align-items: center;
@@ -525,7 +544,7 @@
             color: #00ffff;
         }
 
-        /* 文字區域 */
+        /* ✅ 關鍵修正：固定行高 */
         .app-text-wrapper {
             flex: 1;
             display: flex;
@@ -533,6 +552,7 @@
             justify-content: center;
             text-align: left;
             min-width: 0;
+            line-height: 1.5;
         }
 
         .app-name {
@@ -547,13 +567,13 @@
             line-height: 1.3;
             text-transform: uppercase;
             letter-spacing: 2px;
-            white-space: pre-line; /* ✅ 支持 \n 換行 */
+            white-space: pre-line;
         }
 
         .app-desc {
             font-size: 0.9rem;
             font-weight: 400;
-            color: rgba(0, 255, 255, 0.8); /* ✅ 提高對比度 */
+            color: rgba(0, 255, 255, 0.8);
             line-height: 1.5;
             display: -webkit-box;
             -webkit-line-clamp: 3;
@@ -561,7 +581,6 @@
             overflow: hidden;
         }
 
-        /* 磁吸效果 */
         .app-item {
             --magnetic-x: 0;
             --magnetic-y: 0;
@@ -571,7 +590,6 @@
             transform: translate(var(--magnetic-x), var(--magnetic-y)) scale(1.02);
         }
 
-        /* 長按詳情彈窗 - 科技風 */
         .detail-modal {
             position: fixed;
             top: 0;
@@ -657,7 +675,7 @@
             margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            white-space: pre-line; /* ✅ 支持 \n 換行 */
+            white-space: pre-line;
         }
 
         .detail-desc {
@@ -701,7 +719,6 @@
             transform: scale(0.95);
         }
 
-        /* PWA 安裝提示 - 科技風 */
         .install-prompt {
             position: fixed;
             bottom: 30px;
@@ -751,7 +768,6 @@
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
         }
 
-        /* ==================== 手機版樣式 ==================== */
         @media (max-width: 768px) {
             body {
                 padding: 15px;
@@ -763,7 +779,7 @@
                 margin-bottom: 25px;
             }
 
-            .logo {
+            .logo-container {
                 width: 90px;
                 height: 90px;
             }
@@ -862,7 +878,7 @@
                 letter-spacing: 2px;
             }
 
-            .logo {
+            .logo-container {
                 width: 75px;
                 height: 75px;
             }
@@ -893,7 +909,6 @@
             }
         }
 
-        /* 平板版 */
         @media (min-width: 769px) and (max-width: 1200px) {
             .apps-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -902,26 +917,21 @@
     </style>
 </head>
 <body>
-    <!-- 數位粒子背景 -->
     <canvas id="particleCanvas"></canvas>
 
-    <!-- 內容容器 -->
     <div class="content-wrapper">
-        <!-- Logo -->
+        <!-- ✅ 關鍵修正：圖片預設寬高 -->
         <div class="logo-container">
-            <img src="R0.png" alt="昶青集團 Logo" class="logo" loading="eager">
+            <img src="R0.png" alt="昶青集團 Logo" class="logo" loading="eager" width="120" height="120">
         </div>
 
-        <!-- 標題 -->
         <h1 class="title">昶青集團應用程式入口<br>GAI驅動智慧管理平台</h1>
 
-        <!-- 主容器 -->
         <div class="main-container">
             <div class="apps-grid" id="appsGrid"></div>
         </div>
     </div>
 
-    <!-- 長按詳情彈窗 -->
     <div class="detail-modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
         <div class="detail-content">
             <div class="detail-icon" id="detailIcon"></div>
@@ -934,22 +944,19 @@
         </div>
     </div>
 
-    <!-- PWA 安裝提示 -->
     <div class="install-prompt" id="installPrompt" role="alert">
         <span id="installText">📱 將 AI-GATE 加入主畫面</span>
         <button id="installButton">安裝</button>
     </div>
 
     <script>
-        // ✅ 使用 IIFE 封裝，避免全局變量污染
         (function() {
             'use strict';
 
-            // ✅ 配置管理
             const CONFIG = {
                 particles: {
-                    mobile: { count: 40, maxDistance: 120 },
-                    desktop: { count: 80, maxDistance: 150 }
+                    mobile: { count: 30, maxDistance: 120 }, // ✅ 降低粒子數
+                    desktop: { count: 50, maxDistance: 150 } // ✅ 降低粒子數
                 },
                 interactions: {
                     longPressDelay: 500,
@@ -962,7 +969,6 @@
                 }
             };
 
-            // ✅ 應用程式數據（使用 \n 代替 <br>）
             const apps = [
                 { 
                     name: 'GAI數位資料中心\n【Willion】', 
@@ -1026,14 +1032,12 @@
                 }
             ];
 
-            // ✅ 工具函數：HTML 轉義
             function escapeHtml(text) {
                 const div = document.createElement('div');
                 div.textContent = text;
                 return div.innerHTML;
             }
 
-            // ✅ 工具函數：節流
             function throttle(func, limit) {
                 let inThrottle;
                 return function(...args) {
@@ -1045,7 +1049,6 @@
                 };
             }
 
-            // ✅ 工具函數：防抖
             function debounce(func, wait) {
                 let timeout;
                 return function(...args) {
@@ -1054,7 +1057,6 @@
                 };
             }
 
-            // ✅ 安全的 localStorage 操作
             function safeLocalStorage(key, value) {
                 try {
                     if (value === undefined) {
@@ -1068,7 +1070,6 @@
                 }
             }
 
-            // ✅ 創建圖標元素（修正錯誤處理）
             function createAppIcon(app) {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'app-icon-wrapper';
@@ -1081,8 +1082,10 @@
                 img.alt = escapeHtml(app.name);
                 img.loading = 'lazy';
                 img.decoding = 'async';
+                // ✅ 關鍵修正：預設寬高
+                img.width = 150;
+                img.height = 150;
                 
-                // ✅ 使用事件監聽器代替內聯處理
                 img.addEventListener('error', function() {
                     const fallback = document.createElement('div');
                     fallback.className = 'icon-fallback';
@@ -1096,21 +1099,18 @@
                 return wrapper;
             }
 
-            // ✅ 創建卡片正面
             function createCardFront(app) {
                 const front = document.createElement('div');
                 front.className = 'card-front';
                 
-                // 圖標
                 const iconWrapper = createAppIcon(app);
                 
-                // 文字
                 const textWrapper = document.createElement('div');
                 textWrapper.className = 'app-text-wrapper';
                 
                 const name = document.createElement('div');
                 name.className = 'app-name';
-                name.textContent = app.name; // ✅ 使用 textContent，CSS 處理換行
+                name.textContent = app.name;
                 
                 const desc = document.createElement('div');
                 desc.className = 'app-desc';
@@ -1125,7 +1125,6 @@
                 return front;
             }
 
-            // ✅ 創建卡片背面
             function createCardBack(app) {
                 const back = document.createElement('div');
                 back.className = 'card-back';
@@ -1149,7 +1148,6 @@
                 return back;
             }
 
-            // ✅ 創建應用項目
             function createAppItem(app, index) {
                 const appItem = document.createElement('a');
                 appItem.href = app.url;
@@ -1163,15 +1161,12 @@
                 appItem.dataset.icon = app.icon;
                 appItem.style.animationDelay = `${index * 0.05}s`;
                 
-                // 創建卡片
                 const card = document.createElement('div');
                 card.className = 'app-card';
                 
-                // 正面
                 const front = createCardFront(app);
                 card.appendChild(front);
                 
-                // 背面（僅 PC）
                 if (window.innerWidth > CONFIG.breakpoints.mobile) {
                     const back = createCardBack(app);
                     card.appendChild(back);
@@ -1179,7 +1174,6 @@
                 
                 appItem.appendChild(card);
                 
-                // ✅ 添加鍵盤支持
                 appItem.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
@@ -1187,7 +1181,6 @@
                     }
                 });
                 
-                // ✅ 阻止默認點擊，使用 window.open
                 appItem.addEventListener('click', (e) => {
                     e.preventDefault();
                     window.open(app.url, '_blank', 'noopener,noreferrer');
@@ -1196,7 +1189,6 @@
                 return appItem;
             }
 
-            // ✅ 創建錯誤佔位符
             function createErrorPlaceholder(name) {
                 const placeholder = document.createElement('div');
                 placeholder.className = 'app-item error-placeholder';
@@ -1210,7 +1202,6 @@
                 return placeholder;
             }
 
-            // ✅ 渲染應用程式（添加錯誤處理）
             function renderApps() {
                 const grid = document.getElementById('appsGrid');
                 grid.innerHTML = '';
@@ -1229,14 +1220,12 @@
                 
                 grid.appendChild(fragment);
                 
-                // 初始化交互
                 if (window.innerWidth > CONFIG.breakpoints.mobile) {
                     initMagneticEffect();
                 }
                 initTouchEvents();
             }
 
-            // ✅ 初始化觸摸事件（改進計時器管理）
             const touchTimers = new WeakMap();
             
             function initTouchEvents() {
@@ -1257,7 +1246,6 @@
                                 e.preventDefault();
                                 currentUrl = this.dataset.url;
                                 
-                                // ✅ 安全設置內容
                                 const iconImg = document.createElement('img');
                                 iconImg.src = this.dataset.icon;
                                 iconImg.alt = this.dataset.name;
@@ -1311,7 +1299,6 @@
                 });
             }
 
-            // ✅ 磁吸效果（添加節流）
             function initMagneticEffect() {
                 const appItems = document.querySelectorAll('.app-item');
 
@@ -1326,7 +1313,6 @@
                         this.style.setProperty('--magnetic-y', '0px');
                     });
 
-                    // ✅ 使用節流優化性能
                     const throttledMove = throttle(function(e) {
                         if (!this.classList.contains('magnetic-active')) return;
 
@@ -1345,19 +1331,26 @@
                         
                         this.style.setProperty('--magnetic-x', `${magneticX}px`);
                         this.style.setProperty('--magnetic-y', `${magneticY}px`);
-                    }, 16); // ~60fps
+                    }, 16);
 
                     item.addEventListener('mousemove', throttledMove);
                 });
             }
 
-            // ✅ 粒子系統（添加可見性檢測）
+            // ✅ 關鍵修正：優化粒子系統
             class ParticleSystem {
                 constructor() {
                     this.canvas = document.getElementById('particleCanvas');
-                    this.ctx = this.canvas.getContext('2d');
+                    this.ctx = this.canvas.getContext('2d', { 
+                        alpha: true,
+                        desynchronized: true 
+                    });
                     this.particles = [];
                     this.animationId = null;
+                    this.lastTime = 0;
+                    // ✅ 降低幀率到 30fps
+                    this.fps = 30;
+                    this.fpsInterval = 1000 / this.fps;
                     
                     const config = window.innerWidth < CONFIG.breakpoints.mobile 
                         ? CONFIG.particles.mobile 
@@ -1368,9 +1361,8 @@
                     
                     this.resize();
                     this.init();
-                    this.animate();
+                    this.animate(0);
                     
-                    // ✅ 使用防抖優化 resize
                     window.addEventListener('resize', debounce(() => this.resize(), 250));
                     
                     // ✅ 頁面可見性檢測
@@ -1382,7 +1374,8 @@
                             }
                         } else {
                             if (!this.animationId) {
-                                this.animate();
+                                this.lastTime = performance.now();
+                                this.animate(this.lastTime);
                             }
                         }
                     });
@@ -1399,9 +1392,9 @@
                         this.particles.push({
                             x: Math.random() * this.canvas.width,
                             y: Math.random() * this.canvas.height,
-                            vx: (Math.random() - 0.5) * 0.8,
-                            vy: (Math.random() - 0.5) * 0.8,
-                            radius: Math.random() * 2 + 1
+                            vx: (Math.random() - 0.5) * 0.5, // ✅ 降低速度
+                            vy: (Math.random() - 0.5) * 0.5,
+                            radius: Math.random() * 1.5 + 0.5
                         });
                     }
                 }
@@ -1422,11 +1415,8 @@
                     this.particles.forEach(particle => {
                         this.ctx.beginPath();
                         this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-                        this.ctx.fillStyle = 'rgba(0, 255, 255, 0.8)';
-                        this.ctx.shadowBlur = 10;
-                        this.ctx.shadowColor = 'rgba(0, 255, 255, 0.8)';
+                        this.ctx.fillStyle = 'rgba(0, 255, 255, 0.6)';
                         this.ctx.fill();
-                        this.ctx.shadowBlur = 0;
                     });
 
                     for (let i = 0; i < this.particles.length; i++) {
@@ -1438,8 +1428,8 @@
                             if (distance < this.maxDistance) {
                                 const opacity = 1 - (distance / this.maxDistance);
                                 this.ctx.beginPath();
-                                this.ctx.strokeStyle = `rgba(0, 255, 255, ${opacity * 0.5})`;
-                                this.ctx.lineWidth = 1;
+                                this.ctx.strokeStyle = `rgba(0, 255, 255, ${opacity * 0.3})`;
+                                this.ctx.lineWidth = 0.5;
                                 this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
                                 this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
                                 this.ctx.stroke();
@@ -1448,20 +1438,25 @@
                     }
                 }
 
-                animate() {
-                    // ✅ 檢查頁面可見性
+                animate(currentTime) {
                     if (document.hidden) {
                         this.animationId = null;
                         return;
                     }
                     
-                    this.update();
-                    this.draw();
-                    this.animationId = requestAnimationFrame(() => this.animate());
+                    this.animationId = requestAnimationFrame((time) => this.animate(time));
+                    
+                    // ✅ 限制幀率
+                    const elapsed = currentTime - this.lastTime;
+                    
+                    if (elapsed > this.fpsInterval) {
+                        this.lastTime = currentTime - (elapsed % this.fpsInterval);
+                        this.update();
+                        this.draw();
+                    }
                 }
             }
 
-            // ✅ PWA 相關函數
             function isIOS() {
                 return /iPhone|iPad|iPod/i.test(navigator.userAgent);
             }
@@ -1489,7 +1484,6 @@
                 installText.innerHTML = '📱 點擊 <strong>分享 📤</strong> → <strong>加入主畫面</strong>';
                 installButton.textContent = '知道了';
                 
-                // ✅ 移除舊監聽器
                 const newButton = installButton.cloneNode(true);
                 installButton.parentNode.replaceChild(newButton, installButton);
                 
@@ -1501,7 +1495,6 @@
                 showInstallPrompt();
             }
 
-            // ✅ PWA 安裝事件
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
@@ -1534,7 +1527,6 @@
                 hideInstallPrompt();
             });
 
-            // ✅ Service Worker 註冊（使用 Blob 方式，但添加錯誤處理）
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
                     try {
@@ -1576,7 +1568,6 @@
                         navigator.serviceWorker.register(swUrl)
                             .then(reg => {
                                 console.log('✅ Service Worker 註冊成功', reg.scope);
-                                // ✅ 檢查更新
                                 reg.update();
                             })
                             .catch(err => console.error('❌ Service Worker 註冊失敗:', err));
@@ -1586,11 +1577,14 @@
                 });
             }
 
-            // ✅ 初始化（添加錯誤邊界）
             document.addEventListener('DOMContentLoaded', () => {
                 try {
                     renderApps();
-                    new ParticleSystem();
+                    
+                    // ✅ 延遲啟動粒子系統
+                    setTimeout(() => {
+                        new ParticleSystem();
+                    }, 500);
                     
                     if (isStandalone()) return;
 
@@ -1600,9 +1594,8 @@
                     if (isIOS()) {
                         setTimeout(() => showIOSInstallGuide(), 2000);
                     }
-                                } catch (error) {
+                } catch (error) {
                     console.error('初始化失敗:', error);
-                    // ✅ 顯示錯誤提示
                     const grid = document.getElementById('appsGrid');
                     if (grid) {
                         grid.innerHTML = `
@@ -1619,14 +1612,12 @@
                 }
             });
 
-            // ✅ 防止圖片拖曳
             document.addEventListener('dragstart', (e) => {
                 if (e.target.tagName === 'IMG') {
                     e.preventDefault();
                 }
             });
 
-            // ✅ 視窗大小改變時重置磁吸效果（使用防抖）
             window.addEventListener('resize', debounce(() => {
                 const appItems = document.querySelectorAll('.app-item');
                 appItems.forEach(item => {
@@ -1634,7 +1625,6 @@
                     item.style.setProperty('--magnetic-x', '0px');
                     item.style.setProperty('--magnetic-y', '0px');
                     
-                    // ✅ 清理觸摸計時器
                     const timer = touchTimers.get(item);
                     if (timer) {
                         clearTimeout(timer);
@@ -1642,7 +1632,6 @@
                     }
                 });
                 
-                // ✅ 響應式重新渲染卡片背面
                 if (window.innerWidth > CONFIG.breakpoints.mobile) {
                     const cards = document.querySelectorAll('.app-card');
                     cards.forEach((card, index) => {
@@ -1653,13 +1642,11 @@
                         }
                     });
                 } else {
-                    // 移除背面卡片以節省性能
                     const backs = document.querySelectorAll('.card-back');
                     backs.forEach(back => back.remove());
                 }
             }, 250));
 
-            // ✅ iOS 橡皮筋效果禁用（防止過度滾動）
             if (isIOS()) {
                 let startY = 0;
                 
@@ -1673,7 +1660,6 @@
                     const scrollHeight = document.documentElement.scrollHeight;
                     const clientHeight = document.documentElement.clientHeight;
                     
-                    // 在頂部向下拉或在底部向上拉時阻止
                     if ((scrollTop <= 0 && currentY > startY) || 
                         (scrollTop + clientHeight >= scrollHeight && currentY < startY)) {
                         e.preventDefault();
@@ -1681,9 +1667,7 @@
                 }, { passive: false });
             }
 
-            // ✅ 鍵盤導航支持
             document.addEventListener('keydown', (e) => {
-                // ESC 關閉彈窗
                 if (e.key === 'Escape') {
                     const detailModal = document.getElementById('detailModal');
                     if (detailModal.classList.contains('show')) {
@@ -1697,7 +1681,7 @@
                 }
             });
 
-            // ✅ 性能監控（開發環境）
+            // ✅ 關鍵修正：CLS 監控（開發環境）
             if (window.performance && window.performance.timing) {
                 window.addEventListener('load', () => {
                     setTimeout(() => {
@@ -1709,7 +1693,6 @@
                         console.log(`   頁面載入時間: ${loadTime}ms`);
                         console.log(`   DOM 就緒時間: ${domReady}ms`);
                         
-                        // ✅ Web Vitals 檢測
                         if ('PerformanceObserver' in window) {
                             try {
                                 // LCP (Largest Contentful Paint)
@@ -1729,15 +1712,22 @@
                                 });
                                 fidObserver.observe({ entryTypes: ['first-input'] });
                                 
-                                // CLS (Cumulative Layout Shift)
+                                // ✅ 關鍵：CLS 監控
                                 let clsScore = 0;
                                 const clsObserver = new PerformanceObserver((list) => {
                                     for (const entry of list.getEntries()) {
                                         if (!entry.hadRecentInput) {
                                             clsScore += entry.value;
+                                            console.log(`   CLS 事件: +${entry.value.toFixed(4)} (累計: ${clsScore.toFixed(4)})`);
+                                            
+                                            // ✅ 輸出偏移元素資訊
+                                            if (entry.sources && entry.sources.length > 0) {
+                                                entry.sources.forEach(source => {
+                                                    console.log(`      偏移元素:`, source.node);
+                                                });
+                                            }
                                         }
                                     }
-                                    console.log(`   CLS: ${clsScore.toFixed(4)}`);
                                 });
                                 clsObserver.observe({ entryTypes: ['layout-shift'] });
                             } catch (e) {
@@ -1748,25 +1738,21 @@
                 });
             }
 
-            // ✅ 錯誤全局捕獲
             window.addEventListener('error', (e) => {
                 console.error('全局錯誤:', e.error);
-                // 可以在這裡添加錯誤上報邏輯
             });
 
             window.addEventListener('unhandledrejection', (e) => {
                 console.error('未處理的 Promise 拒絕:', e.reason);
-                // 可以在這裡添加錯誤上報邏輯
             });
 
-            // ✅ 暴露必要的 API 供外部使用（如果需要）
             window.AppPortal = {
-                version: '2.0.0',
+                version: '2.0.1',
                 renderApps: renderApps,
                 config: CONFIG
             };
 
-        })(); // IIFE 結束
+        })();
     </script>
 </body>
 </html>
