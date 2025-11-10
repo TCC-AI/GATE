@@ -5,8 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0a0e27">
     <meta name="description" content="昶青集團應用程式入口 - GAI驅動智慧管理平台">
-    <!-- 🔒 添加 CSP 安全策略 -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; script-src 'self' 'unsafe-inline'; connect-src 'self';">
+    
+    <!-- ✅ 修正：放寬 CSP 策略 -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self'; 
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+        font-src 'self' https://fonts.gstatic.com; 
+        img-src 'self' data: https: blob:; 
+        script-src 'self' 'unsafe-inline' blob:; 
+        connect-src 'self';
+        manifest-src 'self' data:;
+        worker-src 'self' blob:;">
+    
     <title>昶青集團應用程式入口 - GAI驅動智慧管理平台</title>
     
     <!-- Google Fonts -->
@@ -39,11 +49,8 @@
             padding: 20px;
             padding-top: max(20px, env(safe-area-inset-top));
             padding-bottom: max(20px, env(safe-area-inset-bottom));
-            /* ✅ 關鍵修正：強制字體顯示 */
-            font-display: swap;
         }
 
-        /* ✅ 關鍵修正：固定定位背景，避免觸發 layout */
         body::before {
             content: '';
             position: fixed;
@@ -57,11 +64,8 @@
             background-size: 50px 50px;
             z-index: 0;
             pointer-events: none;
-            /* ✅ 使用 will-change 提示瀏覽器優化 */
-            will-change: auto;
         }
 
-        /* ✅ 關鍵修正：使用 transform 代替 top，避免觸發 layout */
         body::after {
             content: '';
             position: fixed;
@@ -77,11 +81,9 @@
             animation: scanLine 4s linear infinite;
             z-index: 0;
             pointer-events: none;
-            /* ✅ 關鍵：使用 transform */
             will-change: transform;
         }
 
-        /* ✅ 關鍵修正：使用 transform 代替 top */
         @keyframes scanLine {
             0% { transform: translateY(0); }
             100% { transform: translateY(100vh); }
@@ -99,13 +101,8 @@
             body::after {
                 animation: none;
             }
-            
-            .app-item:hover .app-card {
-                transform: none !important;
-            }
         }
 
-        /* ✅ 關鍵修正：Canvas 固定定位 + GPU 加速 */
         #particleCanvas {
             position: fixed;
             top: 0;
@@ -114,9 +111,7 @@
             height: 100%;
             z-index: 0;
             pointer-events: none;
-            /* ✅ 使用 GPU 加速 */
             transform: translateZ(0);
-            will-change: auto;
         }
 
         .content-wrapper {
@@ -129,13 +124,11 @@
             align-items: center;
         }
 
-        /* ✅ 關鍵修正：Logo 固定尺寸，防止載入偏移 */
         .logo-container {
             margin-bottom: 20px;
             animation: fadeInDown 0.8s ease-out;
             position: relative;
             filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.6));
-            /* ✅ 預設寬高 */
             width: 120px;
             height: 120px;
         }
@@ -157,7 +150,6 @@
                 19.1% 9.5%
             );
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            /* ✅ 關鍵修正：使用 transform 動畫 */
             animation: float 6s ease-in-out infinite;
             will-change: transform;
         }
@@ -167,13 +159,11 @@
             filter: drop-shadow(0 0 50px rgba(0, 255, 255, 1));
         }
 
-        /* ✅ 關鍵修正：只使用 transform */
         @keyframes float {
             0%, 100% { transform: translateY(0) translateZ(0); }
             50% { transform: translateY(-15px) translateZ(0); }
         }
 
-        /* ✅ 關鍵修正：固定行高，防止字體載入偏移 */
         .title {
             font-family: 'Orbitron', 'Rajdhani', sans-serif;
             font-size: 4rem;
@@ -191,7 +181,6 @@
             animation: fadeInDown 0.8s ease-out 0.2s both, 
                        neonPulse 2s ease-in-out infinite alternate;
             position: relative;
-            /* ✅ 固定行高 */
             line-height: 1.2;
         }
 
@@ -259,7 +248,6 @@
                 20px 100%, 
                 0 calc(100% - 20px)
             );
-            /* ✅ 使用 contain 優化渲染 */
             contain: layout style paint;
         }
 
@@ -298,7 +286,6 @@
             }
         }
 
-        /* ✅ 關鍵修正：網格固定高度 */
         .apps-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -307,20 +294,9 @@
             padding: 20px;
             position: relative;
             z-index: 1;
-            /* ✅ 使用 contain 優化 */
             contain: layout style;
         }
 
-        .app-item:nth-child(1) {
-            grid-column: span 1;
-            grid-row: span 1;
-        }
-
-        .app-item:nth-child(5) {
-            grid-column: span 1;
-        }
-
-        /* ✅ 關鍵修正：卡片容器固定尺寸 */
         .app-item {
             perspective: 1000px;
             cursor: pointer;
@@ -329,10 +305,8 @@
             transition: transform 0.3s ease;
             z-index: 1;
             isolation: isolate;
-            /* ✅ 固定寬高 */
             width: 100%;
             height: 100%;
-            /* ✅ 使用 contain 優化 */
             contain: layout style paint;
         }
 
@@ -351,7 +325,6 @@
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            /* ✅ 使用 will-change 優化翻轉 */
             will-change: transform;
         }
 
@@ -369,7 +342,6 @@
             border-radius: 0;
             overflow: hidden;
             transform-style: preserve-3d;
-            /* ✅ 使用 contain 優化 */
             contain: layout style paint;
         }
 
@@ -481,14 +453,12 @@
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
         }
 
-        /* ✅ 關鍵修正：圖標固定尺寸 */
         .app-icon-wrapper {
             width: 150px;
             height: 150px;
             flex-shrink: 0;
             margin-right: 15px;
             position: relative;
-            /* ✅ 使用 contain 優化 */
             contain: layout size style;
         }
 
@@ -544,7 +514,6 @@
             color: #00ffff;
         }
 
-        /* ✅ 關鍵修正：固定行高 */
         .app-text-wrapper {
             flex: 1;
             display: flex;
@@ -920,7 +889,6 @@
     <canvas id="particleCanvas"></canvas>
 
     <div class="content-wrapper">
-        <!-- ✅ 關鍵修正：圖片預設寬高 -->
         <div class="logo-container">
             <img src="R0.png" alt="昶青集團 Logo" class="logo" loading="eager" width="120" height="120">
         </div>
@@ -955,8 +923,8 @@
 
             const CONFIG = {
                 particles: {
-                    mobile: { count: 30, maxDistance: 120 }, // ✅ 降低粒子數
-                    desktop: { count: 50, maxDistance: 150 } // ✅ 降低粒子數
+                    mobile: { count: 30, maxDistance: 120 },
+                    desktop: { count: 50, maxDistance: 150 }
                 },
                 interactions: {
                     longPressDelay: 500,
@@ -1070,6 +1038,7 @@
                 }
             }
 
+            // ✅ 關鍵修正：安全的 DOM 操作
             function createAppIcon(app) {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'app-icon-wrapper';
@@ -1082,16 +1051,20 @@
                 img.alt = escapeHtml(app.name);
                 img.loading = 'lazy';
                 img.decoding = 'async';
-                // ✅ 關鍵修正：預設寬高
                 img.width = 150;
                 img.height = 150;
                 
-                img.addEventListener('error', function() {
-                    const fallback = document.createElement('div');
-                    fallback.className = 'icon-fallback';
-                    fallback.textContent = '⚡';
-                    this.parentElement.innerHTML = '';
-                    this.parentElement.appendChild(fallback);
+                // ✅ 修正：確保父元素存在
+                img.addEventListener('error', function(e) {
+                    console.warn(`圖片載入失敗: ${app.icon}`);
+                    const parent = this.parentElement;
+                    if (parent) {
+                        const fallback = document.createElement('div');
+                        fallback.className = 'icon-fallback';
+                        fallback.textContent = '⚡';
+                        parent.innerHTML = '';
+                        parent.appendChild(fallback);
+                    }
                 });
                 
                 iconDiv.appendChild(img);
@@ -1204,6 +1177,11 @@
 
             function renderApps() {
                 const grid = document.getElementById('appsGrid');
+                if (!grid) {
+                    console.error('找不到 appsGrid 元素');
+                    return;
+                }
+                
                 grid.innerHTML = '';
                 
                 const fragment = document.createDocumentFragment();
@@ -1249,13 +1227,15 @@
                                 const iconImg = document.createElement('img');
                                 iconImg.src = this.dataset.icon;
                                 iconImg.alt = this.dataset.name;
-                                detailIcon.innerHTML = '';
-                                detailIcon.appendChild(iconImg);
+                                if (detailIcon) {
+                                    detailIcon.innerHTML = '';
+                                    detailIcon.appendChild(iconImg);
+                                }
                                 
-                                detailTitle.textContent = this.dataset.name;
-                                detailDesc.textContent = this.dataset.desc;
+                                if (detailTitle) detailTitle.textContent = this.dataset.name;
+                                if (detailDesc) detailDesc.textContent = this.dataset.desc;
                                 
-                                detailModal.classList.add('show');
+                                if (detailModal) detailModal.classList.add('show');
                                 
                                 if (navigator.vibrate) {
                                     navigator.vibrate(50);
@@ -1283,20 +1263,26 @@
                     }
                 });
 
-                detailOpen.addEventListener('click', () => {
-                    window.open(currentUrl, '_blank', 'noopener,noreferrer');
-                    detailModal.classList.remove('show');
-                });
+                if (detailOpen) {
+                    detailOpen.addEventListener('click', () => {
+                        window.open(currentUrl, '_blank', 'noopener,noreferrer');
+                        if (detailModal) detailModal.classList.remove('show');
+                    });
+                }
 
-                detailClose.addEventListener('click', () => {
-                    detailModal.classList.remove('show');
-                });
+                if (detailClose) {
+                    detailClose.addEventListener('click', () => {
+                        if (detailModal) detailModal.classList.remove('show');
+                    });
+                }
 
-                detailModal.addEventListener('click', (e) => {
-                    if (e.target === detailModal) {
-                        detailModal.classList.remove('show');
-                    }
-                });
+                if (detailModal) {
+                    detailModal.addEventListener('click', (e) => {
+                        if (e.target === detailModal) {
+                            detailModal.classList.remove('show');
+                        }
+                    });
+                }
             }
 
             function initMagneticEffect() {
@@ -1337,10 +1323,14 @@
                 });
             }
 
-            // ✅ 關鍵修正：優化粒子系統
             class ParticleSystem {
                 constructor() {
                     this.canvas = document.getElementById('particleCanvas');
+                    if (!this.canvas) {
+                        console.warn('找不到 particleCanvas');
+                        return;
+                    }
+                    
                     this.ctx = this.canvas.getContext('2d', { 
                         alpha: true,
                         desynchronized: true 
@@ -1348,7 +1338,6 @@
                     this.particles = [];
                     this.animationId = null;
                     this.lastTime = 0;
-                    // ✅ 降低幀率到 30fps
                     this.fps = 30;
                     this.fpsInterval = 1000 / this.fps;
                     
@@ -1365,7 +1354,6 @@
                     
                     window.addEventListener('resize', debounce(() => this.resize(), 250));
                     
-                    // ✅ 頁面可見性檢測
                     document.addEventListener('visibilitychange', () => {
                         if (document.hidden) {
                             if (this.animationId) {
@@ -1382,8 +1370,10 @@
                 }
 
                 resize() {
-                    this.canvas.width = window.innerWidth;
-                    this.canvas.height = window.innerHeight;
+                    if (this.canvas) {
+                        this.canvas.width = window.innerWidth;
+                        this.canvas.height = window.innerHeight;
+                    }
                 }
 
                 init() {
@@ -1392,7 +1382,7 @@
                         this.particles.push({
                             x: Math.random() * this.canvas.width,
                             y: Math.random() * this.canvas.height,
-                            vx: (Math.random() - 0.5) * 0.5, // ✅ 降低速度
+                            vx: (Math.random() - 0.5) * 0.5,
                             vy: (Math.random() - 0.5) * 0.5,
                             radius: Math.random() * 1.5 + 0.5
                         });
@@ -1410,6 +1400,8 @@
                 }
 
                 draw() {
+                    if (!this.ctx) return;
+                    
                     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
                     this.particles.forEach(particle => {
@@ -1446,7 +1438,6 @@
                     
                     this.animationId = requestAnimationFrame((time) => this.animate(time));
                     
-                    // ✅ 限制幀率
                     const elapsed = currentTime - this.lastTime;
                     
                     if (elapsed > this.fpsInterval) {
@@ -1472,27 +1463,33 @@
             const installText = document.getElementById('installText');
 
             function hideInstallPrompt() {
-                installPrompt.classList.remove('show');
-                safeLocalStorage('installPromptClosed', 'true');
+                if (installPrompt) {
+                    installPrompt.classList.remove('show');
+                    safeLocalStorage('installPromptClosed', 'true');
+                }
             }
 
             function showInstallPrompt() {
-                installPrompt.classList.add('show');
+                if (installPrompt) {
+                    installPrompt.classList.add('show');
+                }
             }
 
             function showIOSInstallGuide() {
-                installText.innerHTML = '📱 點擊 <strong>分享 📤</strong> → <strong>加入主畫面</strong>';
-                installButton.textContent = '知道了';
-                
-                const newButton = installButton.cloneNode(true);
-                installButton.parentNode.replaceChild(newButton, installButton);
-                
-                document.getElementById('installButton').addEventListener('click', (e) => {
-                    e.preventDefault();
-                    hideInstallPrompt();
-                });
-                
-                showInstallPrompt();
+                if (installText && installButton) {
+                    installText.innerHTML = '📱 點擊 <strong>分享 📤</strong> → <strong>加入主畫面</strong>';
+                    installButton.textContent = '知道了';
+                    
+                    const newButton = installButton.cloneNode(true);
+                    installButton.parentNode.replaceChild(newButton, installButton);
+                    
+                    document.getElementById('installButton').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        hideInstallPrompt();
+                    });
+                    
+                    showInstallPrompt();
+                }
             }
 
             window.addEventListener('beforeinstallprompt', (e) => {
@@ -1505,28 +1502,31 @@
                 }
             });
 
-            installButton.addEventListener('click', async (e) => {
-                e.preventDefault();
-                
-                if (!deferredPrompt) return;
+            if (installButton) {
+                installButton.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    
+                    if (!deferredPrompt) return;
 
-                try {
-                    deferredPrompt.prompt();
-                    const { outcome } = await deferredPrompt.userChoice;
-                    console.log(`用戶選擇: ${outcome}`);
-                } catch (error) {
-                    console.error('安裝提示失敗:', error);
-                } finally {
-                    deferredPrompt = null;
-                    hideInstallPrompt();
-                }
-            });
+                    try {
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        console.log(`用戶選擇: ${outcome}`);
+                    } catch (error) {
+                        console.error('安裝提示失敗:', error);
+                    } finally {
+                        deferredPrompt = null;
+                        hideInstallPrompt();
+                    }
+                });
+            }
 
             window.addEventListener('appinstalled', () => {
                 console.log('✅ PWA 已安裝');
                 hideInstallPrompt();
             });
 
+            // ✅ 修正：Service Worker 註冊
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
                     try {
@@ -1577,11 +1577,17 @@
                 });
             }
 
-            document.addEventListener('DOMContentLoaded', () => {
+            // ✅ 修正：確保 DOM 載入完成
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+
+            function init() {
                 try {
                     renderApps();
                     
-                    // ✅ 延遲啟動粒子系統
                     setTimeout(() => {
                         new ParticleSystem();
                     }, 500);
@@ -1610,7 +1616,7 @@
                         `;
                     }
                 }
-            });
+            }
 
             document.addEventListener('dragstart', (e) => {
                 if (e.target.tagName === 'IMG') {
@@ -1620,7 +1626,7 @@
 
             window.addEventListener('resize', debounce(() => {
                 const appItems = document.querySelectorAll('.app-item');
-                appItems.forEach(item => {
+                                appItems.forEach(item => {
                     item.classList.remove('magnetic-active');
                     item.style.setProperty('--magnetic-x', '0px');
                     item.style.setProperty('--magnetic-y', '0px');
@@ -1670,73 +1676,16 @@
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     const detailModal = document.getElementById('detailModal');
-                    if (detailModal.classList.contains('show')) {
+                    if (detailModal && detailModal.classList.contains('show')) {
                         detailModal.classList.remove('show');
                     }
                     
                     const installPrompt = document.getElementById('installPrompt');
-                    if (installPrompt.classList.contains('show')) {
+                    if (installPrompt && installPrompt.classList.contains('show')) {
                         hideInstallPrompt();
                     }
                 }
             });
-
-            // ✅ 關鍵修正：CLS 監控（開發環境）
-            if (window.performance && window.performance.timing) {
-                window.addEventListener('load', () => {
-                    setTimeout(() => {
-                        const timing = window.performance.timing;
-                        const loadTime = timing.loadEventEnd - timing.navigationStart;
-                        const domReady = timing.domContentLoadedEventEnd - timing.navigationStart;
-                        
-                        console.log('📊 性能指標:');
-                        console.log(`   頁面載入時間: ${loadTime}ms`);
-                        console.log(`   DOM 就緒時間: ${domReady}ms`);
-                        
-                        if ('PerformanceObserver' in window) {
-                            try {
-                                // LCP (Largest Contentful Paint)
-                                const lcpObserver = new PerformanceObserver((list) => {
-                                    const entries = list.getEntries();
-                                    const lastEntry = entries[entries.length - 1];
-                                    console.log(`   LCP: ${lastEntry.renderTime || lastEntry.loadTime}ms`);
-                                });
-                                lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
-                                
-                                // FID (First Input Delay)
-                                const fidObserver = new PerformanceObserver((list) => {
-                                    const entries = list.getEntries();
-                                    entries.forEach(entry => {
-                                        console.log(`   FID: ${entry.processingStart - entry.startTime}ms`);
-                                    });
-                                });
-                                fidObserver.observe({ entryTypes: ['first-input'] });
-                                
-                                // ✅ 關鍵：CLS 監控
-                                let clsScore = 0;
-                                const clsObserver = new PerformanceObserver((list) => {
-                                    for (const entry of list.getEntries()) {
-                                        if (!entry.hadRecentInput) {
-                                            clsScore += entry.value;
-                                            console.log(`   CLS 事件: +${entry.value.toFixed(4)} (累計: ${clsScore.toFixed(4)})`);
-                                            
-                                            // ✅ 輸出偏移元素資訊
-                                            if (entry.sources && entry.sources.length > 0) {
-                                                entry.sources.forEach(source => {
-                                                    console.log(`      偏移元素:`, source.node);
-                                                });
-                                            }
-                                        }
-                                    }
-                                });
-                                clsObserver.observe({ entryTypes: ['layout-shift'] });
-                            } catch (e) {
-                                console.warn('Web Vitals 監控失敗:', e);
-                            }
-                        }
-                    }, 0);
-                });
-            }
 
             window.addEventListener('error', (e) => {
                 console.error('全局錯誤:', e.error);
@@ -1747,7 +1696,7 @@
             });
 
             window.AppPortal = {
-                version: '2.0.1',
+                version: '2.0.2',
                 renderApps: renderApps,
                 config: CONFIG
             };
@@ -1757,3 +1706,4 @@
 </body>
 </html>
 
+                
