@@ -2,37 +2,21 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0a0e27">
-<meta name="description" content="昶青集團應用程式入口 - GAI驅動智慧管理平台">
-<title>昶青集團應用程式入口 - GAI驅動智慧管理平台</title>
-
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
-
-<!-- PWA Manifest -->
-<link rel="manifest" href="/manifest.json">
-
-<!-- Favicons -->
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-
-<!-- Apple Touch Icons -->
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="apple-touch-icon" sizes="152x152" href="/icon-152x152.png">
-<link rel="apple-touch-icon" sizes="144x144" href="/icon-144x144.png">
-
-<!-- Apple Meta Tags -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="AI-GATE">
-
-<!-- MS Tiles -->
-<meta name="msapplication-TileColor" content="#0a0e27">
-<meta name="msapplication-TileImage" content="/icons/icon-144x144.png">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0a0e27">
+    <meta name="description" content="昶青集團應用程式入口 - GAI驅動智慧管理平台">
+    <title>昶青集團應用程式入口 - GAI驅動智慧管理平台</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIuaYtumdkumbhuWcmCBBSS1HQVRFIiwKICAic2hvcnRfbmFtZSI6ICJBSS1HQVRFIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwYTBlMjciLAogICJ0aGVtZV9jb2xvciI6ICIjMGEwZTI3IiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiUjAucG5nIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciLAogICAgICAicHVycG9zZSI6ICJhbnkgbWFza2FibGUiCiAgICB9LAogICAgewogICAgICAic3JjIjogIlIwLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0sCiAgImRlc2NyaXB0aW9uIjogIuaYtumdkumbhuWcmEFJ5oeA5oWn566h55CG5bmz5Y+wIiwKICAib3JpZW50YXRpb24iOiAicG9ydHJhaXQiCn0=">
+    
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="R0.png">
     
     <style>
         * {
@@ -1274,120 +1258,43 @@
             hideInstallPrompt();
         });
 
-// Service Worker 註冊與更新管理
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-                console.log('✅ Service Worker 註冊成功:', registration.scope);
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                const swCode = `
+                    const CACHE_NAME = 'ai-gate-v1';
+                    const urlsToCache = [
+                        '/',
+                        '/R0.png'
+                    ];
 
-                // 檢查更新
-                registration.addEventListener('updatefound', () => {
-                    const newWorker = registration.installing;
-                    console.log('🔄 發現新版本 Service Worker');
-
-                    newWorker.addEventListener('statechange', () => {
-                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            // 有新版本可用
-                            showUpdateNotification(registration);
-                        }
+                    self.addEventListener('install', (event) => {
+                        event.waitUntil(
+                            caches.open(CACHE_NAME)
+                                .then(cache => cache.addAll(urlsToCache))
+                        );
+                        self.skipWaiting();
                     });
-                });
 
-                // 定期檢查更新（每小時）
-                setInterval(() => {
-                    registration.update();
-                }, 60 * 60 * 1000);
-            })
-            .catch(err => {
-                console.error('❌ Service Worker 註冊失敗:', err);
+                    self.addEventListener('activate', (event) => {
+                        event.waitUntil(self.clients.claim());
+                    });
+
+                    self.addEventListener('fetch', (event) => {
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then(response => response || fetch(event.request))
+                        );
+                    });
+                `;
+
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+
+                navigator.serviceWorker.register(swUrl)
+                    .then(reg => console.log('✅ Service Worker 註冊成功', reg))
+                    .catch(err => console.log('❌ Service Worker 註冊失敗', err));
             });
-
-        // 監聽 SW 控制器變化
-        navigator.serviceWorker.addEventListener('controllerchange', () => {
-            console.log('🔄 Service Worker 已更新，重新載入頁面');
-            window.location.reload();
-        });
-    });
-}
-
-// 顯示更新通知
-function showUpdateNotification(registration) {
-    const updateBanner = document.createElement('div');
-    updateBanner.style.cssText = `
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: linear-gradient(135deg, #0064ff 0%, #00ffff 100%);
-        color: white;
-        padding: 15px 30px;
-        border-radius: 10px;
-        box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
-        z-index: 10000;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        font-family: 'Rajdhani', sans-serif;
-        animation: slideDown 0.5s ease;
-    `;
-    
-    updateBanner.innerHTML = `
-        <span>🎉 新版本可用！</span>
-        <button id="updateButton" style="
-            background: white;
-            color: #0064ff;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 5px;
-            font-weight: 700;
-            cursor: pointer;
-        ">立即更新</button>
-        <button id="dismissButton" style="
-            background: transparent;
-            color: white;
-            border: 1px solid white;
-            padding: 8px 20px;
-            border-radius: 5px;
-            font-weight: 700;
-            cursor: pointer;
-        ">稍後</button>
-    `;
-
-    document.body.appendChild(updateBanner);
-
-    // 立即更新按鈕
-    document.getElementById('updateButton').addEventListener('click', () => {
-        if (registration.waiting) {
-            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
         }
-    });
-
-    // 稍後按鈕
-    document.getElementById('dismissButton').addEventListener('click', () => {
-        updateBanner.remove();
-    });
-}
-
-// 添加動畫樣式
-if (!document.getElementById('updateAnimationStyle')) {
-    const style = document.createElement('style');
-    style.id = 'updateAnimationStyle';
-    style.textContent = `
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-        }
-    `;
-    document.head.appendChild(style);
-}
-
 
         document.addEventListener('DOMContentLoaded', () => {
             renderApps();
